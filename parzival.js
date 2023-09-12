@@ -1,6 +1,4 @@
-import type { CustomThemeConfig } from '@skeletonlabs/tw-plugin';
-
-export const myCustomTheme: CustomThemeConfig = {
+export const myCustomTheme = {
 	name: 'parzival',
 	properties: {
 		// =~= Theme Properties =~=
