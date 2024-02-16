@@ -1,4 +1,4 @@
-<div class="container mx-auto grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
+<div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
 	<section class="col-span-full">
 		<h1 class="h1 my-20">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
 		<p>
