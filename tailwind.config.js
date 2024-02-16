@@ -1,6 +1,7 @@
 import { join } from 'path';
 
 import typography from '@tailwindcss/typography';
+import forms from '@tailwindcss/forms';
 import { parzival } from './parzival';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 /** @type {import('tailwindcss').Config} */
@@ -15,6 +16,7 @@ export default {
 	},
 	plugins: [
 		typography,
+		forms,
 		skeleton({
 			themes: {
 				custom: parzival,
