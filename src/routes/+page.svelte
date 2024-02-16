@@ -1,6 +1,6 @@
 <div class="container mx-auto grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
 	<section class="col-span-full">
-		<h1 class="h1">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
+		<h1 class="h1 my-20">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
 		<p>
 			Introtext Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, similique quidem?
 			Labore consectetur assumenda quam fugit. Alias sint nostrum, aliquam, eveniet, corporis
@@ -8,8 +8,8 @@
 		</p>
 	</section>
 	<section>
-		<h2 class="h2">Versindizes zu den Textzeugen</h2>
-		<p>
+		<h2 class="h2 my-10">Versindizes zu den Textzeugen</h2>
+		<p class="my-5">
 			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
 			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
 			werden.
@@ -24,8 +24,8 @@
 		</select>
 	</section>
 	<section>
-		<h2 class="h2">Verssynopse</h2>
-		<p>
+		<h2 class="h2 my-10">Verssynopse</h2>
+		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
 			Verses (z. B. 1 oder 14) ein. In Ausnahmefällen kann im dritten Feld die Angabe von
@@ -43,19 +43,15 @@
 		<button class="btn variant-filled block">Vers anzeigen</button>
 	</section>
 	<section>
-		<h2 class="h2">Synopse zweier Textzeugen</h2>
-		<p>
+		<h2 class="h2 my-10">Synopse zweier Textzeugen</h2>
+		<p class="my-5">
 			Die beiden Textzeugen können aus den Listen ausgewählt werden; der gewünschte Versbereich ist
-			in die Eingabefelder einzutragen. Der Startvers wird jeweils durch zwei Eingaben bestimmt:
+			in die Eingabefelder einzutragen. Der Startvers wird jeweils durch zwei Eingaben bestimmt: die
+			Zahl des Dreißigers (›Parzival‹), das Kürzel "NP" (für den ›Nuwen Parzifal‹ in den
+			Handschriften V oder V') oder das Kürzel "Ep" (für den Epilog in den Handschriften V und V'),
+			danach die Zahl des Verses.
 		</p>
-		<ul>
-			<li>
-				die Zahl des Dreißigers (›Parzival‹),<br />
-				das Kürzel "NP" (für den ›Nuwen Parzifal‹ in den Handschriften V oder V')<br />
-				oder das Kürzel "Ep" (für den Epilog in den Handschriften V und V')
-			</li>
-			<li>danach die Zahl des Verses.</li>
-		</ul>
+
 		<div>
 			<div class="flex gap-1 my-3">
 				<label>
@@ -89,13 +85,13 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2">Suche</h2>
-		<p>Geben Sie einen Suchbegriff ein, um in der digitalen Edition zu suchen.</p>
+		<h2 class="h2 my-10">Suche</h2>
+		<p class="my-5">Geben Sie einen Suchbegriff ein, um in der digitalen Edition zu suchen.</p>
 		<input type="text" placeholder="Suchbegriff" class="input" />
 	</section>
 	<section class="col-span-full">
-		<h2 class="h2">Edition nach Dreißigern</h2>
-		<p>
+		<h2 class="h2 my-10">Edition nach Dreißigern</h2>
+		<p class="my-5">
 			Aktuell sind noch die Bücher IX bis XIV (Dreißiger 433–733) in Revision; über den ganzen Text
 			hin befindet sich die Interpunktion in Überarbeitung. Die folgende Tabelle führt die Dreißiger
 			des ›Parzival‹ nach Lachmanns Zählung auf. Die in der Datenbank enthaltenen Fassungstexte und
