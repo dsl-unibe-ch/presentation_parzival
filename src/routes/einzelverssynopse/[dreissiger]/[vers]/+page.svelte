@@ -71,6 +71,6 @@
 			>Fassungsverse ein-/ausblenden und nach diesen sortieren</SlideToggle
 		>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
-		<VerseSelector />
+		<VerseSelector targetPath="/einzelverssynopse" />
 	</section>
 </div>

@@ -1,6 +1,8 @@
 <script>
 	import { goto } from '$app/navigation';
 
+	export let targetPath = '/einzelverssynopse';
+
 	/**
 	 * @type {HTMLInputElement}
 	 */
@@ -12,28 +14,26 @@
 
 	let additional = '';
 
-	let valid = false;
+	/**
+	 * @param {Event & { target: HTMLInputElement }} e
+	 */
+	function handleInput(e) {
+		validateMinMax(e.target);
+	}
 
-	const validateMinMax = (e) => {
-		console.log(e);
-		console.log(e.target.value);
-		console.log(isNaN(e.target.value));
+	const validateMinMax = (/** @type {HTMLInputElement } */ i) => {
 		//validate if input is a Number
-		if (isNaN(e.target.value) || e.target.value === '') {
-			e.target.classList.add('input-error');
+		if (isNaN(Number(i.value)) || i.value === '') {
+			i.classList.add('input-error');
+			return false;
 		} else {
 			//validate if input is within min and max
-			if (
-				parseInt(e.target.value) < parseInt(e.target.min) ||
-				parseInt(e.target.value) > parseInt(e.target.max)
-			) {
-				console.log(e.target.value);
-				console.log(e.target.min);
-				console.log(e.target.max);
-
-				e.target.classList.add('input-error');
+			if (parseInt(i.value) < parseInt(i.min) || parseInt(i.value) > parseInt(i.max)) {
+				i.classList.add('input-error');
+				return false;
 			} else {
-				e.target.classList.remove('input-error');
+				i.classList.remove('input-error');
+				return true;
 			}
 		}
 	};
@@ -41,8 +41,10 @@
 
 <form
 	class="flex max-w-full items-baseline gap-1 my-3"
-	on:submit={(e) => {
-		goto(`/einzelverssynopse/${thirties.value}/${verse.value}-${additional}`);
+	on:submit|preventDefault={(e) => {
+		if (validateMinMax(thirties) && validateMinMax(verse)) {
+			goto(`${targetPath}/${thirties.value}/${verse.value}${additional ? '-' + additional : ''}`);
+		}
 	}}
 >
 	<p>Vers:</p>
@@ -52,7 +54,7 @@
 		class="input inline max-w-28"
 		min="1"
 		max="827"
-		on:input={(e) => validateMinMax(e)}
+		on:input={handleInput}
 		bind:this={thirties}
 	/>.<input
 		type="number"
@@ -60,7 +62,7 @@
 		class="input max-w-20"
 		min="1"
 		max="30"
-		on:input={(e) => validateMinMax(e)}
+		on:input={handleInput}
 		bind:this={verse}
 	/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
 	<button class="btn-icon variant-filled btn-icon-sm flex-shrink-0 flex-grow-0">
