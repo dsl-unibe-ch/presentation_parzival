@@ -13,23 +13,21 @@
 	let loss = [];
 
 	onMount(() => {
-		const archetype = sigla.hyparchetypes.map((e) => e.handle);
-		const witnesses = sigla.codices.map((e) => e.handle);
 		const handlePromises = (/** @type {Response} */ r, /** @type {string} */ element) => {
 			if (!r.ok) {
-				loss.push(element);
+				loss = [...loss, element];
 			}
 			return r.json();
 		};
-		witnesses.forEach((element) => {
-			publisherData[element] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element}_${data.dreissiger}.${data.vers}%27]`
-			).then((r) => handlePromises(r, element));
+		sigla.codices.forEach((element) => {
+			publisherData[element.sigil] = fetch(
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${data.dreissiger}.${data.vers}%27]`
+			).then((r) => handlePromises(r, element.sigil));
 		});
-		archetype.forEach((element) => {
-			publisherData[element] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.dreissiger}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element}%20${data.dreissiger}.${data.vers}%27]`
-			).then((r) => handlePromises(r, element));
+		sigla.hyparchetypes.forEach((element) => {
+			publisherData[element.sigil] = fetch(
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.dreissiger}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${data.dreissiger}.${data.vers}%27]`
+			).then((r) => handlePromises(r, element.sigil));
 		});
 		console.log(publisherData);
 	});
