@@ -26,10 +26,6 @@ export default {
 						enhancements: true
 					},
 					{
-						name: 'crimson',
-						enhancements: true
-					},
-					{
 						name: 'vintage',
 						enhancements: true
 					}
