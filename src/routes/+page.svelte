@@ -28,9 +28,10 @@
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
-			Verses (z. B. 1 oder 14) ein. In Ausnahmefällen kann im dritten Feld die Angabe von
-			Zusatzversen erfolgen (z. B. bei 796.28 mit dem Zusatz 1). Hinweis: Die Epilogverse (Ep) in V
-			und V' sowie die Prologverse (Pr) in V werden in der Verssynopse nicht berücksichtigt.
+			Verses (z. B. 1 oder 14) ein. In Ausnahmefällen kann im zweiten Feld zusätzlich die Angabe von
+			Zusatzversen getrennt durch einen Bindestrich erfolgen (z. B. bei 796.28-1 oder 796.28-1-01).
+			Hinweis: Die Epilogverse (Ep) in V und V' sowie die Prologverse (Pr) in V werden in der
+			Verssynopse nicht berücksichtigt.
 		</p>
 		<div class="flex max-w-full items-baseline gap-1 my-3">
 			<p>Vers:</p>
