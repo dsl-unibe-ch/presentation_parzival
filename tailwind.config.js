@@ -28,6 +28,10 @@ export default {
 					{
 						name: 'crimson',
 						enhancements: true
+					},
+					{
+						name: 'vintage',
+						enhancements: true
 					}
 				]
 			}
