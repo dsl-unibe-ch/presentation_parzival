@@ -34,16 +34,16 @@
 </script>
 
 <div class="container mx-auto mt-5">
-	<h1 class="h1">Verssynopse zu {data.dreissiger}.{data.vers}</h1>
+	<h1 class="h1 mb-9">Verssynopse zu {data.dreissiger}.{data.vers}</h1>
 
-	<dl>
-		<dt>Handschrift</dt>
-		<dd>Wortlaut</dd>
+	<dl class="grid grid-cols-[auto_1fr] justify-between h-fit my-4">
+		<dt class="font-bold font-heading-token border-r-4 border-current pr-4">Handschrift</dt>
+		<dd class="font-bold font-heading-token pl-2">Wortlaut</dd>
 		{#each Object.entries(publisherData) as [key, value]}
 			{#await value then value}
 				{#if value.content}
-					<dt>{key}</dt>
-					<dd>{@html value.content}</dd>
+					<dt class="border-r-4 border-current pr-4 pt-4">{key}</dt>
+					<dd class="pl-2 pt-4">{@html value.content}</dd>
 				{/if}
 			{:catch error}
 				<p>error: {error.message}</p>
@@ -51,6 +51,10 @@
 		{/each}
 	</dl>
 	{#if loss.length > 0}
-		<p>Die folgenden Handschriften konnten nicht geladen werden: {loss.join(', ')}</p>
+		<p>
+			Der Vers {data.dreissiger}.{data.vers} fehlt in folgenden Handschriften aufgrund eines umfangreichen
+			Textausfalls (Fragmente werden für diese Auflistung nicht berücksichtigt):
+			<b>{loss.join(', ')}</b>
+		</p>
 	{/if}
 </div>
