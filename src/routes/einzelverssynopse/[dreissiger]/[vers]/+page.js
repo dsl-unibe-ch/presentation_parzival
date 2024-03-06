@@ -1,8 +1,8 @@
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
 	return {
-		dreissiger: params.dreissiger,
-		vers: params.vers.padStart(2, '0')
+		thirties: params.thirties,
+		verse: params.verse.padStart(2, '0')
 	};
 }
 
@@ -11,11 +11,11 @@ export function entries() {
 	// Generate all 827 Dreissiger with 1-30 verses
 	/** @type {import('./$types').RouteParams[]} */
 	const entryArray = [];
-	for (let dreissiger = 1; dreissiger <= 827; dreissiger++) {
-		for (let vers = 1; vers <= 30; vers++) {
+	for (let thirties = 1; thirties <= 827; thirties++) {
+		for (let verse = 1; verse <= 30; verse++) {
 			entryArray.push({
-				dreissiger: `${dreissiger}`,
-				vers: `${vers}`
+				thirties: `${thirties}`,
+				verse: `${verse}`
 			});
 		}
 	}
