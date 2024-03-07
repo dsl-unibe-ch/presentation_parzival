@@ -38,7 +38,9 @@
 	});
 
 	const addToLoss = (/** @type {string} */ handle) => {
-		const sigil = sigla.codices.find((c) => c.handle === handle)?.sigil;
+		const sigil =
+			sigla.codices.find((c) => c.handle === handle)?.sigil ||
+			sigla.hyparchetypes.find((c) => c.handle === handle)?.sigil;
 		if (sigil && !loss.includes(sigil)) {
 			loss = [...loss, sigil];
 		}
