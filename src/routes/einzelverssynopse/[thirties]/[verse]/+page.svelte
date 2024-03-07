@@ -26,7 +26,7 @@
 	onMount(() => {
 		sigla.codices.forEach((element) => {
 			publisherData[element.sigil] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${data.dreissiger}.${data.vers}%27]`
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${data.thirties}.${data.verse}%27]`
 			).then((r) => handlePromises(r, element.sigil));
 		});
 		console.log(publisherData);
@@ -35,14 +35,14 @@
 	$: if (hyparchetypesSlider) {
 		sigla.hyparchetypes.forEach((element) => {
 			publisherData[element.sigil] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.dreissiger}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${data.dreissiger}.${data.vers}%27]`
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${data.thirties}.${data.verse}%27]`
 			).then((r) => handlePromises(r, element.sigil));
 		});
 	}
 </script>
 
 <div class="container mx-auto mt-5 flex flex-wrap justify-between">
-	<h1 class="h1 mb-9 w-full">Verssynopse zu {data.dreissiger}.{data.vers}</h1>
+	<h1 class="h1 mb-9 w-full">Verssynopse zu {data.thirties}.{data.verse}</h1>
 	<div>
 		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit my-4 w-fit">
 			<dt class="font-bold font-heading-token border-r-4 border-current pr-4">Handschrift</dt>
@@ -60,7 +60,7 @@
 		</dl>
 		{#if loss.length > 0}
 			<p class="max-w-sm">
-				Der Vers {data.dreissiger}.{data.vers} fehlt in folgenden Handschriften aufgrund eines umfangreichen
+				Der Vers {data.thirties}.{data.verse} fehlt in folgenden Handschriften aufgrund eines umfangreichen
 				Textausfalls (Fragmente werden für diese Auflistung nicht berücksichtigt):
 				<b>{loss.join(', ')}</b>
 			</p>
