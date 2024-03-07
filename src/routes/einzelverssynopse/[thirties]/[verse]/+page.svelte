@@ -49,29 +49,31 @@
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
 	<h1 class="h1 w-full">Verssynopse zu {data.thirties}.{data.verse}</h1>
 	<div>
-		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit">
+		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit font-mono">
 			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
-			<dd class="font-bold font-heading-token border-l-4 border-current pl-2">Wortlaut</dd>
+			<dd class="font-bold font-heading-token border-l-2 border-current pl-4">Wortlaut</dd>
 			{#each sigla.hyparchetypes as archetype (archetype.handle)}
 				{#if hyparchetypesSlider}
-					<dt class="pr-4 pt-2">{archetype.sigil}</dt>
+					<dt class="pr-4 py-1 font-sans">{archetype.sigil}</dt>
 					{#await publisherData[archetype.handle]}
-						<dd class="border-l-4 border-current pl-2 pt-2"></dd>
+						<dd class="border-l-2 border-current pl-4 py-1 font-sans"></dd>
 					{:then value}
 						{#if value?.content}
-							<dd class="border-l-4 border-current pl-2 pt-2">{@html value?.content}</dd>
+							<dd class="border-l-2 border-current pl-4 py-1 font-sans">{@html value?.content}</dd>
 						{:else}
-							<dd class="border-l-4 border-current pl-2 pt-2"></dd>
+							<dd class="border-l-2 border-current pl-4 py-1"></dd>
 						{/if}
 					{/await}
 				{/if}
 				{#each archetype.witnesses as witness}
 					{#await publisherData[witness] then value}
 						{#if value?.content}
-							<dt class="pr-4 pt-2 ml-4">
+							<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
 								{sigla.codices.find((c) => c.handle === witness)?.sigil}
 							</dt>
-							<dd class="border-l-4 border-current ml-6 pt-2">{@html value.content}</dd>
+							<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
+								{@html value.content}
+							</dd>
 						{/if}
 					{:catch error}
 						<p>error: {error.message}</p>
