@@ -12,13 +12,14 @@ jobs:
       - name: Debug
         run: |
           cat /proc/sys/fs/file-max
-          sudo sysctl -w fs.file-max=500000
-          cat /proc/sys/fs/file-max
-          sudo prlimit --pid $$ --nofile=1048576:1048576
-          sudo sysctl fs.inotify.max_user_instances=1280
-          sudo sysctl fs.inotify.max_user_watches=655360
+          ulimit -Sn  # Shows the soft limit
+          ulimit -Hn  # Shows the hard limit
+          sudo ulimit -n 10485760
+          sudo prlimit --pid $$ --nofile=10485760:10485760
           sudo sysctl -p
           cat /proc/sys/fs/file-max
+          ulimit -Sn  # Shows the soft limit
+          ulimit -Hn  # Shows the hard limit
 
       - name: Checkout
         uses: actions/checkout@v4
