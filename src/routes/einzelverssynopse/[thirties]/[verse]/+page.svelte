@@ -3,6 +3,7 @@
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { afterNavigate } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -113,7 +114,7 @@
 			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
 				<a
 					class="anchor"
-					href="/einzelverssynopse/{parseInt(verse) === 1
+					href="{base}einzelverssynopse/{parseInt(verse) === 1
 						? parseInt(thirties) - 1
 						: thirties}/{parseInt(verse) === 1 ? 30 : parseInt(verse) - 1}"
 				>
@@ -123,7 +124,7 @@
 			{#if !(parseInt(thirties) === 827 && parseInt(verse) === 30)}
 				<a
 					class="anchor"
-					href="/einzelverssynopse/{parseInt(verse) === 30
+					href="{base}einzelverssynopse/{parseInt(verse) === 30
 						? parseInt(thirties) + 1
 						: thirties}/{parseInt(verse) === 30 ? 1 : parseInt(verse) + 1}"
 				>

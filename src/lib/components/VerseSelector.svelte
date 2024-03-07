@@ -1,5 +1,6 @@
 <script>
 	import { goto, preloadData } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	export let targetPath = '/einzelverssynopse';
 
@@ -44,7 +45,9 @@
 	class="flex max-w-full items-baseline gap-1 my-3"
 	on:submit|preventDefault={(e) => {
 		if (validateMinMax(thirties) && validateMinMax(verse)) {
-			goto(`${targetPath}/${thirties.value}/${verse.value}${additional ? '-' + additional : ''}`);
+			goto(
+				`${base}${targetPath}/${thirties.value}/${verse.value}${additional ? '-' + additional : ''}`
+			);
 		}
 	}}
 >
