@@ -25,31 +25,43 @@
 
 	onMount(() => {
 		sigla.codices.forEach((element) => {
-			publisherData[element.sigil] = fetch(
+			publisherData[element.handle] = fetch(
 				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${data.thirties}.${data.verse}%27]`
-			).then((r) => handlePromises(r, element.sigil));
+			).then((r) => handlePromises(r, element.handle));
 		});
 		console.log(publisherData);
 	});
 
 	$: if (hyparchetypesSlider) {
 		sigla.hyparchetypes.forEach((element) => {
-			publisherData[element.sigil] = fetch(
+			publisherData[element.handle] = fetch(
 				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${data.thirties}.${data.verse}%27]`
-			).then((r) => handlePromises(r, element.sigil));
+			).then((r) => handlePromises(r, element.handle));
 		});
+	} else {
+		sigla.hyparchetypes.forEach((element) => {
+			delete publisherData[element.handle];
+		});
+		publisherData = publisherData;
 	}
+
+	$: sortedPublisherDataArray = sigla.hyparchetypes.flatMap((element) => {
+		return [
+			[element.sigil, publisherData[element.sigil]],
+			...element.witnesses.map((w) => [w, publisherData[w]])
+		];
+	});
 </script>
 
-<div class="container mx-auto mt-5 flex flex-wrap justify-between">
-	<h1 class="h1 mb-9 w-full">Verssynopse zu {data.thirties}.{data.verse}</h1>
+<div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
+	<h1 class="h1 w-full">Verssynopse zu {data.thirties}.{data.verse}</h1>
 	<div>
-		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit my-4 w-fit">
+		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit">
 			<dt class="font-bold font-heading-token border-r-4 border-current pr-4">Handschrift</dt>
 			<dd class="font-bold font-heading-token pl-2">Wortlaut</dd>
-			{#each Object.entries(publisherData) as [key, value]}
+			{#each sortedPublisherDataArray as [key, value]}
 				{#await value then value}
-					{#if value.content}
+					{#if value?.content}
 						<dt class="border-r-4 border-current pr-4 pt-4">{key}</dt>
 						<dd class="pl-2 pt-4">{@html value.content}</dd>
 					{/if}
@@ -67,9 +79,13 @@
 		{/if}
 	</div>
 	<section>
-		<SlideToggle name="hyparchetypes-slider" bind:checked={hyparchetypesSlider}
-			>Fassungsverse ein-/ausblenden und nach diesen sortieren</SlideToggle
+		<SlideToggle
+			name="hyparchetypes-slider"
+			active="bg-primary-500"
+			bind:checked={hyparchetypesSlider}
 		>
+			Fassungsverse ein-/ausblenden und nach diesen sortieren
+		</SlideToggle>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
 		<VerseSelector targetPath="/einzelverssynopse" />
 	</section>

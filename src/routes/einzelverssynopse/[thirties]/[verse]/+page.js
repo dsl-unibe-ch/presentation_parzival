@@ -19,15 +19,6 @@ export function entries() {
 			});
 		}
 	}
-	// too many open files :(
-	/*for (let thirties = 1; thirties <= 2; thirties++) {
-		for (let verse = 1; verse <= 30; verse++) {
-			entryArray.push({
-				thirties: `${thirties}`,
-				verse: `${verse}`
-			});
-		}
-	}*/
 
 	return entryArray;
 }
