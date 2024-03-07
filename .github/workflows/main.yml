@@ -9,6 +9,12 @@ jobs:
   build_site:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug
+        run: |
+          cat /proc/sys/fs/file-max
+          sysctl -w fs.file-max=500000
+          sysctl -p
+
       - name: Checkout
         uses: actions/checkout@v4
 
