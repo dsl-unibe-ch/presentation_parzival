@@ -1,3 +1,7 @@
+<script>
+	import VerseSelector from '$lib/components/VerseSelector.svelte';
+</script>
+
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
 	<section class="col-span-full">
 		<h1 class="h1 my-20">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
@@ -34,14 +38,8 @@
 			Verssynopse nicht berücksichtigt.
 		</p>
 		<div class="flex max-w-full items-baseline gap-1 my-3">
-			<p>Vers:</p>
-			<input type="text" placeholder="Dreißiger" class="input inline" />.<input
-				type="text"
-				placeholder="Vers"
-				class="input"
-			/>-<input type="text" placeholder="Zusatzvers" class="input" />
+			<VerseSelector targetPath="/einzelverssynopse" />
 		</div>
-		<button class="btn variant-filled block">Vers anzeigen</button>
 	</section>
 	<section>
 		<h2 class="h2 my-10">Synopse zweier Textzeugen</h2>
@@ -75,14 +73,8 @@
 				</label>
 			</div>
 			<div class="flex max-w-full items-baseline gap-1 my-3">
-				<p>Vers:</p>
-				<input type="text" placeholder="Dreißiger" class="input inline" />.<input
-					type="text"
-					placeholder="Vers"
-					class="input"
-				/>-<input type="text" placeholder="Zusatzvers" class="input" />
+				<VerseSelector targetPath="/textzeugen" />
 			</div>
-			<button class="btn variant-filled block">Vers anzeigen</button>
 		</div>
 	</section>
 	<section>

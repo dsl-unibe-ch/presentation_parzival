@@ -1,7 +1,9 @@
 <script>
-	import { goto } from '$app/navigation';
+	import { goto, preloadData } from '$app/navigation';
 
 	export let targetPath = '/einzelverssynopse';
+
+	//TODO: use preloadData as soon as valid data is entered
 
 	/**
 	 * @type {HTMLInputElement}
@@ -14,14 +16,13 @@
 
 	let additional = '';
 
-	/**
-	 * @param {Event & { target: HTMLInputElement }} e
-	 */
-	function handleInput(e) {
-		validateMinMax(e.target);
+	function handleInput(/** @type {Event} */ e) {
+		if (e.target instanceof HTMLInputElement) {
+			validateMinMax(e.target);
+		}
 	}
 
-	const validateMinMax = (/** @type {HTMLInputElement } */ i) => {
+	const validateMinMax = (/** @type {HTMLInputElement} */ i) => {
 		//validate if input is a Number
 		if (isNaN(Number(i.value)) || i.value === '') {
 			i.classList.add('input-error');

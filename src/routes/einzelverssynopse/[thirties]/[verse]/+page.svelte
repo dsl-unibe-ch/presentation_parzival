@@ -2,13 +2,27 @@
 	import sigla from '$lib/sigla.json';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
+	import { afterNavigate } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
 
+	/** @type {{ [key: string]: Promise<any> }} */
+	const publisherData = {};
+
 	/** @type {string[]} */
 	let loss = [];
-	$: ({ thirties, verse, publisherData } = data);
+	$: ({ thirties, verse } = data);
+
+	afterNavigate(() => {
+		// reset loss
+		loss = [];
+		sigla.codices.forEach((element) => {
+			publisherData[element.handle] = fetch(
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
+			).then((r) => r.json());
+		});
+	});
 
 	let hyparchetypesSlider = false;
 
@@ -93,5 +107,27 @@
 		</SlideToggle>
 		<h2 class="h2 my-7">Zu Vers springen:</h2>
 		<VerseSelector targetPath="/einzelverssynopse" />
+		<div class="flex justify-between">
+			{#if !(parseInt(thirties) === 1 && parseInt(verse) === 1)}
+				<a
+					class="anchor"
+					href="/einzelverssynopse/{parseInt(verse) === 1
+						? parseInt(thirties) - 1
+						: thirties}/{parseInt(verse) === 1 ? 30 : parseInt(verse) - 1}"
+				>
+					vorheriger Vers
+				</a>
+			{/if}
+			{#if !(parseInt(thirties) === 827 && parseInt(verse) === 30)}
+				<a
+					class="anchor"
+					href="/einzelverssynopse/{parseInt(verse) === 30
+						? parseInt(thirties) + 1
+						: thirties}/{parseInt(verse) === 30 ? 1 : parseInt(verse) + 1}"
+				>
+					nächster Vers
+				</a>
+			{/if}
+		</div>
 	</section>
 </div>
