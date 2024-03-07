@@ -12,18 +12,16 @@
 
 	let hyparchetypesSlider = false;
 
-	$: if (hyparchetypesSlider) {
-		sigla.hyparchetypes.forEach((element) => {
+	// if hyparchetypesSlider is active, fetch the hyparchetypes
+	$: sigla.hyparchetypes.forEach((element) => {
+		if (hyparchetypesSlider) {
 			publisherData[element.handle] = fetch(
 				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 			).then((r) => r.json());
-		});
-	} else {
-		sigla.hyparchetypes.forEach((element) => {
+		} else {
 			delete publisherData[element.handle];
-		});
-		publisherData = publisherData;
-	}
+		}
+	});
 
 	const addToLoss = (/** @type {string} */ handle) => {
 		const sigil = sigla.codices.find((c) => c.handle === handle)?.sigil;
@@ -32,6 +30,7 @@
 		}
 	};
 
+	// check for missing verses and add them to loss
 	$: Object.entries(publisherData).forEach(([key, promise]) => {
 		promise.then((value) => {
 			if (!value.content) {
