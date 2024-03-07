@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 	import sigla from '$lib/sigla.json';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
@@ -7,36 +6,17 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	/** @type {{ [key: string]: Promise<any> }} */
-	let publisherData = {};
-	/**
-	 * @type {string[]}
-	 */
+	/** @type {string[]} */
 	let loss = [];
+	$: ({ thirties, verse, publisherData } = data);
 
 	let hyparchetypesSlider = false;
-
-	const handlePromises = (/** @type {Response} */ r, /** @type {string} */ element) => {
-		if (!r.ok) {
-			loss = [...loss, element];
-		}
-		return r.json();
-	};
-
-	onMount(() => {
-		sigla.codices.forEach((element) => {
-			publisherData[element.handle] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${data.thirties}.${data.verse}%27]`
-			).then((r) => handlePromises(r, element.sigil));
-		});
-		console.log(publisherData);
-	});
 
 	$: if (hyparchetypesSlider) {
 		sigla.hyparchetypes.forEach((element) => {
 			publisherData[element.handle] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${data.thirties}.${data.verse}%27]`
-			).then((r) => handlePromises(r, element.sigil));
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+			).then((r) => r.json());
 		});
 	} else {
 		sigla.hyparchetypes.forEach((element) => {
@@ -44,10 +24,25 @@
 		});
 		publisherData = publisherData;
 	}
+
+	const addToLoss = (/** @type {string} */ handle) => {
+		const sigil = sigla.codices.find((c) => c.handle === handle)?.sigil;
+		if (sigil && !loss.includes(sigil)) {
+			loss = [...loss, sigil];
+		}
+	};
+
+	$: Object.entries(publisherData).forEach(([key, promise]) => {
+		promise.then((value) => {
+			if (!value.content) {
+				addToLoss(key);
+			}
+		});
+	});
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
-	<h1 class="h1 w-full">Verssynopse zu {data.thirties}.{data.verse}</h1>
+	<h1 class="h1 w-full">Verssynopse zu {thirties}.{verse}</h1>
 	<div>
 		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit font-mono">
 			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
@@ -83,8 +78,8 @@
 		</dl>
 		{#if loss.length > 0}
 			<p class="max-w-sm">
-				Der Vers {data.thirties}.{data.verse} fehlt in folgenden Handschriften aufgrund eines umfangreichen
-				Textausfalls (Fragmente werden für diese Auflistung nicht berücksichtigt):
+				Der Vers {thirties}.{verse} fehlt in folgenden Handschriften aufgrund eines umfangreichen Textausfalls
+				(Fragmente werden für diese Auflistung nicht berücksichtigt):
 				<b>{loss.join(', ')}</b>
 			</p>
 		{/if}
