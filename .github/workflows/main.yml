@@ -12,8 +12,11 @@ jobs:
       - name: Debug
         run: |
           cat /proc/sys/fs/file-max
-          sysctl -w fs.file-max=500000
-          sysctl -p
+          sudo sysctl -w fs.file-max=500000
+          sudo sysctl -p
+          sudo prlimit --pid $$ --nofile=1048576:1048576
+          sudo sysctl fs.inotify.max_user_instances=1280
+          sudo sysctl fs.inotify.max_user_watches=655360
 
       - name: Checkout
         uses: actions/checkout@v4
