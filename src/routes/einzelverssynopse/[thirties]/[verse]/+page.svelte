@@ -27,7 +27,7 @@
 		sigla.codices.forEach((element) => {
 			publisherData[element.handle] = fetch(
 				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${data.thirties}.${data.verse}%27]`
-			).then((r) => handlePromises(r, element.handle));
+			).then((r) => handlePromises(r, element.sigil));
 		});
 		console.log(publisherData);
 	});
@@ -36,7 +36,7 @@
 		sigla.hyparchetypes.forEach((element) => {
 			publisherData[element.handle] = fetch(
 				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${data.thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${data.thirties}.${data.verse}%27]`
-			).then((r) => handlePromises(r, element.handle));
+			).then((r) => handlePromises(r, element.sigil));
 		});
 	} else {
 		sigla.hyparchetypes.forEach((element) => {
@@ -44,30 +44,39 @@
 		});
 		publisherData = publisherData;
 	}
-
-	$: sortedPublisherDataArray = sigla.hyparchetypes.flatMap((element) => {
-		return [
-			[element.sigil, publisherData[element.sigil]],
-			...element.witnesses.map((w) => [w, publisherData[w]])
-		];
-	});
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
 	<h1 class="h1 w-full">Verssynopse zu {data.thirties}.{data.verse}</h1>
 	<div>
 		<dl class="grid grid-cols-[auto_1fr] justify-between h-fit mb-4 w-fit">
-			<dt class="font-bold font-heading-token border-r-4 border-current pr-4">Handschrift</dt>
-			<dd class="font-bold font-heading-token pl-2">Wortlaut</dd>
-			{#each sortedPublisherDataArray as [key, value]}
-				{#await value then value}
-					{#if value?.content}
-						<dt class="border-r-4 border-current pr-4 pt-4">{key}</dt>
-						<dd class="pl-2 pt-4">{@html value.content}</dd>
-					{/if}
-				{:catch error}
-					<p>error: {error.message}</p>
-				{/await}
+			<dt class="font-bold font-heading-token pr-4">Handschrift</dt>
+			<dd class="font-bold font-heading-token border-l-4 border-current pl-2">Wortlaut</dd>
+			{#each sigla.hyparchetypes as archetype (archetype.handle)}
+				{#if hyparchetypesSlider}
+					<dt class="pr-4 pt-2">{archetype.sigil}</dt>
+					{#await publisherData[archetype.handle]}
+						<dd class="border-l-4 border-current pl-2 pt-2"></dd>
+					{:then value}
+						{#if value?.content}
+							<dd class="border-l-4 border-current pl-2 pt-2">{@html value?.content}</dd>
+						{:else}
+							<dd class="border-l-4 border-current pl-2 pt-2"></dd>
+						{/if}
+					{/await}
+				{/if}
+				{#each archetype.witnesses as witness}
+					{#await publisherData[witness] then value}
+						{#if value?.content}
+							<dt class="pr-4 pt-2 ml-4">
+								{sigla.codices.find((c) => c.handle === witness)?.sigil}
+							</dt>
+							<dd class="border-l-4 border-current ml-6 pt-2">{@html value.content}</dd>
+						{/if}
+					{:catch error}
+						<p>error: {error.message}</p>
+					{/await}
+				{/each}
 			{/each}
 		</dl>
 		{#if loss.length > 0}
