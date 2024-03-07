@@ -26,7 +26,7 @@
 	const drawerStore = getDrawerStore();
 
 	$: classesActive = (/** @type {string} */ href) =>
-		base + href === $page.url.pathname
+		base + href === `/${$page.url.pathname.split('/')[1]}`
 			? 'bg-primary-500 hover:text-primary-400 text-secondary-500'
 			: 'hover:text-primary-500';
 
@@ -69,7 +69,7 @@
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Parzival</strong>
+				<a class="text-xl uppercase font-bold" href="/">Parzival</a>
 			</svelte:fragment>
 			<nav class="flex-none items-center h-full hidden lg:flex">
 				{#each pages as page}
