@@ -9,21 +9,6 @@ jobs:
   build_site:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug
-        run: |
-          cat /proc/sys/fs/file-max
-          ulimit -Sn  # Shows the soft limit
-          ulimit -Hn  # Shows the hard limit
-          sudo su
-          ulimit -n 10485760
-          ulimit -Hn 10485760
-          prlimit --pid $$ --nofile=10485760:10485760
-          exit
-          sysctl -p
-          cat /proc/sys/fs/file-max
-          ulimit -Sn  # Shows the soft limit
-          ulimit -Hn  # Shows the hard limit
-
       - name: Checkout
         uses: actions/checkout@v4
 
