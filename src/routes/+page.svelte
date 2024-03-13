@@ -92,6 +92,5 @@
 			Durch Anklicken der Siglen in der obersten Leiste kann direkt zum ersten vorhandenen Dreißiger
 			im jeweiligen Überlieferungszeugen gesprungen werden.
 		</p>
-		<i>Dataviz der Teufelstabelle</i>
 	</section>
 </div>
