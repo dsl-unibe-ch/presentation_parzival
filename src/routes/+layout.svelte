@@ -69,7 +69,7 @@
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<a class="text-xl uppercase font-bold" href={`${base}`}>Parzival</a>
+				<a class="text-xl uppercase font-bold" href={`${base}/`}>Parzival</a>
 			</svelte:fragment>
 			<nav class="flex-none items-center h-full hidden lg:flex">
 				{#each pages as page}
