@@ -1,5 +1,6 @@
 <script>
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
+	import Devilstable from './Devilstable.svelte';
 </script>
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
@@ -92,5 +93,8 @@
 			Durch Anklicken der Siglen in der obersten Leiste kann direkt zum ersten vorhandenen Dreißiger
 			im jeweiligen Überlieferungszeugen gesprungen werden.
 		</p>
+	</section>
+	<section>
+		<Devilstable />
 	</section>
 </div>
