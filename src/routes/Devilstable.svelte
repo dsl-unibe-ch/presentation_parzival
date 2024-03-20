@@ -1,7 +1,7 @@
 <script>
 	import * as d3 from 'd3';
+	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
-	import { popup } from '@skeletonlabs/skeleton';
 
 	let width = 400;
 	let height = 400;
@@ -39,13 +39,38 @@
 			]
 		}
 	];
+
 	/**
-	 * @type {import('@skeletonlabs/skeleton').PopupSettings}
+	 * @type {HTMLElement}
 	 */
-	const popupVerse = {
-		event: 'hover',
-		target: 'popupVerse',
-		placement: 'top'
+	let floating;
+
+	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
+		mousePos = d3.pointer(event);
+		const virtualEl = {
+			getBoundingClientRect() {
+				return {
+					width: 0,
+					height: 0,
+					x: event.clientX,
+					y: event.clientY,
+					left: event.clientX,
+					right: event.clientX,
+					top: event.clientY,
+					bottom: event.clientY
+				};
+			}
+		};
+
+		computePosition(virtualEl, floating, {
+			placement: 'right-start',
+			middleware: [offset(15), flip(), shift()]
+		}).then(({ x, y }) => {
+			floating.style.left = `${x}px`;
+			floating.style.top = `${y}px`;
+			floating.style.opacity = '1';
+			floating.style.display = 'block';
+		});
 	};
 
 	$: x = d3
@@ -66,29 +91,37 @@
 	$: verse = Math.round(y.invert(mousePos[1]));
 </script>
 
-<div class="card p-4 variant-filled-secondary" data-popup="popupVerse">
+<div
+	class="card p-1 variant-filled-secondary absolute"
+	data-popup="popupVerse"
+	bind:this={floating}
+>
 	<p>{verse}</p>
-	<div class="arrow variant-filled-secondary" />
 </div>
 
-<svg width="400" height="400" role="application">
-	<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
-	<g bind:this={gy} transform="translate({marginLeft},0)" />
-	{#each data as sigla}
-		{#each sigla.values as [start, end]}
-			<a
-				href={`${base}/textzeugen/${sigla.label}/${verse}`}
-				on:mousemove={(e) => (mousePos = d3.pointer(e))}
-				use:popup={popupVerse}
-			>
-				<rect
-					x={x(sigla.label)}
-					y={y(end)}
-					width={x.bandwidth()}
-					height={y(start) - y(end)}
-					fill="currentColor"
-				/>
-			</a>
+<div
+	on:mousemove={handleMouseMove}
+	on:mouseleave={(_e) => {
+		floating.style.display = 'none';
+		floating.style.opacity = '0';
+	}}
+	role="application"
+>
+	<svg width="400" height="400">
+		<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
+		<g bind:this={gy} transform="translate({marginLeft},0)" />
+		{#each data as sigla}
+			{#each sigla.values as [start, end]}
+				<a href={`${base}/textzeugen/${sigla.label}/${verse}`}>
+					<rect
+						x={x(sigla.label)}
+						y={y(end)}
+						width={x.bandwidth()}
+						height={y(start) - y(end)}
+						fill="currentColor"
+					/>
+				</a>
+			{/each}
 		{/each}
-	{/each}
-</svg>
+	</svg>
+</div>
