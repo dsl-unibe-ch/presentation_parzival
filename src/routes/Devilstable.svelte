@@ -3,8 +3,8 @@
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
 
-	let width = 400;
-	let height = 400;
+	export let width = 400;
+	export let height = 400;
 	let marginTop = 20;
 	let marginRight = 20;
 	let marginBottom = 20;
@@ -107,7 +107,7 @@
 	}}
 	role="application"
 >
-	<svg width="400" height="400">
+	<svg {width} {height}>
 		<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" />
 		{#each data as sigla}

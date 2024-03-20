@@ -1,6 +1,9 @@
 <script>
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
+
+	let tableWidth = 0;
+	let tableHeight = 0;
 </script>
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
@@ -83,7 +86,11 @@
 		<p class="my-5">Geben Sie einen Suchbegriff ein, um in der digitalen Edition zu suchen.</p>
 		<input type="text" placeholder="Suchbegriff" class="input" />
 	</section>
-	<section class="col-span-full">
+	<section
+		class="col-span-full h-[85vh]"
+		bind:clientWidth={tableWidth}
+		bind:clientHeight={tableHeight}
+	>
 		<h2 class="h2 my-10">Edition nach Dreißigern</h2>
 		<p class="my-5">
 			Aktuell sind noch die Bücher IX bis XIV (Dreißiger 433–733) in Revision; über den ganzen Text
@@ -93,8 +100,7 @@
 			Durch Anklicken der Siglen in der obersten Leiste kann direkt zum ersten vorhandenen Dreißiger
 			im jeweiligen Überlieferungszeugen gesprungen werden.
 		</p>
-	</section>
-	<section>
-		<Devilstable />
+
+		<Devilstable width={tableWidth} height={tableHeight} />
 	</section>
 </div>
