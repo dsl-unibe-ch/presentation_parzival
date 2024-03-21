@@ -84,7 +84,7 @@
 	data-popup="popupVerse"
 	bind:this={floating}
 >
-	<p>{verse}</p>
+	<p>enter Manuskript later {verse}</p>
 </div>
 
 <div
