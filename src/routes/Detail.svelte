@@ -5,6 +5,9 @@
 
 	export let width = 400;
 	export let height = 400;
+	export let data_max = 827;
+	export let data_start = 1;
+	export let data_end = data_max;
 	let marginTop = 20;
 	let marginRight = 20;
 	let marginBottom = 20;
@@ -69,14 +72,11 @@
 		.round(true)
 		.paddingOuter(0.1)
 		.paddingInner(0.2);
-	$: y = d3.scaleLinear(d3.extent(data.flatMap((d) => d.values.flat())), [
-		height - marginBottom,
-		marginTop
-	]);
+	$: y = d3.scaleLinear([data_start, data[0]?.values.length], [height - marginBottom, marginTop]);
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
 
-	$: verse = Math.round(y.invert(mousePos[1]));
+	$: verse = Math.floor(y.invert(mousePos[1]));
 </script>
 
 <div
@@ -99,16 +99,19 @@
 		<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" />
 		{#each data as sigla}
-			{#each sigla.values as [start, end]}
-				<a href={`${base}/textzeugen/${sigla.label}/${verse}`}>
-					<rect
-						x={x(sigla.label)}
-						y={y(end)}
-						width={x.bandwidth()}
-						height={y(start) - y(end)}
-						fill="currentColor"
-					/>
-				</a>
+			{#each sigla.values as hasVerse, i}
+				{#if hasVerse}
+					{@const verseNumber = i + 1}
+					<a href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}>
+						<rect
+							x={x(sigla.label)}
+							y={y(verseNumber + 1)}
+							width={x.bandwidth()}
+							height={y(verseNumber) - y(verseNumber + 1)}
+							fill="currentColor"
+						/>
+					</a>
+				{/if}
 			{/each}
 		{/each}
 	</svg>

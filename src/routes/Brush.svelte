@@ -7,8 +7,8 @@
 	let marginRight = 20;
 	let marginBottom = 20;
 	let marginLeft = 20;
-	const DATA_MIN = 1;
-	const DATA_MAX = 822;
+	export let DATA_MIN = 1;
+	export let DATA_MAX = 822;
 
 	/**
 	 * @type {SVGGElement}
@@ -39,22 +39,6 @@
 			]
 		}
 	];
-
-	data = data.map((d) => {
-		const values = new Array(DATA_MAX).fill(false);
-
-		d.values.forEach(([start, end]) => {
-			for (let i = start; i <= end; i++) {
-				// Adjust for 0-indexed array
-				values[i - 1] = true;
-			}
-		});
-
-		return {
-			label: d.label,
-			values
-		};
-	});
 
 	const pointsPerRect = 10;
 	const chunks = Math.ceil(DATA_MAX / pointsPerRect);
