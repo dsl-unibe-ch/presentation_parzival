@@ -7,6 +7,7 @@
 	let marginRight = 20;
 	let marginBottom = 20;
 	let marginLeft = 20;
+	let chunkWidth = 18;
 	export let DATA_MIN = 1;
 	export let DATA_MAX = 822;
 
@@ -35,15 +36,15 @@
 			]
 		}
 	];
-
-	const pointsPerRect = 10;
-	const chunks = Math.floor(DATA_MAX / pointsPerRect);
+	$: numChunks = Math.max(Math.floor((width - marginLeft - marginRight) / chunkWidth), 1);
+	$: pointsPerRect = Math.ceil((DATA_MAX - DATA_MIN) / numChunks);
+	$: console.log(width, numChunks, pointsPerRect);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
-	const chunkedData = data.map((d) => {
-		const chunked = new Array(chunks).fill(0);
+	$: chunkedData = data.map((d) => {
+		const chunked = new Array(numChunks).fill(0);
 
-		for (let i = 0; i < chunks; i++) {
+		for (let i = 0; i < numChunks; i++) {
 			const start = i * pointsPerRect;
 			const end = Math.min((i + 1) * pointsPerRect, DATA_MAX);
 
@@ -67,6 +68,7 @@
 		)
 		.paddingOuter(0.05)
 		.round(true);
+	$: xChunk = d3.scaleLinear([0, numChunks], [marginLeft, width - marginRight]);
 	$: x = d3.scaleLinear([DATA_MIN, DATA_MAX], [marginLeft, width - marginRight]);
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
@@ -78,8 +80,8 @@
 	{#each chunkedData as d}
 		<g>
 			{#each d.values as v, j}
-				{@const start = x(j * pointsPerRect + 1)}
-				{@const end = x((j + 1) * pointsPerRect)}
+				{@const start = xChunk(j)}
+				{@const end = xChunk(j + 1)}
 				<rect
 					x={start}
 					y={y(d.label)}
