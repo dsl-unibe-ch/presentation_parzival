@@ -20,6 +20,11 @@
 	 */
 	let gy;
 
+	/**
+	 * @type {SVGGElement}
+	 */
+	let gBrush;
+
 	export let data = [
 		{
 			label: 'D',
@@ -75,6 +80,22 @@
 	$: x = d3.scaleLinear([DATA_MIN, DATA_MAX], [marginLeft, width - marginRight]);
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
+
+	$: brush = d3
+		.brushX()
+		.extent([
+			[marginLeft, 0],
+			[width - marginRight, height - marginBottom - marginTop]
+		])
+		.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
+			const selection = e.selection;
+			const start = x.invert(selection[0]);
+			const end = x.invert(selection[1]);
+			console.log(start, end);
+		});
+	$: d3.select(gBrush)
+		.call(brush)
+		.call(brush.move, [x(DATA_MIN), x(100)]);
 </script>
 
 <svg {width} {height}>
@@ -95,4 +116,5 @@
 			{/each}
 		</g>
 	{/each}
+	<g bind:this={gBrush} transform="translate(0,{marginTop})" />
 </svg>
