@@ -38,7 +38,10 @@
 	];
 	$: numChunks = Math.max(Math.floor((width - marginLeft - marginRight) / chunkWidth), 1);
 	$: pointsPerRect = Math.ceil((DATA_MAX - DATA_MIN) / numChunks);
-	$: console.log(width, numChunks, pointsPerRect);
+	$: colorScale = d3.scaleQuantile(
+		[0, pointsPerRect],
+		['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']
+	);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	$: chunkedData = data.map((d) => {
@@ -87,7 +90,7 @@
 					y={y(d.label)}
 					width={end - start}
 					height={y.bandwidth()}
-					fill={v ? 'black' : 'white'}
+					fill={`rgb(var(--color-primary-${colorScale(v)}))`}
 				/>
 			{/each}
 		</g>
