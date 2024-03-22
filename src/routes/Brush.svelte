@@ -18,10 +18,6 @@
 	 * @type {SVGGElement}
 	 */
 	let gy;
-	/**
-	 * @type {number[]}
-	 */
-	let mousePos = [0, 1];
 
 	export let data = [
 		{
@@ -41,7 +37,7 @@
 	];
 
 	const pointsPerRect = 10;
-	const chunks = Math.ceil(DATA_MAX / pointsPerRect);
+	const chunks = Math.floor(DATA_MAX / pointsPerRect);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	const chunkedData = data.map((d) => {
@@ -64,26 +60,34 @@
 		};
 	});
 
-	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
-		mousePos = d3.pointer(event);
-	};
-
 	$: y = d3
 		.scaleBand(
 			data.map((d) => d.label),
 			[height - marginTop, marginBottom]
 		)
-		.round(true)
-		.paddingOuter(0.1)
-		.paddingInner(0.2);
-	$: x = d3.scaleLinear([DATA_MIN, DATA_MAX], [marginRight, width - marginLeft]);
+		.paddingOuter(0.05)
+		.round(true);
+	$: x = d3.scaleLinear([DATA_MIN, DATA_MAX], [marginLeft, width - marginRight]);
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
-
-	$: verse = Math.round(x.invert(mousePos[1]));
 </script>
 
 <svg {width} {height}>
-	<g bind:this={gy} transform="translate({marginLeft},0)" />
+	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
 	<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
+	{#each chunkedData as d}
+		<g>
+			{#each d.values as v, j}
+				{@const start = x(j * pointsPerRect + 1)}
+				{@const end = x((j + 1) * pointsPerRect)}
+				<rect
+					x={start}
+					y={y(d.label)}
+					width={end - start}
+					height={y.bandwidth()}
+					fill={v ? 'black' : 'white'}
+				/>
+			{/each}
+		</g>
+	{/each}
 </svg>
