@@ -12,7 +12,7 @@
 	let marginLeft = 20;
 	let chunkWidth = 18;
 	export let DATA_MIN = 1;
-	export let DATA_MAX = 822;
+	export let DATA_MAX = 827;
 
 	/**
 	 * @type {SVGGElement}
@@ -31,24 +31,18 @@
 	export let data = [
 		{
 			label: 'D',
-			values: [
-				[1, 3],
-				[15, 20]
-			]
+			values: []
 		},
 		{
 			label: 'n',
-			values: [
-				[1, 16],
-				[18, 25]
-			]
+			values: []
 		}
 	];
 	$: numChunks = Math.max(Math.floor((width - marginLeft - marginRight) / chunkWidth), 1);
-	$: pointsPerRect = Math.ceil((DATA_MAX - DATA_MIN) / numChunks);
+	$: pointsPerRect = Math.round((DATA_MAX - DATA_MIN) / numChunks);
 	$: colorScale = d3.scaleQuantile(
 		[0, pointsPerRect],
-		['50', '100', '200', '300', '400', '500', '600', '700', '800', '900']
+		['50', '200', '400', '500', '600', '700', '800', '900']
 	);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk

@@ -13,7 +13,7 @@
 	let marginTop = 20;
 	let marginRight = 20;
 	let marginBottom = 20;
-	let marginLeft = 20;
+	let marginLeft = 25;
 
 	/**
 	 * @type {SVGGElement}

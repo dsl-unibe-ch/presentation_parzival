@@ -31,7 +31,7 @@
 		}
 	];
 
-	$: data = data.map((d) => {
+	$: boolData = data.map((d) => {
 		const values = new Array(DATA_MAX).fill(false);
 
 		d.values.forEach(([start, end]) => {
@@ -48,11 +48,11 @@
 	});
 </script>
 
-<Brush {width} {data} on:brush={(e) => (selection = e.detail)} />
+<Brush {width} data={boolData} on:brush={(e) => (selection = e.detail)} />
 <Detail
 	{width}
 	{height}
-	data={data.map((d) => {
+	data={boolData.map((d) => {
 		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
 	})}
 	data_start={selection.start}
