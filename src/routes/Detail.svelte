@@ -52,14 +52,27 @@
 
 		computePosition(virtualEl, floating, {
 			placement: 'right-start',
-			middleware: [offset(15), flip(), shift()]
+			middleware: [offset(15), flip(), shift()],
+			strategy: 'fixed'
 		}).then(({ x, y }) => {
-			floating.style.left = `${x}px`;
-			floating.style.top = `${y}px`;
-			floating.style.opacity = '1';
-			floating.style.display = 'block';
+			Object.assign(floating.style, {
+				left: `${x}px`,
+				top: `${y}px`,
+				opacity: '1',
+				display: 'block'
+			});
 		});
 	};
+
+	function scaleBandInvert(scale) {
+		const domain = scale.domain();
+		const paddingOuter = scale(domain[0]);
+		const eachBand = scale.step();
+		return function (value) {
+			const index = Math.floor((value - paddingOuter) / eachBand);
+			return domain[Math.max(0, Math.min(index, domain.length - 1))];
+		};
+	}
 	$: x = d3
 		.scaleBand(
 			data.map((d) => d.label),
@@ -77,14 +90,16 @@
 	$: d3.select(gx).call(d3.axisBottom(x));
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
+
+	$: manuscript = scaleBandInvert(x)(mousePos[0]);
 </script>
 
 <div
-	class="card p-1 variant-filled-secondary absolute"
+	class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
 	data-popup="popupVerse"
 	bind:this={floating}
 >
-	<p>enter Manuskript later {verse}</p>
+	<p>{manuscript} {verse}</p>
 </div>
 
 <div
@@ -99,20 +114,25 @@
 		<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" />
 		{#each data as sigla}
-			{#each sigla.values as hasVerse, i}
-				{#if hasVerse}
-					{@const verseNumber = i + data_start}
-					<a href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}>
-						<rect
-							x={x(sigla.label)}
-							y={y(verseNumber + 1)}
-							width={x.bandwidth()}
-							height={y(verseNumber) - y(verseNumber + 1)}
-							fill="currentColor"
-						/>
-					</a>
-				{/if}
-			{/each}
+			<g data-manuscript={sigla.label}>
+				{#each sigla.values as hasVerse, i}
+					{#if hasVerse}
+						{@const verseNumber = i + data_start}
+						<a
+							href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
+							class="hover:text-primary-500"
+						>
+							<rect
+								x={x(sigla.label)}
+								y={y(verseNumber + 1)}
+								width={x.bandwidth()}
+								height={y(verseNumber) - y(verseNumber + 1)}
+								fill="currentColor"
+							/>
+						</a>
+					{/if}
+				{/each}
+			</g>
 		{/each}
 	</svg>
 </div>
