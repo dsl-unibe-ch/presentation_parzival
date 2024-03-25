@@ -92,10 +92,21 @@
 		])
 		.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 			const selection = e.selection;
-			const start = Math.round(x.invert(selection[0]));
-			const end = Math.round(x.invert(selection[1]));
+			if (selection[1] - selection[0] < 150) {
+				const start = Math.round(x.invert(selection[0]));
+				const end = Math.round(x.invert(selection[1]));
 
-			dispatch('brush', { start, end });
+				dispatch('brush', { start, end });
+			}
+		})
+		.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
+			const selection = e.selection;
+			if (selection[1] - selection[0] > 150) {
+				const start = Math.round(x.invert(selection[0]));
+				const end = Math.round(x.invert(selection[1]));
+
+				dispatch('brush', { start, end });
+			}
 		});
 	$: d3.select(gBrush)
 		.call(brush)
