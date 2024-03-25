@@ -53,7 +53,7 @@
 	{width}
 	{height}
 	data={data.map((d) => {
-		return { label: d.label, values: d.values.slice(selection.start, selection.end) };
+		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
 	})}
 	data_start={selection.start}
 />
