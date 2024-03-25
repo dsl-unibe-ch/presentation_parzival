@@ -1,4 +1,5 @@
 <script>
+	import { map } from 'd3';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
 
@@ -11,7 +12,7 @@
 	/**
 	 * @type {{values: [number,number][], label: string}[]}
 	 */
-	let data = [
+	export let data = [
 		{
 			label: 'D',
 			values: [
@@ -28,8 +29,8 @@
 		}
 	];
 
-	data = data.map((d) => {
-		const values = new Array(28).fill(false);
+	$: data = data.map((d) => {
+		const values = new Array(DATA_MAX).fill(false);
 
 		d.values.forEach(([start, end]) => {
 			for (let i = start; i <= end; i++) {
@@ -46,4 +47,12 @@
 </script>
 
 <Brush {width} {data} />
-<Detail {width} {height} {data} data_start={1} data_end={28} />
+<Detail
+	{width}
+	{height}
+	data={data.map((d) => {
+		return { label: d.label, values: d.values.slice(1, 101) };
+	})}
+	data_start={1}
+	data_end={101}
+/>

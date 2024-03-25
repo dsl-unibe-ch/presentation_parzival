@@ -1,6 +1,7 @@
 <script>
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
+	import tableData from '$lib/contiguous_ranges.json';
 
 	let tableWidth = 0;
 	let tableHeight = 0;
@@ -101,6 +102,6 @@
 			im jeweiligen Überlieferungszeugen gesprungen werden.
 		</p>
 
-		<Devilstable width={tableWidth} height={tableHeight} />
+		<Devilstable width={tableWidth} height={tableHeight} data={tableData['contiguous-ranges']} />
 	</section>
 </div>
