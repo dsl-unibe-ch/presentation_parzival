@@ -5,9 +5,11 @@
 
 	export let width = 400;
 	export let height = 400;
-	export let data_max = 827;
 	export let data_start = 1;
-	export let data_end = data_max;
+	/**
+	 * @type {{values: boolean[], label: string}[]}
+	 */
+	export let data = [];
 	let marginTop = 20;
 	let marginRight = 20;
 	let marginBottom = 20;
@@ -25,11 +27,6 @@
 	 * @type {number[]}
 	 */
 	let mousePos = [0, 1];
-
-	/**
-	 * @type {{values: [number,number][], label: string}[]}
-	 */
-	export let data = [];
 
 	/**
 	 * @type {HTMLElement}
@@ -63,7 +60,6 @@
 			floating.style.display = 'block';
 		});
 	};
-
 	$: x = d3
 		.scaleBand(
 			data.map((d) => d.label),
@@ -72,7 +68,11 @@
 		.round(true)
 		.paddingOuter(0.1)
 		.paddingInner(0.2);
-	$: y = d3.scaleLinear([data_start, data[0]?.values.length], [height - marginBottom, marginTop]);
+
+	$: y = d3.scaleLinear(
+		[data_start, data_start + data[0]?.values.length],
+		[height - marginBottom, marginTop]
+	);
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
 
@@ -101,7 +101,7 @@
 		{#each data as sigla}
 			{#each sigla.values as hasVerse, i}
 				{#if hasVerse}
-					{@const verseNumber = i + 1}
+					{@const verseNumber = i + data_start}
 					<a href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}>
 						<rect
 							x={x(sigla.label)}

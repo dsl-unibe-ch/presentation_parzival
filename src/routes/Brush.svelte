@@ -1,5 +1,8 @@
 <script>
 	import * as d3 from 'd3';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let width = 400;
 	export let height = 150;
@@ -89,9 +92,10 @@
 		])
 		.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 			const selection = e.selection;
-			const start = x.invert(selection[0]);
-			const end = x.invert(selection[1]);
-			console.log(start, end);
+			const start = Math.round(x.invert(selection[0]));
+			const end = Math.round(x.invert(selection[1]));
+
+			dispatch('brush', { start, end });
 		});
 	$: d3.select(gBrush)
 		.call(brush)

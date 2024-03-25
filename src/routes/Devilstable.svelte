@@ -9,6 +9,8 @@
 	export let width = 400;
 	export let height = 400;
 
+	let selection = { start: 1, end: 100 };
+
 	/**
 	 * @type {{values: [number,number][], label: string}[]}
 	 */
@@ -46,13 +48,12 @@
 	});
 </script>
 
-<Brush {width} {data} />
+<Brush {width} {data} on:brush={(e) => (selection = e.detail)} />
 <Detail
 	{width}
 	{height}
 	data={data.map((d) => {
-		return { label: d.label, values: d.values.slice(1, 101) };
+		return { label: d.label, values: d.values.slice(selection.start, selection.end) };
 	})}
-	data_start={1}
-	data_end={101}
+	data_start={selection.start}
 />
