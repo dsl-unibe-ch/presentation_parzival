@@ -28,6 +28,9 @@
 	 */
 	let gBrush;
 
+	/**
+	 * @type {{values: boolean[], label: string}[]}
+	 */
 	export let data = [
 		{
 			label: 'D',

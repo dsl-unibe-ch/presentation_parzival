@@ -12,7 +12,7 @@
 	let selection = { start: 1, end: 100 };
 
 	/**
-	 * @type {{values: [number,number][], label: string}[]}
+	 * @type {{values: number[][], label: string}[]}
 	 */
 	export let data = [
 		{
@@ -39,7 +39,7 @@
 		const [fractions, noFractions] = data.reduce(
 			/**
 			 *
-			 * @param {[{values: [number,number][], label: string}[],{values: [number,number][], label: string}[]]} acc
+			 * @param {[{values: number[][], label: string}[],{values: number[][], label: string}[]]} acc
 			 * @param item
 			 */
 			(acc, item) => {
