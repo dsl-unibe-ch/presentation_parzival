@@ -64,11 +64,14 @@
 		});
 	};
 
+	/**
+	 * @param {d3.scaleBand<string>} scale
+	 */
 	function scaleBandInvert(scale) {
 		const domain = scale.domain();
 		const paddingOuter = scale(domain[0]);
 		const eachBand = scale.step();
-		return function (value) {
+		return function (/** @type {number} */ value) {
 			const index = Math.floor((value - paddingOuter) / eachBand);
 			return domain[Math.max(0, Math.min(index, domain.length - 1))];
 		};
@@ -86,12 +89,12 @@
 		[data_start, data_start + data[0]?.values.length],
 		[height - marginBottom, marginTop]
 	);
+	$: manuscript = scaleBandInvert(x)(mousePos[0]);
+
 	$: d3.select(gy).call(d3.axisLeft(y));
 	$: d3.select(gx).call(d3.axisBottom(x));
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
-
-	$: manuscript = scaleBandInvert(x)(mousePos[0]);
 </script>
 
 <div
@@ -118,18 +121,38 @@
 				{#each sigla.values as hasVerse, i}
 					{#if hasVerse}
 						{@const verseNumber = i + data_start}
-						<a
-							href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
-							class="hover:text-primary-500"
-						>
+						{#if Array.isArray(hasVerse)}
 							<rect
 								x={x(sigla.label)}
 								y={y(verseNumber + 1)}
 								width={x.bandwidth()}
 								height={y(verseNumber) - y(verseNumber + 1)}
 								fill="currentColor"
+								on:click={() => {
+									console.log(hasVerse);
+								}}
+								role="button"
+								tabindex="0"
+								on:keydown={(e) => {
+									if (e.key === 'Enter' || e.key === ' ') {
+										console.log(hasVerse);
+									}
+								}}
 							/>
-						</a>
+						{:else}
+							<a
+								href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
+								class="hover:text-primary-500"
+							>
+								<rect
+									x={x(sigla.label)}
+									y={y(verseNumber + 1)}
+									width={x.bandwidth()}
+									height={y(verseNumber) - y(verseNumber + 1)}
+									fill="currentColor"
+								/>
+							</a>
+						{/if}
 					{/if}
 				{/each}
 			</g>

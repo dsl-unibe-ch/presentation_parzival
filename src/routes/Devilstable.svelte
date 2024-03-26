@@ -31,21 +31,65 @@
 		}
 	];
 
-	$: boolData = data.map((d) => {
-		const values = new Array(DATA_MAX).fill(false);
+	/**
+	 * @type {{values: boolean[], label: string}[]}
+	 */
+	let boolData = [];
+	$: {
+		const [fractions, noFractions] = data.reduce(
+			/**
+			 *
+			 * @param {[{values: [number,number][], label: string}[],{values: [number,number][], label: string}[]]} acc
+			 * @param item
+			 */
+			(acc, item) => {
+				// Determine which sub-array to push the item into based on whether it includes the substring.
+				item.label.includes('fr') ? acc[0].push(item) : acc[1].push(item);
+				return acc;
+			},
+			[[], []]
+		); // Initial accumulator value is two empty arrays.
 
-		d.values.forEach(([start, end]) => {
-			for (let i = start; i <= end; i++) {
-				// Adjust for 0-indexed array
-				values[i - 1] = true;
-			}
-		});
-
-		return {
-			label: d.label,
-			values
+		//combine all the fractions into one Object with the label 'fr'
+		const fractionData = {
+			label: 'fr',
+			values: new Array(DATA_MAX).fill(false)
 		};
-	});
+		//loop DATA_MAX times and check if the value is in any of the fractions
+		for (let i = 0; i < DATA_MAX; i++) {
+			//check if the value is in any of the fractions
+			for (let j = 0; j < fractions.length; j++) {
+				//check if the value is in the range of the fraction
+				if (fractions[j].values.some(([start, end]) => i + 1 >= start && i + 1 <= end)) {
+					//if the value is in the range of the fraction, add the label to the array
+					if (Array.isArray(fractionData.values[i])) {
+						fractionData.values[i] = [...fractionData.values[i], fractions[j].label];
+					} else {
+						fractionData.values[i] = [fractions[j].label];
+					}
+				}
+			}
+		}
+
+		boolData = [
+			fractionData,
+			...noFractions.map((d) => {
+				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
+
+				d.values.forEach(([start, end]) => {
+					for (let i = start; i <= end; i++) {
+						// Adjust for 0-indexed array
+						values[i - 1] = true;
+					}
+				});
+
+				return {
+					label: d.label,
+					values
+				};
+			})
+		];
+	}
 </script>
 
 <Brush {width} data={boolData} on:brush={(e) => (selection = e.detail)} />
