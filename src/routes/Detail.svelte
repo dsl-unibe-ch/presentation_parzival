@@ -128,6 +128,7 @@
 								width={x.bandwidth()}
 								height={y(verseNumber) - y(verseNumber + 1)}
 								fill="currentColor"
+								class="hover:text-primary-500"
 								on:click={() => {
 									console.log(hasVerse);
 								}}
