@@ -92,10 +92,10 @@
 	}
 </script>
 
-<Brush {width} data={boolData} on:brush={(e) => (selection = e.detail)} />
+<Brush height={200} {width} data={boolData} on:brush={(e) => (selection = e.detail)} />
 <Detail
 	{width}
-	{height}
+	height={height - 200}
 	data={boolData.map((d) => {
 		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
 	})}

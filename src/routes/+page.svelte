@@ -88,7 +88,7 @@
 		<input type="text" placeholder="Suchbegriff" class="input" />
 	</section>
 	<section
-		class="col-span-full h-[85vh]"
+		class="col-span-full h-[88vh]"
 		bind:clientWidth={tableWidth}
 		bind:clientHeight={tableHeight}
 	>

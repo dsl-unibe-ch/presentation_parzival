@@ -9,7 +9,7 @@
 	let marginTop = 20;
 	let marginRight = 20;
 	let marginBottom = 20;
-	let marginLeft = 20;
+	let marginLeft = 28;
 	let chunkWidth = 18;
 	export let DATA_MIN = 1;
 	export let DATA_MAX = 827;
@@ -67,13 +67,10 @@
 		};
 	});
 
-	$: y = d3
-		.scaleBand(
-			data.map((d) => d.label),
-			[height - marginTop, marginBottom]
-		)
-		.paddingOuter(0.05)
-		.round(true);
+	$: y = d3.scaleBand(
+		data.map((d) => d.label),
+		[height - marginTop, marginBottom]
+	);
 	$: xChunk = d3.scaleLinear([0, numChunks], [marginLeft, width - marginRight]);
 	$: x = d3.scaleLinear([DATA_MIN, DATA_MAX], [marginLeft, width - marginRight]);
 	$: d3.select(gy).call(d3.axisLeft(y));
@@ -87,7 +84,7 @@
 		])
 		.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 			const selection = e.selection;
-			if (selection[1] - selection[0] < 150) {
+			if (selection[1] - selection[0] <= 180) {
 				const start = Math.round(x.invert(selection[0]));
 				const end = Math.round(x.invert(selection[1]));
 
@@ -96,7 +93,7 @@
 		})
 		.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
 			const selection = e.selection;
-			if (selection[1] - selection[0] > 150) {
+			if (selection[1] - selection[0] > 180) {
 				const start = Math.round(x.invert(selection[0]));
 				const end = Math.round(x.invert(selection[1]));
 
