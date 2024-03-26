@@ -40,10 +40,11 @@
 	];
 	$: numChunks = Math.max(Math.floor((width - marginLeft - marginRight) / chunkWidth), 1);
 	$: pointsPerRect = Math.round((DATA_MAX - DATA_MIN) / numChunks);
-	$: colorScale = d3.scaleQuantile(
-		[0, pointsPerRect],
-		['50', '200', '400', '500', '600', '700', '800', '900']
+	$: colorScale = d3.scaleThreshold(
+		[1, pointsPerRect / 4, (pointsPerRect / 4) * 2, (pointsPerRect / 4) * 3, pointsPerRect],
+		['50', '200', '400', '500', '600', '900']
 	);
+	// $: colorScale = d3.scaleQuantize([0, pointsPerRect], ['50', '200', '400', '500', '600', '900']);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
 	$: chunkedData = data.map((d) => {
