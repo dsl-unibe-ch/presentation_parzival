@@ -45,7 +45,8 @@
 	$: pointsPerRect = Math.round((DATA_MAX - DATA_MIN) / numChunks);
 	$: colorScale = d3.scaleThreshold(
 		[1, pointsPerRect / 4, (pointsPerRect / 4) * 2, (pointsPerRect / 4) * 3, pointsPerRect],
-		['50', '200', '400', '500', '600', '900']
+		// ['50', '200', '400', '500', '600', '900']
+		['900', '600', '500', '400', '200', '50']
 	);
 	// $: colorScale = d3.scaleQuantize([0, pointsPerRect], ['50', '200', '400', '500', '600', '900']);
 

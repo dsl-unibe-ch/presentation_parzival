@@ -128,7 +128,7 @@
 								width={x.bandwidth()}
 								height={y(verseNumber) - y(verseNumber + 1)}
 								fill="currentColor"
-								class="hover:text-primary-500"
+								class="hover:text-secondary-900"
 								on:click={() => {
 									console.log(hasVerse);
 								}}
@@ -143,7 +143,7 @@
 						{:else}
 							<a
 								href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
-								class="hover:text-primary-500"
+								class="hover:text-secondary-900"
 							>
 								<rect
 									x={x(sigla.label)}
@@ -151,6 +151,7 @@
 									width={x.bandwidth()}
 									height={y(verseNumber) - y(verseNumber + 1)}
 									fill="currentColor"
+									class="hover:text-secondary-900"
 								/>
 							</a>
 						{/if}
