@@ -101,3 +101,9 @@
 	})}
 	data_start={selection.start}
 />
+
+<style>
+	:global(.tick text) {
+		font-size: 0.75rem;
+	}
+</style>

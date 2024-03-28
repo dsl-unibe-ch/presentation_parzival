@@ -7,7 +7,7 @@
 	export let width = 400;
 	export let height = 150;
 	let marginTop = 20;
-	let marginRight = 20;
+	let marginRight = 0;
 	let marginBottom = 20;
 	let marginLeft = 28;
 	let chunkWidth = 18;

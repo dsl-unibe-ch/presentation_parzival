@@ -11,9 +11,9 @@
 	 */
 	export let data = [];
 	let marginTop = 20;
-	let marginRight = 20;
+	let marginRight = 0;
 	let marginBottom = 20;
-	let marginLeft = 25;
+	let marginLeft = 35;
 
 	/**
 	 * @type {SVGGElement}
@@ -91,8 +91,15 @@
 	);
 	$: manuscript = scaleBandInvert(x)(mousePos[0]);
 
-	$: d3.select(gy).call(d3.axisLeft(y));
-	$: d3.select(gx).call(d3.axisBottom(x));
+	$: d3.select(gy)
+		.call(
+			d3
+				.axisRight(y)
+				.ticks(20)
+				.tickSize(width - marginLeft - marginRight)
+		)
+		.call((g) => g.selectAll('.tick text').attr('x', -25));
+	$: d3.select(gx).call(d3.axisTop(x));
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
 </script>
@@ -112,10 +119,11 @@
 		floating.style.opacity = '0';
 	}}
 	role="application"
+	class="mt-6"
 >
 	<svg {width} {height}>
-		<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
-		<g bind:this={gy} transform="translate({marginLeft},0)" />
+		<g bind:this={gx} transform="translate(0,{marginTop})" class="x-axis" />
+		<g bind:this={gy} transform="translate({marginLeft},0)" class="y-axis" />
 		{#each data as sigla}
 			<g data-manuscript={sigla.label}>
 				{#each sigla.values as hasVerse, i}
@@ -161,3 +169,14 @@
 		{/each}
 	</svg>
 </div>
+
+<style>
+	.x-axis :global(text) {
+		font-size: 1rem;
+	}
+
+	.y-axis :global(.tick line) {
+		stroke-opacity: 0.5;
+		stroke-dasharray: 2, 2;
+	}
+</style>
