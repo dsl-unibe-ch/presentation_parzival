@@ -87,11 +87,7 @@
 		<p class="my-5">Geben Sie einen Suchbegriff ein, um in der digitalen Edition zu suchen.</p>
 		<input type="text" placeholder="Suchbegriff" class="input" />
 	</section>
-	<section
-		class="col-span-full h-[88vh]"
-		bind:clientWidth={tableWidth}
-		bind:clientHeight={tableHeight}
-	>
+	<section class="col-span-full">
 		<h2 class="h2 my-10">Edition nach Dreißigern</h2>
 		<p class="my-5">
 			Aktuell sind noch die Bücher IX bis XIV (Dreißiger 433–733) in Revision; über den ganzen Text
@@ -101,7 +97,12 @@
 			Durch Anklicken der Siglen in der obersten Leiste kann direkt zum ersten vorhandenen Dreißiger
 			im jeweiligen Überlieferungszeugen gesprungen werden.
 		</p>
-
-		<Devilstable width={tableWidth} height={tableHeight} data={tableData['contiguous-ranges']} />
+		<div
+			class="w-[calc(100vw-4rem)] mx-[calc(50%-50vw+2rem)] h-[90vh]"
+			bind:clientWidth={tableWidth}
+			bind:clientHeight={tableHeight}
+		>
+			<Devilstable width={tableWidth} height={tableHeight} data={tableData['contiguous-ranges']} />
+		</div>
 	</section>
 </div>
