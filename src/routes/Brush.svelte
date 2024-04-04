@@ -10,7 +10,7 @@
 	let marginRight = 0;
 	let marginBottom = 20;
 	let marginLeft = 28;
-	let chunkWidth = 18;
+	const optimalChunkWidth = 18;
 	export let DATA_MIN = 1;
 	export let DATA_MAX = 827;
 
@@ -41,33 +41,39 @@
 			values: []
 		}
 	];
-	$: numChunks = Math.max(Math.floor((width - marginLeft - marginRight) / chunkWidth), 1);
-	$: pointsPerRect = Math.round((DATA_MAX - DATA_MIN) / numChunks);
-	$: colorScale = d3.scaleThreshold(
-		[1, pointsPerRect / 4, (pointsPerRect / 4) * 2, (pointsPerRect / 4) * 3, pointsPerRect],
-		// ['50', '200', '400', '500', '600', '900']
-		['900', '600', '500', '400', '200', '50']
-	);
-	// $: colorScale = d3.scaleQuantize([0, pointsPerRect], ['50', '200', '400', '500', '600', '900']);
+	$: availableWidth = width - marginLeft - marginRight;
+	$: numChunks = Math.max(Math.floor(availableWidth / optimalChunkWidth), 1);
+	$: colorScale = d3
+		.scaleThreshold()
+		.domain([0.001, 1 / 4, 2 / 4, 3 / 4, 0.9999])
+		.range(['900', '600', '500', '400', '200', '50']);
+	// $: colorScale = d3.scaleQuantize([0, 1], ['50', '200', '400', '500', '600', '900']);
 
 	// create chunks: each chunk is a number counting the number of true values in the chunk
-	$: chunkedData = data.map((d) => {
+	$: chunkedData = data.map((dataObject) => {
 		const chunked = new Array(numChunks).fill(0);
-
+		const chunkedPresent = new Array(numChunks).fill(0);
 		for (let i = 0; i < numChunks; i++) {
-			const start = i * pointsPerRect;
-			const end = Math.min((i + 1) * pointsPerRect, DATA_MAX);
-
-			for (let j = start; j < end; j++) {
-				if (d.values[j]) {
+			const start = xChunk(i);
+			const end = xChunk(i + 1);
+			dataObject.values.forEach((present, valIndex) => {
+				const pos = x(valIndex);
+				if (pos >= start && pos < end) {
 					chunked[i]++;
+					if (present) {
+						chunkedPresent[i]++;
+					}
+				} else if (pos >= end) {
+					return;
 				}
-			}
+			});
 		}
 
 		return {
-			label: d.label,
-			values: chunked
+			label: dataObject.label,
+			values: chunked.map((val, i) => {
+				return chunkedPresent[i] / val;
+			})
 		};
 	});
 
