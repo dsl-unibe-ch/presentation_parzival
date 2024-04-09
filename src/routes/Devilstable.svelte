@@ -9,6 +9,10 @@
 	export let width = 400;
 	export let height = 400;
 
+	$: mobile = width < 800;
+
+	const brushDimension = 200;
+
 	let selection = { start: 1, end: 100 };
 
 	/**
@@ -92,10 +96,15 @@
 	}
 </script>
 
-<Brush height={200} {width} data={boolData} on:brush={(e) => (selection = e.detail)} />
+<Brush
+	height={mobile ? brushDimension : height}
+	width={mobile ? width : brushDimension}
+	data={boolData}
+	on:brush={(e) => (selection = e.detail)}
+/>
 <Detail
-	{width}
-	height={height - 200}
+	width={mobile ? width : width - brushDimension}
+	height={mobile ? height - brushDimension : height}
 	data={boolData.map((d) => {
 		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
 	})}
