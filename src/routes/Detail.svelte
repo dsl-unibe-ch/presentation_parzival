@@ -65,11 +65,11 @@
 	};
 
 	/**
-	 * @param {d3.scaleBand<string>} scale
+	 * @param { import('d3').ScaleBand<string> } scale
 	 */
 	function scaleBandInvert(scale) {
 		const domain = scale.domain();
-		const paddingOuter = scale(domain[0]);
+		const paddingOuter = scale(domain[0]) ?? 0;
 		const eachBand = scale.step();
 		return function (/** @type {number} */ value) {
 			const index = Math.floor((value - paddingOuter) / eachBand);
@@ -98,7 +98,9 @@
 				.ticks(20)
 				.tickSize(width - marginLeft - marginRight)
 		)
-		.call((g) => g.selectAll('.tick text').attr('x', -25));
+		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
+			g.selectAll('.tick text').attr('x', -25);
+		});
 	$: d3.select(gx).call(d3.axisTop(x));
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
