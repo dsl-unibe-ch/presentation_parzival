@@ -33,8 +33,13 @@
 	 */
 	let floating;
 
+	/**
+	 * @type {HTMLElement}
+	 */
+	let svgElement;
+
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
-		mousePos = d3.pointer(event);
+		mousePos = d3.pointer(event, svgElement);
 		const virtualEl = {
 			getBoundingClientRect() {
 				return {
@@ -113,7 +118,6 @@
 >
 	<p>{manuscript} {verse}</p>
 </div>
-
 <div
 	on:mousemove={handleMouseMove}
 	on:mouseleave={(_e) => {
@@ -123,7 +127,7 @@
 	role="application"
 	class="mt-6"
 >
-	<svg {width} {height}>
+	<svg {width} {height} bind:this={svgElement}>
 		<g bind:this={gx} transform="translate(0,{marginTop})" class="x-axis" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" class="y-axis" />
 		{#each data as sigla}
