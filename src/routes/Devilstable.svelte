@@ -39,8 +39,6 @@
 	 * @type {{values: boolean[], label: string}[]}
 	 */
 	let boolData = [];
-
-	let boolFractionData = [];
 	$: {
 		const [fractions, noFractions] = data.reduce(
 			/**
@@ -76,23 +74,25 @@
 				}
 			}
 		}
-		const toBool = (d) => {
-			/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 
-			d.values.forEach(([start, end]) => {
-				for (let i = start; i <= end; i++) {
-					// Adjust for 0-indexed array
-					values[i - 1] = true;
-				}
-			});
+		boolData = [
+			fractionData,
+			...noFractions.map((d) => {
+				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 
-			return {
-				label: d.label,
-				values
-			};
-		};
-		boolFractionData = fractions.map(toBool);
-		boolData = [fractionData, ...noFractions.map(toBool)];
+				d.values.forEach(([start, end]) => {
+					for (let i = start; i <= end; i++) {
+						// Adjust for 0-indexed array
+						values[i - 1] = true;
+					}
+				});
+
+				return {
+					label: d.label,
+					values
+				};
+			})
+		];
 	}
 </script>
 
@@ -106,9 +106,6 @@
 	width={mobile ? width : width - brushDimension}
 	height={mobile ? height - brushDimension : height}
 	data={boolData.map((d) => {
-		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
-	})}
-	fractionData={boolFractionData.map((d) => {
 		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
 	})}
 	data_start={selection.start}
