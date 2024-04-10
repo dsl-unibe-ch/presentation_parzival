@@ -41,34 +41,38 @@
 
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
 		mousePos = d3.pointer(event, svgElement);
+		if (mousePos[0] >= marginLeft && mousePos[1] >= marginTop) {
+			const virtualEl = {
+				getBoundingClientRect() {
+					return {
+						width: 0,
+						height: 0,
+						x: event.clientX,
+						y: event.clientY,
+						left: event.clientX,
+						right: event.clientX,
+						top: event.clientY,
+						bottom: event.clientY
+					};
+				}
+			};
 
-		const virtualEl = {
-			getBoundingClientRect() {
-				return {
-					width: 0,
-					height: 0,
-					x: event.clientX,
-					y: event.clientY,
-					left: event.clientX,
-					right: event.clientX,
-					top: event.clientY,
-					bottom: event.clientY
-				};
-			}
-		};
-
-		computePosition(virtualEl, floating, {
-			placement: 'right-start',
-			middleware: [offset(15), flip(), shift()],
-			strategy: 'fixed'
-		}).then(({ x, y }) => {
-			Object.assign(floating.style, {
-				left: `${x}px`,
-				top: `${y}px`,
-				opacity: '1',
-				display: 'block'
+			computePosition(virtualEl, floating, {
+				placement: 'right-start',
+				middleware: [offset(15), flip(), shift()],
+				strategy: 'fixed'
+			}).then(({ x, y }) => {
+				Object.assign(floating.style, {
+					left: `${x}px`,
+					top: `${y}px`,
+					opacity: '1',
+					display: 'block'
+				});
 			});
-		});
+		} else {
+			floating.style.display = 'none';
+			floating.style.opacity = '0';
+		}
 	};
 
 	/**
