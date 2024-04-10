@@ -6,6 +6,7 @@
 	export let width = 400;
 	export let height = 400;
 	export let data_start = 1;
+	export let fractionData = [];
 	/**
 	 * @type {{values: boolean[], label: string}[]}
 	 */
@@ -34,7 +35,7 @@
 	let floating;
 
 	/**
-	 * @type {HTMLElement}
+	 * @type {SVGElement}
 	 */
 	let svgElement;
 
@@ -94,7 +95,17 @@
 		[data_start, data_start + data[0]?.values.length],
 		[height - marginBottom, marginTop]
 	);
-	$: manuscript = scaleBandInvert(x)(mousePos[0]);
+	function getfraction(/** @type {number} */ verse) {
+		let labels = [];
+		for (let i = 0; i < fractionData.length; i++) {
+			if (fractionData[i].values[verse + data_start - 1]) {
+				labels.push(fractionData[i].label);
+			}
+		}
+		return labels;
+	}
+	$: manuscript =
+		scaleBandInvert(x)(mousePos[0]) === 'fr' ? getfraction(verse) : scaleBandInvert(x)(mousePos[0]);
 
 	$: d3.select(gy)
 		.call(
@@ -116,7 +127,15 @@
 	data-popup="popupVerse"
 	bind:this={floating}
 >
-	<p>{manuscript} {verse}</p>
+	{#if Array.isArray(manuscript)}
+		<ul>
+			{#each manuscript as sigla}
+				<li><p>{sigla} {verse}</p></li>
+			{/each}
+		</ul>
+	{:else}
+		<p>{manuscript} {verse}</p>
+	{/if}
 </div>
 <div
 	on:mousemove={handleMouseMove}
