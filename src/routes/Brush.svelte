@@ -98,18 +98,22 @@
 		};
 	});
 	$: d3.select(gy).call(d3.axisLeft(y));
-	$: d3.select(gx).call(d3.axisBottom(x));
+	$: mobile ? d3.select(gx).call(d3.axisBottom(x)) : d3.select(gx).call(d3.axisTop(x));
 	/**
 	 * @type {d3.brushX | d3.brushY}
 	 */
 	let brush;
 	$: {
-		brush = mobile ? d3.brushX() : d3.brushY();
+		brush = mobile
+			? d3.brushX().extent([
+					[marginLeft, 0],
+					[width - marginRight, height - marginBottom - marginTop]
+				])
+			: d3.brushY().extent([
+					[marginLeft, marginTop],
+					[width - marginRight, height - marginBottom]
+				]);
 		brush
-			.extent([
-				[marginLeft, 0],
-				[width - marginRight, height - marginBottom - marginTop]
-			])
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = mobile ? e.selection[0] : e.selection[1];
 				const to = mobile ? e.selection[1] : e.selection[0];
@@ -133,12 +137,15 @@
 	}
 	$: d3.select(gBrush)
 		.call(brush)
-		.call(brush.move, [valuesDim(DATA_MIN), valuesDim(100)]);
+		.call(
+			brush.move,
+			mobile ? [valuesDim(DATA_MIN), valuesDim(100)] : [valuesDim(100), valuesDim(DATA_MIN)]
+		);
 </script>
 
 <svg {width} {height} class="float-left">
 	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
-	<g bind:this={gx} transform="translate(0,{height - marginBottom})" />
+	<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
 	{#each chunkedData as d}
 		<g>
 			{#each d.values as v, j}
@@ -154,5 +161,5 @@
 			{/each}
 		</g>
 	{/each}
-	<g bind:this={gBrush} transform="translate(0,{marginTop})" />
+	<g bind:this={gBrush} transform="translate(0,{mobile ? marginTop : 0})" />
 </svg>

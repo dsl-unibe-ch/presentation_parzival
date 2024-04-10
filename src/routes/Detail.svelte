@@ -10,7 +10,7 @@
 	 * @type {{values: boolean[], label: string}[]}
 	 */
 	export let data = [];
-	let marginTop = 20;
+	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
 	let marginLeft = 35;
