@@ -115,7 +115,20 @@
 		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
 			g.selectAll('.tick text').attr('x', -25);
 		});
-	$: d3.select(gx).call(d3.axisTop(x));
+	$: d3.select(gx)
+		.call(d3.axisTop(x))
+		.selectAll('.tick text')
+		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
+			g.attr('role', 'button');
+		})
+		.nodes()
+		.forEach((node) => {
+			popup(node, {
+				event: 'click',
+				target: `popuplabel-${node.textContent}`,
+				placement: 'top'
+			});
+		});
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
 </script>
@@ -140,6 +153,14 @@
 		<p>{manuscript} {verse}</p>
 	{/if}
 </div>
+{#each data.map((d) => d.label) as label}
+	<div
+		class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
+		data-popup="popuplabel-{label}"
+	>
+		<p>Hier stehen Erläuterungen zu {label}</p>
+	</div>
+{/each}
 {#each data.find((d) => d.label === 'fr').values as fraction, i}
 	{#if Array.isArray(fraction)}
 		{@const verse = i + data_start}
