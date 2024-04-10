@@ -2,6 +2,7 @@
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
+	import { popup } from '@skeletonlabs/skeleton';
 
 	export let width = 400;
 	export let height = 400;
@@ -40,6 +41,7 @@
 
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
 		mousePos = d3.pointer(event, svgElement);
+
 		const virtualEl = {
 			getBoundingClientRect() {
 				return {
@@ -122,13 +124,38 @@
 	{#if Array.isArray(manuscript)}
 		<ul>
 			{#each manuscript as sigla}
-				<li><p>{sigla} {verse}</p></li>
+				<li>
+					<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
+						{sigla}
+						{verse}
+					</a>
+				</li>
 			{/each}
 		</ul>
 	{:else}
 		<p>{manuscript} {verse}</p>
 	{/if}
 </div>
+{#each data.find((d) => d.label === 'fr').values as fraction, i}
+	{#if Array.isArray(fraction)}
+		{@const verse = i + data_start}
+		<div
+			class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
+			data-popup="popupFractions-{verse}"
+		>
+			<ul>
+				{#each fraction as sigla}
+					<li>
+						<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
+							{sigla}
+							{verse}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/if}
+{/each}
 <div
 	on:mousemove={handleMouseMove}
 	on:mouseleave={(_e) => {
@@ -147,24 +174,37 @@
 					{#if hasVerse}
 						{@const verseNumber = i + data_start}
 						{#if Array.isArray(hasVerse)}
-							<rect
-								x={x(sigla.label)}
-								y={y(verseNumber + 1)}
-								width={x.bandwidth()}
-								height={y(verseNumber) - y(verseNumber + 1)}
-								fill="currentColor"
-								class="hover:text-secondary-900"
-								on:click={() => {
-									console.log(hasVerse);
-								}}
-								role="button"
-								tabindex="0"
-								on:keydown={(e) => {
-									if (e.key === 'Enter' || e.key === ' ') {
-										console.log(hasVerse);
-									}
-								}}
-							/>
+							{#if hasVerse.length === 1}
+								<a
+									href={`${base}/textzeugen/${hasVerse[0]}/${verseNumber}`}
+									class="hover:text-secondary-900"
+								>
+									<rect
+										x={x(sigla.label)}
+										y={y(verseNumber + 1)}
+										width={x.bandwidth()}
+										height={y(verseNumber) - y(verseNumber + 1)}
+										fill="currentColor"
+										class="hover:text-secondary-900"
+									/>
+								</a>
+							{:else}
+								<rect
+									x={x(sigla.label)}
+									y={y(verseNumber + 1)}
+									width={x.bandwidth()}
+									height={y(verseNumber) - y(verseNumber + 1)}
+									fill="currentColor"
+									class="hover:text-secondary-900"
+									role="button"
+									tabindex="0"
+									use:popup={{
+										event: 'focus-blur',
+										target: 'popupFractions-' + verseNumber,
+										placement: 'top'
+									}}
+								/>
+							{/if}
 						{:else}
 							<a
 								href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
