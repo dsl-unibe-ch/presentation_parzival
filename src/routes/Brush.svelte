@@ -117,7 +117,7 @@
 			.on('brush', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = mobile ? e.selection[0] : e.selection[1];
 				const to = mobile ? e.selection[1] : e.selection[0];
-				if (to - from <= 180) {
+				if (Math.abs(from - to) <= 180) {
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
 
@@ -127,7 +127,7 @@
 			.on('end', (/** @type {{ selection: [number, number]; }} */ e) => {
 				const from = mobile ? e.selection[0] : e.selection[1];
 				const to = mobile ? e.selection[1] : e.selection[0];
-				if (to - from > 180) {
+				if (Math.abs(from - to) > 180) {
 					const start = Math.round(valuesDim.invert(from));
 					const end = Math.round(valuesDim.invert(to));
 
