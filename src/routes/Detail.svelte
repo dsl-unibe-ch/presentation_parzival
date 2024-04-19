@@ -2,7 +2,6 @@
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
-	import { popup } from '@skeletonlabs/skeleton';
 
 	export let width = 400;
 	export let height = 400;
@@ -120,14 +119,6 @@
 		.selectAll('.tick text')
 		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
 			g.attr('role', 'button');
-		})
-		.nodes()
-		.forEach((node) => {
-			popup(node, {
-				event: 'click',
-				target: `popuplabel-${node.textContent}`,
-				placement: 'top'
-			});
 		});
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
@@ -223,11 +214,6 @@
 									class="hover:text-secondary-900"
 									role="button"
 									tabindex="0"
-									use:popup={{
-										event: 'focus-blur',
-										target: 'popupFractions-' + verseNumber,
-										placement: 'top'
-									}}
 								/>
 							{/if}
 						{:else}
