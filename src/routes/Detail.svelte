@@ -145,9 +145,49 @@
 		.selectAll('.tick text')
 		.call((g) => {
 			g.attr('role', 'button');
+			g.attr('tabindex', '0');
+		})
+		.on('click', (e) => {
+			const reference = e.currentTarget;
+			const popup = popupLabels[reference.textContent];
+			if (popup && reference) {
+				computePosition(reference, popup, {
+					placement: 'top'
+				}).then(({ x, y }) => {
+					Object.assign(popup.style, {
+						top: `${y}px`,
+						left: `${x}px`,
+						opacity: '1'
+					});
+				});
+			}
+		})
+		.on('blur', (e) => {
+			const reference = e.currentTarget;
+			const popup = popupLabels[reference.textContent];
+			if (popup) {
+				popup.style.opacity = '0';
+			}
 		});
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
+	const popupFractions = {};
+	const popupLabels = {};
+	const openPopupFractions = (e, verseNumber) => {
+		const reference = e.currentTarget;
+		const popup = popupFractions[verseNumber];
+		if (popup && reference) {
+			computePosition(reference, popup, {
+				placement: 'top'
+			}).then(({ x, y }) => {
+				Object.assign(popup.style, {
+					top: `${y}px`,
+					left: `${x}px`,
+					opacity: '1'
+				});
+			});
+		}
+	};
 </script>
 
 <div
@@ -172,8 +212,8 @@
 </div>
 {#each data.map((d) => d.label) as label}
 	<div
-		class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
-		data-popup="popuplabel-{label}"
+		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 w-max"
+		bind:this={popupLabels[label]}
 	>
 		<p>Hier stehen Erläuterungen zu {label}</p>
 	</div>
@@ -182,8 +222,8 @@
 	{#if Array.isArray(fraction)}
 		{@const verse = i + data_start}
 		<div
-			class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
-			data-popup="popupFractions-{verse}"
+			class="card p-1 variant-filled-primary top-0 left-0 w-max absolute opacity-0"
+			bind:this={popupFractions[verse]}
 		>
 			<ul>
 				{#each fraction as sigla}
@@ -231,20 +271,31 @@
 									/>
 								</a>
 							{:else}
-								<rect
-									x={x(sigla.label)}
-									y={y(verseNumber + 1)}
-									width={x.bandwidth()}
-									height={y(verseNumber) - y(verseNumber + 1)}
-									fill="currentColor"
-									class="hover:text-secondary-900"
+								<!-- svelte-ignore a11y-invalid-attribute -->
+								<a
 									role="button"
 									tabindex="0"
-								/>
+									href="#"
+									on:keydown={(e) => openPopupFractions(e, verseNumber)}
+									on:click|preventDefault|stopPropagation={(e) =>
+										openPopupFractions(e, verseNumber)}
+									on:blur={() => {
+										popupFractions[verseNumber].style.opacity = '0';
+									}}
+								>
+									<rect
+										x={x(sigla.label)}
+										y={y(verseNumber + 1)}
+										width={x.bandwidth()}
+										height={y(verseNumber) - y(verseNumber + 1)}
+										fill="currentColor"
+										class="hover:text-secondary-900"
+									/>
+								</a>
 							{/if}
 						{:else}
 							<a
-								href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
+								href={`${base}/textzeugen/${sigla.label}/${verse}`}
 								class="hover:text-secondary-900"
 							>
 								<rect
