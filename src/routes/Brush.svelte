@@ -143,7 +143,7 @@
 		);
 </script>
 
-<svg {width} {height} class="float-left">
+<svg {width} {height} class="float-left" shape-rendering="crispEdges">
 	<g bind:this={gy} transform="translate({marginLeft - 5} ,0)" />
 	<g bind:this={gx} transform="translate(0,{mobile ? height - marginBottom : marginTop - 1})" />
 	{#each chunkedData as d}

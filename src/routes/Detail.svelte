@@ -247,7 +247,7 @@
 	role="application"
 	class="mt-6"
 >
-	<svg {width} {height} bind:this={svgElement}>
+	<svg {width} {height} bind:this={svgElement} shape-rendering="crispEdges">
 		<g bind:this={gx} transform="translate(0,{marginTop})" class="x-axis" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" class="y-axis" />
 		{#each contigousData as sigla}
