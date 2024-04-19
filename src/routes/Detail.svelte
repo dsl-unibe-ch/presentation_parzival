@@ -10,6 +10,32 @@
 	 * @type {{values: boolean[], label: string}[]}
 	 */
 	export let data = [];
+	$: contigousData = data.map((d) => {
+		if (d.label === 'fr') {
+			return d;
+		}
+		let contiguousRanges = [];
+		let start = 0;
+		for (let i = 0; i < d.values.length; i++) {
+			if (d.values[i]) {
+				if (start === 0) {
+					start = i + data_start;
+				}
+			} else {
+				if (start !== 0) {
+					contiguousRanges.push([start, i - 1 + data_start]);
+					start = 0;
+				}
+			}
+		}
+		if (start !== 0) {
+			contiguousRanges.push([start, d.values.length - 1 + data_start]);
+		}
+		return {
+			label: d.label,
+			values: contiguousRanges
+		};
+	});
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
@@ -117,7 +143,7 @@
 	$: d3.select(gx)
 		.call(d3.axisTop(x))
 		.selectAll('.tick text')
-		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
+		.call((g) => {
 			g.attr('role', 'button');
 		});
 
@@ -152,7 +178,7 @@
 		<p>Hier stehen Erläuterungen zu {label}</p>
 	</div>
 {/each}
-{#each data.find((d) => d.label === 'fr').values as fraction, i}
+{#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
 	{#if Array.isArray(fraction)}
 		{@const verse = i + data_start}
 		<div
@@ -184,15 +210,15 @@
 	<svg {width} {height} bind:this={svgElement}>
 		<g bind:this={gx} transform="translate(0,{marginTop})" class="x-axis" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" class="y-axis" />
-		{#each data as sigla}
+		{#each contigousData as sigla}
 			<g data-manuscript={sigla.label}>
-				{#each sigla.values as hasVerse, i}
-					{#if hasVerse}
+				{#each sigla.values as values, i}
+					{#if values}
 						{@const verseNumber = i + data_start}
-						{#if Array.isArray(hasVerse)}
-							{#if hasVerse.length === 1}
+						{#if isNaN(values[0])}
+							{#if values.length === 1}
 								<a
-									href={`${base}/textzeugen/${hasVerse[0]}/${verseNumber}`}
+									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
 									class="hover:text-secondary-900"
 								>
 									<rect
@@ -223,9 +249,9 @@
 							>
 								<rect
 									x={x(sigla.label)}
-									y={y(verseNumber + 1)}
+									y={y(values[1] + 1)}
 									width={x.bandwidth()}
-									height={y(verseNumber) - y(verseNumber + 1)}
+									height={y(values[0]) - y(values[1] + 1)}
 									fill="currentColor"
 									class="hover:text-secondary-900"
 								/>
