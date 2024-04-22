@@ -12,9 +12,6 @@
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
-	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
-	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	// Scroll to top on page change (is needed because of skeleton app shell)
 	afterNavigate((/** @type import('@sveltejs/kit').AfterNavigate */ params) => {

@@ -102,7 +102,11 @@
 			bind:clientWidth={tableWidth}
 			bind:clientHeight={tableHeight}
 		>
-			<Devilstable width={tableWidth} height={tableHeight} data={tableData['contiguous-ranges']} />
+			<Devilstable
+				width={tableWidth || 1000}
+				height={tableHeight || 400}
+				data={tableData['contiguous-ranges']}
+			/>
 		</div>
 	</section>
 </div>

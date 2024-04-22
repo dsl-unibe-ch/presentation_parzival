@@ -2,7 +2,6 @@
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
-	import { popup } from '@skeletonlabs/skeleton';
 
 	export let width = 400;
 	export let height = 400;
@@ -11,6 +10,32 @@
 	 * @type {{values: boolean[], label: string}[]}
 	 */
 	export let data = [];
+	$: contigousData = data.map((d) => {
+		if (d.label === 'fr') {
+			return d;
+		}
+		let contiguousRanges = [];
+		let start = 0;
+		for (let i = 0; i < d.values.length; i++) {
+			if (d.values[i]) {
+				if (start === 0) {
+					start = i + data_start;
+				}
+			} else {
+				if (start !== 0) {
+					contiguousRanges.push([start, i - 1 + data_start]);
+					start = 0;
+				}
+			}
+		}
+		if (start !== 0) {
+			contiguousRanges.push([start, d.values.length - 1 + data_start]);
+		}
+		return {
+			label: d.label,
+			values: contiguousRanges
+		};
+	});
 	let marginTop = 30;
 	let marginRight = 0;
 	let marginBottom = 20;
@@ -118,19 +143,51 @@
 	$: d3.select(gx)
 		.call(d3.axisTop(x))
 		.selectAll('.tick text')
-		.call((/** @type import('d3-selection').Selection<SVGGElement, any, null, undefined> */ g) => {
+		.call((g) => {
 			g.attr('role', 'button');
+			g.attr('tabindex', '0');
 		})
-		.nodes()
-		.forEach((node) => {
-			popup(node, {
-				event: 'click',
-				target: `popuplabel-${node.textContent}`,
-				placement: 'top'
-			});
+		.on('click', (e) => {
+			const reference = e.currentTarget;
+			const popup = popupLabels[reference.textContent];
+			if (popup && reference) {
+				computePosition(reference, popup, {
+					placement: 'top'
+				}).then(({ x, y }) => {
+					Object.assign(popup.style, {
+						top: `${y}px`,
+						left: `${x}px`,
+						opacity: '1'
+					});
+				});
+			}
+		})
+		.on('blur', (e) => {
+			const reference = e.currentTarget;
+			const popup = popupLabels[reference.textContent];
+			if (popup) {
+				popup.style.opacity = '0';
+			}
 		});
 
 	$: verse = Math.floor(y.invert(mousePos[1]));
+	const popupFractions = {};
+	const popupLabels = {};
+	const openPopupFractions = (e, verseNumber) => {
+		const reference = e.currentTarget;
+		const popup = popupFractions[verseNumber];
+		if (popup && reference) {
+			computePosition(reference, popup, {
+				placement: 'top'
+			}).then(({ x, y }) => {
+				Object.assign(popup.style, {
+					top: `${y}px`,
+					left: `${x}px`,
+					opacity: '1'
+				});
+			});
+		}
+	};
 </script>
 
 <div
@@ -155,18 +212,18 @@
 </div>
 {#each data.map((d) => d.label) as label}
 	<div
-		class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
-		data-popup="popuplabel-{label}"
+		class="card p-1 variant-filled-primary absolute opacity-0 top-0 left-0 w-max"
+		bind:this={popupLabels[label]}
 	>
 		<p>Hier stehen Erläuterungen zu {label}</p>
 	</div>
 {/each}
-{#each data.find((d) => d.label === 'fr').values as fraction, i}
+{#each data.find((d) => d.label === 'fr')?.values || [] as fraction, i}
 	{#if Array.isArray(fraction)}
 		{@const verse = i + data_start}
 		<div
-			class="card p-1 variant-filled-primary fixed top-0 left-0 w-max"
-			data-popup="popupFractions-{verse}"
+			class="card p-1 variant-filled-primary top-0 left-0 w-max absolute opacity-0"
+			bind:this={popupFractions[verse]}
 		>
 			<ul>
 				{#each fraction as sigla}
@@ -190,18 +247,18 @@
 	role="application"
 	class="mt-6"
 >
-	<svg {width} {height} bind:this={svgElement}>
+	<svg {width} {height} bind:this={svgElement} shape-rendering="crispEdges">
 		<g bind:this={gx} transform="translate(0,{marginTop})" class="x-axis" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" class="y-axis" />
-		{#each data as sigla}
+		{#each contigousData as sigla}
 			<g data-manuscript={sigla.label}>
-				{#each sigla.values as hasVerse, i}
-					{#if hasVerse}
+				{#each sigla.values as values, i}
+					{#if values}
 						{@const verseNumber = i + data_start}
-						{#if Array.isArray(hasVerse)}
-							{#if hasVerse.length === 1}
+						{#if isNaN(values[0])}
+							{#if values.length === 1}
 								<a
-									href={`${base}/textzeugen/${hasVerse[0]}/${verseNumber}`}
+									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
 									class="hover:text-secondary-900"
 								>
 									<rect
@@ -214,32 +271,38 @@
 									/>
 								</a>
 							{:else}
-								<rect
-									x={x(sigla.label)}
-									y={y(verseNumber + 1)}
-									width={x.bandwidth()}
-									height={y(verseNumber) - y(verseNumber + 1)}
-									fill="currentColor"
-									class="hover:text-secondary-900"
+								<!-- svelte-ignore a11y-invalid-attribute -->
+								<a
 									role="button"
 									tabindex="0"
-									use:popup={{
-										event: 'focus-blur',
-										target: 'popupFractions-' + verseNumber,
-										placement: 'top'
+									href="#"
+									on:keydown={(e) => openPopupFractions(e, verseNumber)}
+									on:click|preventDefault|stopPropagation={(e) =>
+										openPopupFractions(e, verseNumber)}
+									on:blur={() => {
+										popupFractions[verseNumber].style.opacity = '0';
 									}}
-								/>
+								>
+									<rect
+										x={x(sigla.label)}
+										y={y(verseNumber + 1)}
+										width={x.bandwidth()}
+										height={y(verseNumber) - y(verseNumber + 1)}
+										fill="currentColor"
+										class="hover:text-secondary-900"
+									/>
+								</a>
 							{/if}
 						{:else}
 							<a
-								href={`${base}/textzeugen/${sigla.label}/${verseNumber}`}
+								href={`${base}/textzeugen/${sigla.label}/${verse}`}
 								class="hover:text-secondary-900"
 							>
 								<rect
 									x={x(sigla.label)}
-									y={y(verseNumber + 1)}
+									y={y(values[1] + 1)}
 									width={x.bandwidth()}
-									height={y(verseNumber) - y(verseNumber + 1)}
+									height={y(values[0]) - y(values[1] + 1)}
 									fill="currentColor"
 									class="hover:text-secondary-900"
 								/>
