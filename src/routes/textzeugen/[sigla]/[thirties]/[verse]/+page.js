@@ -1,15 +1,17 @@
 import { generateEntries } from '$lib/functions';
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
+	const sigla = params.sigla.split('-');
+	const iiif = sigla.map((witnes) =>
+		fetch(`/api/json/metadata-ms-page/${witnes}/${params.thirties}/${params.verse}`)
+			.then((r) => r.json())
+			.then((data) => data.iiif)
+	);
 	return {
-		sigla: params.sigla.split('-'),
+		sigla,
 		thirties: params.thirties,
 		verse: params.verse.padStart(2, '0'),
-		iiif: (
-			await fetch(
-				`/api/json/metadata-ms-page/${params.sigla}/${params.thirties}/${params.verse}`
-			).then((r) => r.json())
-		).iiif
+		iiif: await Promise.all(iiif)
 	};
 }
 
