@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { assets } from '$app/paths';
+	import { afterNavigate } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -14,6 +15,8 @@
 	 * @type {import('openseadragon').Viewer[]}
 	 */
 	let viewer = [];
+
+	let transcription = [];
 
 	onMount(async () => {
 		OpenSeadragon = (await import('openseadragon')).default;
@@ -86,10 +89,18 @@
 		});
 	});
 
+	afterNavigate(async () => {
+		data.sigla.forEach(async (element, i) => {
+			transcription[element] = fetch(
+				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/pb[@xml:id="${data.page[i]}"]/following-sibling::*[following-sibling::pb]`
+			).then((r) => r.json());
+			console.log(await transcription[element]);
+		});
+	});
+
 	$: {
 		if (viewer[0] && data.iiif[0]) {
 			data.iiif.forEach((iiif, index) => {
-				console.log(iiif);
 				fetch(iiif)
 					.then((res) => res.json())
 					.then((json) => {
@@ -100,13 +111,21 @@
 	}
 </script>
 
+{JSON.stringify(data)}
+
 <section class="w-full">
 	<h1 class="h1">Textzeugen</h1>
 	<p>Textzeugenansicht, Einstellungen</p>
 </section>
 {#each data.sigla as witnes}
 	<section>
-		<p>transkription</p>
+		{#await transcription[witnes]}
+			<p>Loading...</p>
+		{:then transcription}
+			{@html transcription}
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}
 	</section>
 	<section>
 		<div id="viewer-{witnes}" class="w-full h-[60vh]"></div>
