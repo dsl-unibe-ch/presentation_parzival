@@ -1,5 +1,7 @@
 //import sigla from '$lib/sigla.json';
 
+import { generateEntries } from '$lib/functions';
+
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
 	/** @type {{ [key: string]: Promise<any> }} */
@@ -20,17 +22,5 @@ export async function load({ fetch, params }) {
 
 /** @type {import('./$types').EntryGenerator} */
 export function entries() {
-	// Generate all 827 Dreissiger with 1-30 verses
-	/** @type {import('./$types').RouteParams[]} */
-	const entryArray = [];
-	for (let thirties = 1; thirties <= 827; thirties++) {
-		for (let verse = 1; verse <= 30; verse++) {
-			entryArray.push({
-				thirties: `${thirties}`,
-				verse: `${verse}`
-			});
-		}
-	}
-
-	return entryArray;
+	return generateEntries(false);
 }
