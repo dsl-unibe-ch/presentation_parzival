@@ -12,7 +12,7 @@ export async function GET({ params }) {
 	} catch (e) {
 		error(404, 'Not found');
 	}
-	return new Response(iiif);
+	return new Response(JSON.stringify({ iiif }));
 }
 
 /** @type {import('./$types').EntryGenerator} */
