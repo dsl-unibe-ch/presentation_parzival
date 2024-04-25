@@ -108,8 +108,6 @@
 	});
 </script>
 
-{JSON.stringify(data)}
-
 <section class="w-full">
 	<h1 class="h1">Textzeugen</h1>
 	<p>Textzeugenansicht, Einstellungen</p>
@@ -121,7 +119,13 @@
 				<p>Loading...</p>
 			{:then tpData}
 				{#if tpData?.content}
-					{@html tpData?.content}
+					<!-- find <cb> and divide the content into two divs-->
+					{@const columns = tpData.content.split('<br class="tei-cb">')}
+					<div class="flex flex-row gap-5">
+						{#each columns as column}
+							<div class="column">{@html column}</div>
+						{/each}
+					</div>
 				{:else}
 					{JSON.stringify(tpData)}
 				{/if}
@@ -134,3 +138,11 @@
 		</section>
 	</section>
 {/each}
+
+<style>
+	.column :global(.line) {
+		display: flex;
+		gap: 1em;
+		margin: 0.5em 0;
+	}
+</style>
