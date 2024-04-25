@@ -3,9 +3,13 @@ import { generateEntries } from '$lib/functions';
 export async function load({ fetch, params }) {
 	const sigla = params.sigla.split('-');
 	const meta = sigla.map((witnes) =>
-		fetch(`/api/json/metadata-ms-page/${witnes}/${params.thirties}/${params.verse}`).then((r) =>
-			r.json()
-		)
+		fetch(`/api/json/metadata-ms-page/${witnes}/${params.thirties}/${params.verse}`).then((r) => {
+			if (r.status === 200) {
+				return r.json();
+			} else {
+				return { iiif: '', page: '' };
+			}
+		})
 	);
 	return {
 		sigla,

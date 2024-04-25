@@ -3,7 +3,7 @@ import { codices } from '$lib/sigla.json';
 /**
  * Generate all 827 Dreissiger with 1-30 verses for all sigla
  * @param {boolean} sigla
- * @returns
+ * @returns {Array<{ sigla?: string, thirties: string, verse: string }>}
  */
 export function generateEntries(sigla) {
 	const entryArray = [];
