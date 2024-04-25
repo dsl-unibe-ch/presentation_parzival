@@ -1,7 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 	import { assets } from '$app/paths';
-	import { afterNavigate } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -16,7 +15,7 @@
 	 */
 	let viewer = [];
 
-	let transcription = [];
+	let tpData = [];
 
 	onMount(async () => {
 		OpenSeadragon = (await import('openseadragon')).default;
@@ -89,15 +88,6 @@
 		});
 	});
 
-	afterNavigate(async () => {
-		data.sigla.forEach(async (element, i) => {
-			transcription[element] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/pb[@xml:id="${data.page[i]}"]/following-sibling::*[following-sibling::pb]`
-			).then((r) => r.json());
-			console.log(await transcription[element]);
-		});
-	});
-
 	$: {
 		if (viewer[0] && data.iiif[0]) {
 			data.iiif.forEach((iiif, index) => {
@@ -109,6 +99,13 @@
 			});
 		}
 	}
+	$: data.sigla.forEach(async (element, i) => {
+		console.log('running for ', element);
+		tpData[element] = fetch(
+			`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element}.xml/json?&view=page&id=${data.page[i]}&odd=parzival.odd`
+		).then((r) => r.json());
+		tpData = { ...tpData };
+	});
 </script>
 
 {JSON.stringify(data)}
@@ -118,16 +115,22 @@
 	<p>Textzeugenansicht, Einstellungen</p>
 </section>
 {#each data.sigla as witnes}
-	<section>
-		{#await transcription[witnes]}
-			<p>Loading...</p>
-		{:then transcription}
-			{@html transcription}
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await}
-	</section>
-	<section>
-		<div id="viewer-{witnes}" class="w-full h-[60vh]"></div>
+	<section class="grid grid-cols-2">
+		<section>
+			{#await tpData[witnes]}
+				<p>Loading...</p>
+			{:then tpData}
+				{#if tpData?.content}
+					{@html tpData?.content}
+				{:else}
+					{JSON.stringify(tpData)}
+				{/if}
+			{:catch error}
+				<p style="color: red">{error.message}</p>
+			{/await}
+		</section>
+		<section>
+			<div id="viewer-{witnes}" class="w-full h-[60vh]"></div>
+		</section>
 	</section>
 {/each}
