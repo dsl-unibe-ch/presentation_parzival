@@ -75,10 +75,6 @@
 		}
 
 		boolData = [
-			{
-				label: 'Fassung',
-				values: new Array(DATA_MAX).fill(true)
-			},
 			...noFractions.map((d) => {
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 
@@ -108,7 +104,13 @@
 <Detail
 	width={mobile ? width : width - brushDimension}
 	height={mobile ? height - brushDimension : height}
-	data={boolData.map((d) => {
+	data={[
+		{
+			label: 'Fassung',
+			values: new Array(DATA_MAX).fill(true)
+		},
+		...boolData
+	].map((d) => {
 		return { label: d.label, values: d.values.slice(selection.start - 1, selection.end + 1) };
 	})}
 	data_start={selection.start}
