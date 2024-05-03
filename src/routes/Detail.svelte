@@ -212,7 +212,7 @@
 		<ul>
 			{#each manuscript as sigla}
 				<li>
-					<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
+					<a href={`${base}/textzeugen/${sigla}/${verse}/1`} class="hover:text-secondary-900">
 						{sigla}
 						{verse}
 					</a>
@@ -241,7 +241,7 @@
 			<ul>
 				{#each fraction as sigla}
 					<li>
-						<a href={`${base}/textzeugen/${sigla}/${verse}`} class="hover:text-secondary-900">
+						<a href={`${base}/textzeugen/${sigla}/${verse}/1`} class="hover:text-secondary-900">
 							{sigla}
 							{verse}
 						</a>
@@ -272,7 +272,7 @@
 						{@const verseNumber = i + data_start}
 						{#if isNaN(values[0])}
 							{#if values.length === 1}
-								<a href={`${base}/textzeugen/${values[0]}/${verseNumber}`}>
+								<a href={`${base}/textzeugen/${values[0]}/${verseNumber}/1`}>
 									<rect
 										x={x(sigla.label)}
 										y={y(verseNumber + 1)}
@@ -306,7 +306,7 @@
 								</a>
 							{/if}
 						{:else}
-							<a href={`${base}/textzeugen/${sigla.label}/${verse}`}>
+							<a href={`${base}/textzeugen/${sigla.label}/${verse}/1`}>
 								<rect
 									x={x(sigla.label)}
 									y={y(values[1] + 1)}
