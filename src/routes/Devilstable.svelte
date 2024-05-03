@@ -76,7 +76,6 @@
 		}
 
 		boolData = [
-			fractionData,
 			...noFractions.map((d) => {
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 
@@ -91,7 +90,8 @@
 					label: d.label,
 					values
 				};
-			})
+			}),
+			fractionData
 		];
 	}
 </script>
