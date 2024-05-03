@@ -58,6 +58,10 @@
 	 * @type {HTMLElement}
 	 */
 	let floating;
+	/**
+	 * @type {HTMLElement}
+	 */
+	let hoverLine;
 
 	/**
 	 * @type {SVGElement}
@@ -67,6 +71,12 @@
 	const handleMouseMove = (/** @type {{ clientX: any; clientY: any; }} */ event) => {
 		mousePos = d3.pointer(event, svgElement);
 		if (mousePos[0] >= marginLeft && mousePos[1] >= marginTop) {
+			// show horizontal line
+			hoverLine.style.opacity = '1';
+			hoverLine.setAttribute('y1', `${mousePos[1]}`);
+			hoverLine.setAttribute('y2', `${mousePos[1]}`);
+
+			// show floating element
 			const virtualEl = {
 				getBoundingClientRect() {
 					return {
@@ -95,8 +105,11 @@
 				});
 			});
 		} else {
+			// hide floating element
 			floating.style.display = 'none';
 			floating.style.opacity = '0';
+			// hide horizontal line
+			hoverLine.style.opacity = '0';
 		}
 	};
 
@@ -243,6 +256,7 @@
 	on:mouseleave={(_e) => {
 		floating.style.display = 'none';
 		floating.style.opacity = '0';
+		hoverLine.style.opacity = '0';
 	}}
 	role="application"
 	class="mt-6"
@@ -250,6 +264,7 @@
 	<svg {width} {height} bind:this={svgElement} shape-rendering="crispEdges">
 		<g bind:this={gx} transform="translate(0,{marginTop})" class="x-axis" />
 		<g bind:this={gy} transform="translate({marginLeft},0)" class="y-axis" />
+
 		{#each contigousData as sigla}
 			<g data-manuscript={sigla.label}>
 				{#each sigla.values as values, i}
@@ -257,17 +272,14 @@
 						{@const verseNumber = i + data_start}
 						{#if isNaN(values[0])}
 							{#if values.length === 1}
-								<a
-									href={`${base}/textzeugen/${values[0]}/${verseNumber}`}
-									class="hover:text-secondary-900"
-								>
+								<a href={`${base}/textzeugen/${values[0]}/${verseNumber}`}>
 									<rect
 										x={x(sigla.label)}
 										y={y(verseNumber + 1)}
 										width={x.bandwidth()}
 										height={y(verseNumber) - y(verseNumber + 1)}
 										fill="currentColor"
-										class="hover:text-secondary-900"
+										class="hover:text-primary-500"
 									/>
 								</a>
 							{:else}
@@ -289,22 +301,19 @@
 										width={x.bandwidth()}
 										height={y(verseNumber) - y(verseNumber + 1)}
 										fill="currentColor"
-										class="hover:text-secondary-900"
+										class="hover:text-primary-500"
 									/>
 								</a>
 							{/if}
 						{:else}
-							<a
-								href={`${base}/textzeugen/${sigla.label}/${verse}`}
-								class="hover:text-secondary-900"
-							>
+							<a href={`${base}/textzeugen/${sigla.label}/${verse}`}>
 								<rect
 									x={x(sigla.label)}
 									y={y(values[1] + 1)}
 									width={x.bandwidth()}
 									height={y(values[0]) - y(values[1] + 1)}
 									fill="currentColor"
-									class="hover:text-secondary-900"
+									class="hover:text-primary-500"
 								/>
 							</a>
 						{/if}
@@ -312,6 +321,16 @@
 				{/each}
 			</g>
 		{/each}
+		<line
+			bind:this={hoverLine}
+			opacity="0"
+			x1="0"
+			x2={width}
+			stroke-width="1"
+			pointer-events="none"
+			stroke="currentColor"
+			class="text-primary-500"
+		/>
 	</svg>
 </div>
 
