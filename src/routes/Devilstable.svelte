@@ -1,9 +1,8 @@
 <script>
-	import { map } from 'd3';
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
+	import { codices } from '$lib/sigla.json';
 
-	const DATA_MIN = 1;
 	const DATA_MAX = 827;
 
 	export let width = 400;
@@ -91,7 +90,7 @@
 				});
 
 				return {
-					label: d.label,
+					label: codices.find((i) => i.handle === d.label)?.sigil || d.label,
 					values
 				};
 			}),
