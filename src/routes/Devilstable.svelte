@@ -76,6 +76,10 @@
 		}
 
 		boolData = [
+			{
+				label: 'Fassung',
+				values: new Array(DATA_MAX).fill(true)
+			},
 			...noFractions.map((d) => {
 				/** @type {boolean[]} */ const values = new Array(DATA_MAX).fill(false);
 

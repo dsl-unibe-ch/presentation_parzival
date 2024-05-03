@@ -305,6 +305,17 @@
 									/>
 								</a>
 							{/if}
+						{:else if sigla.label === 'Fassung'}
+							<a href={`${base}/fassungen/${verse}/1`}>
+								<rect
+									x={x(sigla.label)}
+									y={y(values[1] + 1)}
+									width={x.bandwidth()}
+									height={y(values[0]) - y(values[1] + 1)}
+									fill="currentColor"
+									class="hover:text-primary-500"
+								/>
+							</a>
 						{:else}
 							<a href={`${base}/textzeugen/${sigla.label}/${verse}/1`}>
 								<rect
