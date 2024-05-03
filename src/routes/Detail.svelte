@@ -2,6 +2,7 @@
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
+	import { codices } from '$lib/sigla.json';
 
 	export let width = 400;
 	export let height = 400;
@@ -154,7 +155,18 @@
 			g.selectAll('.tick text').attr('x', -25);
 		});
 	$: d3.select(gx)
-		.call(d3.axisTop(x))
+		.call(
+			d3.axisTop(
+				d3
+					.scaleBand(
+						data.map((d) => codices.find((i) => i.handle === d.label)?.sigil || d.label),
+						[marginLeft, width - marginRight]
+					)
+					.round(true)
+					.paddingOuter(0.1)
+					.paddingInner(0.2)
+			)
+		)
 		.selectAll('.tick text')
 		.call((g) => {
 			g.attr('role', 'button');

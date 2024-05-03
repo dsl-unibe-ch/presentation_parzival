@@ -1,7 +1,6 @@
 <script>
 	import Brush from './Brush.svelte';
 	import Detail from './Detail.svelte';
-	import { codices } from '$lib/sigla.json';
 
 	const DATA_MAX = 827;
 
@@ -86,7 +85,7 @@
 				});
 
 				return {
-					label: codices.find((i) => i.handle === d.label)?.sigil || d.label,
+					label: d.label,
 					values
 				};
 			}),

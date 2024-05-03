@@ -11,6 +11,7 @@ export async function GET({ params }) {
 		);
 		return new Response(JSON.stringify({ iiif: meta.iiif, page: meta.id }));
 	} catch (e) {
+		console.error(e);
 		return error(404, 'Not found');
 	}
 }
