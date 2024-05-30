@@ -1,8 +1,10 @@
 <script>
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
-	import tableData from '$lib/contiguous_ranges.json';
 
+	/** @type {import('./$types').PageData} */
+	export let data;
+	$: ({ tableData } = data);
 	let tableWidth = 0;
 	let tableHeight = 0;
 </script>
