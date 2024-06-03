@@ -4,6 +4,7 @@
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { afterNavigate } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { teipb } from '$lib/constants';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -20,7 +21,7 @@
 		loss = [];
 		sigla.codices.forEach((element) => {
 			publisherData[element.handle] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
+				`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
 			).then((r) => r.json());
 		});
 	});
@@ -31,7 +32,7 @@
 	$: sigla.hyparchetypes.forEach((element) => {
 		if (hyparchetypesSlider) {
 			publisherData[element.handle] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+				`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 			).then((r) => r.json());
 		} else {
 			delete publisherData[element.handle];

@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { assets } from '$app/paths';
+	import { teipb } from '$lib/constants';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -104,7 +105,7 @@
 		data.sigla.forEach(async (element, i) => {
 			console.log('running for ', element);
 			tpData[element] = fetch(
-				`https://tei-ub.dh.unibe.ch/exist/apps/parzival/api/parts/${element}.xml/json?&view=page&id=${data.page[i]}&odd=parzival.odd`
+				`${teipb}/parts/${element}.xml/json?&view=page&id=${data.page[i]}&odd=parzival.odd`
 			).then((r) => r.json());
 			tpData = { ...tpData };
 		});
