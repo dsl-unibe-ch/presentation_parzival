@@ -8,7 +8,6 @@ export async function GET({ params, fetch }) {
 		const data = await fetch(
 			`https://dhbern.github.io/parzival-static-api/api/json/metadata-ms-page/${params.sigla}.json`
 		).then((r) => r.json());
-		console.log(data);
 		meta = data[params.sigla].find((/** @type {{ l: string, id:string | string[]; }} */ entry) =>
 			entry.l.includes(`${params.thirties}.${params.verse.padStart(2, '0')}`)
 		);
