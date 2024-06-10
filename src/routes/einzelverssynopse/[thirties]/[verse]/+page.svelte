@@ -136,7 +136,7 @@
 	</section>
 </div>
 
-<style lang="scss" global>
+<style global>
 	.anchor {
 		color: var(--color-primary-500);
 		text-decoration: none;
