@@ -93,6 +93,7 @@
 		if (viewer[0] && data.iiif[0]) {
 			console.log('loading iiif');
 			data.iiif.forEach((iiif, index) => {
+				if (iiif === 'not found') return;
 				fetch(iiif)
 					.then((res) => res.json())
 					.then((json) => {
@@ -104,6 +105,7 @@
 	$: if (viewer[0])
 		data.sigla.forEach(async (element, i) => {
 			console.log('running for ', element);
+			if (data.page[i] === 'not found') return;
 			tpData[element] = fetch(
 				`${teipb}/parts/${element}.xml/json?&view=page&id=${data.page[i]}&odd=parzival.odd`
 			).then((r) => r.json());
@@ -121,16 +123,20 @@
 			{#await tpData[witnes]}
 				<p>Loading...</p>
 			{:then tpData}
-				{#if tpData?.content}
-					<!-- find <cb> and divide the content into two divs-->
-					{@const columns = tpData.content.split('<br class="tei-cb">')}
-					<div class="flex flex-row gap-5">
-						{#each columns as column}
-							<div class="column">{@html column}</div>
-						{/each}
-					</div>
+				{#if tpData}
+					{#if tpData?.content}
+						<!-- find <cb> and divide the content into two divs-->
+						{@const columns = tpData.content.split('<br class="tei-cb">')}
+						<div class="flex flex-row gap-5">
+							{#each columns as column}
+								<div class="column">{@html column}</div>
+							{/each}
+						</div>
+					{:else}
+						{JSON.stringify(tpData)}
+					{/if}
 				{:else}
-					{JSON.stringify(tpData)}
+					<p>Der Vers existiert nicht</p>
 				{/if}
 			{:catch error}
 				<p style="color: red">{error.message}</p>

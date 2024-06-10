@@ -9,7 +9,7 @@ export async function load({ fetch, params }) {
 				if (r.status === 200) {
 					return r.json();
 				} else {
-					return { iiif: '', page: '' };
+					return { iiif: 'not found', page: 'not found' };
 				}
 			}
 		)
