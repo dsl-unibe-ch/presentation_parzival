@@ -14,8 +14,8 @@ export async function load({ fetch, params }) {
 	});*/
 
 	return {
-		thirties: params.thirties,
-		verse: params.verse.padStart(2, '0')
+		thirties: params.thirties ?? '1',
+		verse: params.verse?.padStart(2, '0') ?? '01'
 		//publisherData
 	};
 }

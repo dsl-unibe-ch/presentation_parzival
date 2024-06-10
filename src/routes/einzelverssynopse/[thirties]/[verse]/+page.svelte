@@ -135,3 +135,10 @@
 		</div>
 	</section>
 </div>
+
+<style lang="scss" global>
+	.anchor {
+		color: var(--color-primary-500);
+		text-decoration: none;
+	}
+</style>
