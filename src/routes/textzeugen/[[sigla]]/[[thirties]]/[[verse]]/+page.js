@@ -1,5 +1,3 @@
-import { base } from '$app/paths';
-import { generateEntries } from '$lib/functions';
 import { api } from '$lib/constants';
 
 /** @type {import('./$types').PageLoad} */

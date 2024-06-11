@@ -1,5 +1,6 @@
 <script>
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
+	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import Devilstable from './Devilstable.svelte';
 
 	/** @type {import('./$types').PageData} */
@@ -7,6 +8,11 @@
 	$: ({ tableData } = data);
 	let tableWidth = 0;
 	let tableHeight = 0;
+
+	/**
+	 * @type { String[] }
+	 */
+	let selectedSigla = ['', ''];
 </script>
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
@@ -57,30 +63,13 @@
 			Handschriften V oder V') oder das Kürzel "Ep" (für den Epilog in den Handschriften V und V'),
 			danach die Zahl des Verses.
 		</p>
-
 		<div>
 			<div class="flex gap-1 my-3">
-				<label>
-					Textzeugen: <select class="select my-2">
-						<option value="1">Textzeuge 1</option>
-						<option value="2">G</option>
-						<option value="3">D</option>
-						<option value="4">m</option>
-						<option value="5">Fr</option>
-					</select>
-				</label>
-				<label>
-					Textzeugen: <select class="select my-2">
-						<option value="1">Textzeuge 1</option>
-						<option value="2">G</option>
-						<option value="3">D</option>
-						<option value="4">m</option>
-						<option value="5">Fr</option>
-					</select>
-				</label>
+				<TextzeugenSelector bind:value={selectedSigla[0]} />
+				<TextzeugenSelector bind:value={selectedSigla[1]} />
 			</div>
 			<div class="flex max-w-full items-baseline gap-1 my-3">
-				<VerseSelector targetPath="/textzeugen" />
+				<VerseSelector targetPath={`/textzeugen/${selectedSigla.join('-')}`} />
 			</div>
 		</div>
 	</section>

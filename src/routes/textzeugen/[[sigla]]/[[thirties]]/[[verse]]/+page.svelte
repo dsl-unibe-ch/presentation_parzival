@@ -148,8 +148,6 @@
 			</section>
 		</section>
 	{/each}
-{:else}
-	<p>Keine Textzeugen ausgewählt</p>
 {/if}
 
 <style>
