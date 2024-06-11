@@ -39,15 +39,17 @@ export async function load({ fetch, params }) {
 		}
 	}
 
-	const meta = sigla?.map((witnes) =>
-		fetch(`${base}/api/json/metadata-ms-page/${witnes}/${thirties}/${verse}`).then((r) => {
-			if (r.status === 200) {
-				return r.json();
-			} else {
-				return { iiif: 'not found', page: 'not found' };
-			}
-		})
-	);
+	const meta = sigla?.map(async (witnes) => {
+		const data = await fetch(`${api}/json/metadata-ms-page/${witnes}.json`).then((r) => r.json());
+		const returnObject = data[witnes].find(
+			(/** @type {{ l: string, id:string | string[]; }} */ entry) =>
+				entry.l.includes(`${thirties}.${verse}`)
+		);
+		return returnObject
+			? { iiif: returnObject.iiif, page: returnObject.id }
+			: { iiif: false, page: false };
+	});
+
 	return {
 		sigla,
 		thirties,
