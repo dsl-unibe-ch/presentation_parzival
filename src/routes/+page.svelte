@@ -64,13 +64,7 @@
 			danach die Zahl des Verses.
 		</p>
 		<div>
-			<div class="flex gap-1 my-3">
-				<TextzeugenSelector bind:value={selectedSigla[0]} />
-				<TextzeugenSelector bind:value={selectedSigla[1]} />
-			</div>
-			<div class="flex max-w-full items-baseline gap-1 my-3">
-				<VerseSelector targetPath={`/textzeugen/${selectedSigla.join('-')}`} />
-			</div>
+			<TextzeugenSelector />
 		</div>
 	</section>
 	<section>

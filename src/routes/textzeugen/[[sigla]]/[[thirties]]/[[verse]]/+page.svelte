@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { assets } from '$app/paths';
 	import { teipb } from '$lib/constants';
+	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -116,6 +117,7 @@
 <section class="w-full">
 	<h1 class="h1">Textzeugen</h1>
 	<p>Textzeugenansicht, Einstellungen</p>
+	<TextzeugenSelector />
 </section>
 {#if data.sigla}
 	{#each data.sigla as witnes}
