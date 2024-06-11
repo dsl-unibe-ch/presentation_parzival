@@ -63,9 +63,3 @@ export async function load({ fetch, params }) {
 		page: meta ? (await Promise.all(meta)).map((m) => m?.page) : false
 	};
 }
-
-/** @type {import('./$types').EntryGenerator} */
-export function entries() {
-	// @ts-ignore
-	return generateEntries(true);
-}
