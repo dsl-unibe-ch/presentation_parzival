@@ -1,4 +1,3 @@
-import { generateEntries } from '$lib/functions';
 import { error } from '@sveltejs/kit';
 import { api } from '$lib/constants';
 
