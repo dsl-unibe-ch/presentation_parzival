@@ -20,7 +20,7 @@
 
 	onMount(async () => {
 		OpenSeadragon = (await import('openseadragon')).default;
-		data.sigla.forEach((witnes) => {
+		data.sigla?.forEach((witnes) => {
 			viewer = [
 				...viewer,
 				new OpenSeadragon.Viewer({
@@ -103,7 +103,7 @@
 		}
 	}
 	$: if (viewer[0])
-		data.sigla.forEach(async (element, i) => {
+		data.sigla?.forEach(async (element, i) => {
 			console.log('running for ', element);
 			if (data.page[i] === 'not found') return;
 			tpData[element] = fetch(
@@ -117,36 +117,40 @@
 	<h1 class="h1">Textzeugen</h1>
 	<p>Textzeugenansicht, Einstellungen</p>
 </section>
-{#each data.sigla as witnes}
-	<section class="grid grid-cols-2">
-		<section>
-			{#await tpData[witnes]}
-				<p>Loading...</p>
-			{:then tpData}
-				{#if tpData}
-					{#if tpData?.content}
-						<!-- find <cb> and divide the content into two divs-->
-						{@const columns = tpData.content.split('<br class="tei-cb">')}
-						<div class="flex flex-row gap-5">
-							{#each columns as column}
-								<div class="column">{@html column}</div>
-							{/each}
-						</div>
+{#if data.sigla}
+	{#each data.sigla as witnes}
+		<section class="grid grid-cols-2">
+			<section>
+				{#await tpData[witnes]}
+					<p>Loading...</p>
+				{:then tpData}
+					{#if tpData}
+						{#if tpData?.content}
+							<!-- find <cb> and divide the content into two divs-->
+							{@const columns = tpData.content.split('<br class="tei-cb">')}
+							<div class="flex flex-row gap-5">
+								{#each columns as column}
+									<div class="column">{@html column}</div>
+								{/each}
+							</div>
+						{:else}
+							{JSON.stringify(tpData)}
+						{/if}
 					{:else}
-						{JSON.stringify(tpData)}
+						<p>Der Vers existiert nicht</p>
 					{/if}
-				{:else}
-					<p>Der Vers existiert nicht</p>
-				{/if}
-			{:catch error}
-				<p style="color: red">{error.message}</p>
-			{/await}
+				{:catch error}
+					<p style="color: red">{error.message}</p>
+				{/await}
+			</section>
+			<section>
+				<div id="viewer-{witnes}" class="w-full h-[60vh]"></div>
+			</section>
 		</section>
-		<section>
-			<div id="viewer-{witnes}" class="w-full h-[60vh]"></div>
-		</section>
-	</section>
-{/each}
+	{/each}
+{:else}
+	<p>Keine Textzeugen ausgewählt</p>
+{/if}
 
 <style>
 	.column :global(.line) {
