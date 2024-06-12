@@ -2,7 +2,7 @@
 	import { codices, fragments } from '$lib/sigla.json';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 
-	export let selectedSigla = ['d', ''];
+	export let selectedSigla = ['d'];
 
 	export let coordinates = ['', ''];
 </script>
