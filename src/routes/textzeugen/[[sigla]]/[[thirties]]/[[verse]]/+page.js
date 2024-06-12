@@ -48,10 +48,22 @@ export async function load({ fetch, params }) {
 		} else {
 			returnObject = data[witnes][0];
 		}
-		returnObject.iiif = fetch(returnObject.iiif).then((res) => res.json());
+		returnObject.iiif = fetch(returnObject.iiif).then((res) => {
+			if (!res.ok) {
+				console.error('Failed to fetch iiif', res);
+				return false;
+			}
+			return res.json();
+		});
 		returnObject.tpData = fetch(
 			`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
-		).then((r) => r.json());
+		).then((r) => {
+			if (!r.ok) {
+				console.error('Failed to fetch tpData', r);
+				return false;
+			}
+			return r.json();
+		});
 		return returnObject
 			? { tpData: returnObject.tpData, iiif: returnObject.iiif, page: returnObject.id }
 			: { tpData: false, iiif: false, page: false };
