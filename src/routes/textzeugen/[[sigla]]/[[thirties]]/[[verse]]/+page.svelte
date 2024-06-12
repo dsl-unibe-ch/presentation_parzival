@@ -1,7 +1,5 @@
 <script>
-	import { afterNavigate } from '$app/navigation';
 	import { assets } from '$app/paths';
-	import { teipb } from '$lib/constants';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import { codices, fragments } from '$lib/sigla.json';
 
@@ -18,105 +16,93 @@
 	 */
 	let viewer = [];
 
-	let tpData = [];
+	const generateViewer = (node, iiif) => {
+		const i = node.id.split('-')[1];
+		if (data.iiif[i] === 'not found') return;
+		const createViewer = () => {
+			viewer[i] = new OpenSeadragon.Viewer({
+				id: node.id,
+				prefixUrl: `${assets}/openseadragon-svg-icons/icons/`,
+				navImages: {
+					zoomIn: {
+						REST: 'zoomin_rest.svg',
+						GROUP: 'zoomin_grouphover.svg',
+						HOVER: 'zoomin_hover.svg',
+						DOWN: 'zoomin_pressed.svg'
+					},
+					next: {
+						REST: 'next_rest.svg',
+						GROUP: 'next_grouphover.svg',
 
-	afterNavigate(async () => {
+						HOVER: 'next_hover.svg',
+						DOWN: 'next_pressed.svg'
+					},
+					previous: {
+						REST: 'previous_rest.svg',
+						GROUP: 'previous_grouphover.svg',
+						HOVER: 'previous_hover.svg',
+						DOWN: 'previous_pressed.svg'
+					},
+					fullpage: {
+						REST: 'fullpage_rest.svg',
+						GROUP: 'fullpage_grouphover.svg',
+						HOVER: 'fullpage_hover.svg',
+						DOWN: 'fullpage_pressed.svg'
+					},
+					home: {
+						REST: 'home_rest.svg',
+						GROUP: 'home_grouphover.svg',
+						HOVER: 'home_hover.svg',
+						DOWN: 'home_pressed.svg'
+					},
+					zoomOut: {
+						REST: 'zoomout_rest.svg',
+						GROUP: 'zoomout_grouphover.svg',
+						HOVER: 'zoomout_hover.svg',
+						DOWN: 'zoomout_pressed.svg'
+					},
+					rotateleft: {
+						REST: 'rotateleft_rest.svg',
+						GROUP: 'rotateleft_grouphover.svg',
+						HOVER: 'rotateleft_hover.svg',
+						DOWN: 'rotateleft_pressed.svg'
+					},
+					rotateright: {
+						REST: 'rotateright_rest.svg',
+						GROUP: 'rotateright_grouphover.svg',
+						HOVER: 'rotateright_hover.svg',
+						DOWN: 'rotateright_pressed.svg'
+					},
+					flip: {
+						REST: 'flip_rest.svg',
+						GROUP: 'flip_grouphover.svg',
+						HOVER: 'flip_hover.svg',
+						DOWN: 'flip_pressed.svg'
+					}
+				},
+				sequenceMode: false
+			});
+			iiif.then((iiif) => viewer[i].open(iiif));
+		};
 		if (!OpenSeadragon) {
-			OpenSeadragon = (await import('openseadragon')).default;
-		}
-		if (data?.sigla.length > viewer.length) {
-			data.sigla?.forEach((_witnes, i) => {
-				viewer = [
-					...viewer,
-					new OpenSeadragon.Viewer({
-						id: `viewer-${i}`,
-						prefixUrl: `${assets}/openseadragon-svg-icons/icons/`,
-						navImages: {
-							zoomIn: {
-								REST: 'zoomin_rest.svg',
-								GROUP: 'zoomin_grouphover.svg',
-								HOVER: 'zoomin_hover.svg',
-								DOWN: 'zoomin_pressed.svg'
-							},
-							next: {
-								REST: 'next_rest.svg',
-								GROUP: 'next_grouphover.svg',
-
-								HOVER: 'next_hover.svg',
-								DOWN: 'next_pressed.svg'
-							},
-							previous: {
-								REST: 'previous_rest.svg',
-								GROUP: 'previous_grouphover.svg',
-								HOVER: 'previous_hover.svg',
-								DOWN: 'previous_pressed.svg'
-							},
-							fullpage: {
-								REST: 'fullpage_rest.svg',
-								GROUP: 'fullpage_grouphover.svg',
-								HOVER: 'fullpage_hover.svg',
-								DOWN: 'fullpage_pressed.svg'
-							},
-							home: {
-								REST: 'home_rest.svg',
-								GROUP: 'home_grouphover.svg',
-								HOVER: 'home_hover.svg',
-								DOWN: 'home_pressed.svg'
-							},
-							zoomOut: {
-								REST: 'zoomout_rest.svg',
-								GROUP: 'zoomout_grouphover.svg',
-								HOVER: 'zoomout_hover.svg',
-								DOWN: 'zoomout_pressed.svg'
-							},
-							rotateleft: {
-								REST: 'rotateleft_rest.svg',
-								GROUP: 'rotateleft_grouphover.svg',
-								HOVER: 'rotateleft_hover.svg',
-								DOWN: 'rotateleft_pressed.svg'
-							},
-							rotateright: {
-								REST: 'rotateright_rest.svg',
-								GROUP: 'rotateright_grouphover.svg',
-								HOVER: 'rotateright_hover.svg',
-								DOWN: 'rotateright_pressed.svg'
-							},
-							flip: {
-								REST: 'flip_rest.svg',
-								GROUP: 'flip_grouphover.svg',
-								HOVER: 'flip_hover.svg',
-								DOWN: 'flip_pressed.svg'
-							}
-						},
-						sequenceMode: false
-					})
-				];
+			import('openseadragon').then((r) => {
+				OpenSeadragon = r.default;
+				createViewer();
 			});
+		} else {
+			createViewer();
 		}
-	});
 
-	$: {
-		if (viewer[0] && data.iiif[0]) {
-			console.log('loading iiif');
-			data.iiif.forEach((iiif, index) => {
-				if (iiif === 'not found') return;
-				fetch(iiif)
-					.then((res) => res.json())
-					.then((json) => {
-						viewer[index].open(json);
-					});
-			});
-		}
-	}
-	$: if (viewer[0])
-		data.sigla?.forEach(async (element, i) => {
-			console.log('running for ', element);
-			if (data.page[i] === 'not found') return;
-			tpData[element] = fetch(
-				`${teipb}/parts/${element}.xml/json?&view=page&id=${data.page[i]}&odd=parzival.odd`
-			).then((r) => r.json());
-			tpData = { ...tpData };
-		});
+		return {
+			update(iiif) {
+				iiif.then((iiif) => viewer[i].open(iiif));
+			},
+			destroy() {
+				viewer[i].destroy();
+			}
+		};
+	};
+
 	const generateLabel = (sigla) => {
 		const info = [...codices, ...fragments];
 		sigla.map((s) => {
@@ -139,14 +125,17 @@
 			{data?.sigla ? generateLabel(data.sigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor können
 			Sie die Textzeugen wechseln.
 		</p>
-		<TextzeugenSelector selectedSigla={[...data.sigla]} coordinates={[data.thirties, data.verse]} />
+		<TextzeugenSelector
+			selectedSigla={data.sigla ? [...data.sigla] : []}
+			coordinates={[data.thirties, data.verse]}
+		/>
 	</div>
 </section>
 {#if data.sigla}
-	{#each data.sigla as witnes, i}
+	{#each data.sigla as _witnes, i}
 		<section class="grid grid-cols-2">
 			<section>
-				{#await tpData[witnes]}
+				{#await data.tpData[i]}
 					<p>Loading...</p>
 				{:then tpData}
 					{#if tpData}
@@ -169,7 +158,7 @@
 				{/await}
 			</section>
 			<section>
-				<div id="viewer-{i}" class="w-full h-[60vh]"></div>
+				<div id="viewer-{i}" class="w-full h-[60vh]" use:generateViewer={data.iiif[i]}></div>
 			</section>
 		</section>
 	{/each}

@@ -1,4 +1,4 @@
-import { api } from '$lib/constants';
+import { api, teipb } from '$lib/constants';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
@@ -48,15 +48,20 @@ export async function load({ fetch, params }) {
 		} else {
 			returnObject = data[witnes][0];
 		}
+		returnObject.iiif = fetch(returnObject.iiif).then((res) => res.json());
+		returnObject.tpData = fetch(
+			`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
+		).then((r) => r.json());
 		return returnObject
-			? { iiif: returnObject.iiif, page: returnObject.id }
-			: { iiif: false, page: false };
+			? { tpData: returnObject.tpData, iiif: returnObject.iiif, page: returnObject.id }
+			: { tpData: false, iiif: false, page: false };
 	});
 
 	return {
 		sigla,
 		thirties,
 		verse,
+		tpData: meta ? (await Promise.all(meta)).map((m) => m?.tpData) : false,
 		iiif: meta ? (await Promise.all(meta)).map((m) => m?.iiif) : false,
 		page: meta ? (await Promise.all(meta)).map((m) => m?.page) : false
 	};
