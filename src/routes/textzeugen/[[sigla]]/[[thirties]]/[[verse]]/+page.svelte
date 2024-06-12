@@ -117,7 +117,7 @@
 <section class="w-full">
 	<h1 class="h1">Textzeugen</h1>
 	<p>Textzeugenansicht, Einstellungen</p>
-	<TextzeugenSelector />
+	<TextzeugenSelector selectedSigla={data.sigla} coordinates={[data.thirties, data.verse]} />
 </section>
 {#if data.sigla}
 	{#each data.sigla as witnes}

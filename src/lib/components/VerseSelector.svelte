@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 
 	export let targetPath = '/einzelverssynopse';
+	export let coordinates = [1, '1'];
 
 	//TODO: use preloadData as soon as valid data is entered
 
@@ -60,6 +61,7 @@
 		max="827"
 		on:input={handleInput}
 		bind:this={thirties}
+		value={coordinates[0]}
 	/>.<input
 		type="number"
 		placeholder="Vers"
@@ -68,6 +70,7 @@
 		max="30"
 		on:input={handleInput}
 		bind:this={verse}
+		value={coordinates[1]}
 	/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
 	<button class="btn-icon variant-filled btn-icon-sm flex-shrink-0 flex-grow-0">
 		<i class="fa-solid fa-magnifying-glass"></i></button
