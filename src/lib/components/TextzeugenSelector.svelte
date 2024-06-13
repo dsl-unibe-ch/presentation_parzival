@@ -15,7 +15,7 @@
 			Textzeuge: <select class="select my-2" bind:value={selectedSigla[i]}>
 				{#if i !== 0}<option value="">kein Textzeuge</option>{/if}
 				{#each sigla as { sigil, handle }}
-					<option value={handle}>{sigil}</option>
+					<option value={handle}>{@html sigil}</option>
 				{/each}
 			</select>
 		</label>
