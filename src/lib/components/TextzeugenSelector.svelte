@@ -1,6 +1,8 @@
 <script>
-	import { codices, fragments } from '$lib/sigla.json';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
+
+	/** @type {{sigil: String, loc: String, aka: String, cod: String, handle: String}[]}*/
+	export let sigla = [];
 
 	export let selectedSigla = ['d'];
 
@@ -12,7 +14,7 @@
 		<label>
 			Textzeuge: <select class="select my-2" bind:value={selectedSigla[i]}>
 				{#if i !== 0}<option value="">kein Textzeuge</option>{/if}
-				{#each [...codices, ...fragments] as { sigil, handle }}
+				{#each sigla as { sigil, handle }}
 					<option value={handle}>{sigil}</option>
 				{/each}
 			</select>

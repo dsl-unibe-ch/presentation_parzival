@@ -2,6 +2,9 @@ import { api, teipb } from '$lib/constants';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
+	const { codices, fragments } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
+		r.json()
+	);
 	const sigla = params.sigla?.split('-');
 	/** @type string | boolean */
 	let thirties = params.thirties ?? '1';
@@ -39,31 +42,35 @@ export async function load({ fetch, params }) {
 
 	const meta = sigla?.map(async (witnes) => {
 		const data = await fetch(`${api}/json/metadata-ms-page/${witnes}.json`).then((r) => r.json());
-		let returnObject;
+		let returnObject = {};
 		if (thirties) {
-			returnObject = data[witnes].find(
-				(/** @type {{ l: string, id:string | string[]; }} */ entry) =>
+			returnObject =
+				data[witnes].find((/** @type {{ l: string, id:string | string[]; }} */ entry) =>
 					entry.l.includes(`${thirties}.${verse}`)
-			);
+				) ?? {};
 		} else {
 			returnObject = data[witnes][0];
 		}
-		returnObject.iiif = fetch(returnObject.iiif).then((res) => {
-			if (!res.ok) {
-				console.error('Failed to fetch iiif', res);
-				return false;
-			}
-			return res.json();
-		});
-		returnObject.tpData = fetch(
-			`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
-		).then((r) => {
-			if (!r.ok) {
-				console.error('Failed to fetch tpData', r);
-				return false;
-			}
-			return r.json();
-		});
+		if (returnObject.iiif) {
+			returnObject.iiif = fetch(returnObject.iiif).then((res) => {
+				if (!res.ok) {
+					console.error('Failed to fetch iiif', res);
+					return false;
+				}
+				return res.json();
+			});
+		}
+		if (returnObject.id) {
+			returnObject.tpData = fetch(
+				`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
+			).then((r) => {
+				if (!r.ok) {
+					console.error('Failed to fetch tpData', r);
+					return false;
+				}
+				return r.json();
+			});
+		}
 		return returnObject
 			? { tpData: returnObject.tpData, iiif: returnObject.iiif, page: returnObject.id }
 			: { tpData: false, iiif: false, page: false };
@@ -73,6 +80,8 @@ export async function load({ fetch, params }) {
 		sigla,
 		thirties,
 		verse,
+		codices,
+		fragments,
 		tpData: meta ? (await Promise.all(meta)).map((m) => m?.tpData) : false,
 		iiif: meta ? (await Promise.all(meta)).map((m) => m?.iiif) : false,
 		page: meta ? (await Promise.all(meta)).map((m) => m?.page) : false

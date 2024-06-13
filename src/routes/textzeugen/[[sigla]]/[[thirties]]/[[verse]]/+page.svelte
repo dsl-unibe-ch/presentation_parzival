@@ -1,7 +1,6 @@
 <script>
 	import { assets } from '$app/paths';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
-	import { codices, fragments } from '$lib/sigla.json';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -18,7 +17,7 @@
 
 	const generateViewer = (node, iiif) => {
 		const i = node.id.split('-')[1];
-		if (data.iiif[i] === 'not found') return;
+		if (!iiif || iiif[i] === 'not found') return;
 		const createViewer = () => {
 			viewer[i] = new OpenSeadragon.Viewer({
 				id: node.id,
@@ -104,7 +103,7 @@
 	};
 
 	const generateLabel = (sigla) => {
-		const info = [...codices, ...fragments];
+		const info = [...data.codices, ...data.fragments];
 		sigla.map((s) => {
 			const found = info.find((i) => i.sigil === s);
 			if (found) {
@@ -126,6 +125,7 @@
 			Sie die Textzeugen wechseln.
 		</p>
 		<TextzeugenSelector
+			sigla={[...data.codices, ...data.fragments]}
 			selectedSigla={data.sigla ? [...data.sigla] : []}
 			coordinates={[data.thirties, data.verse]}
 		/>
