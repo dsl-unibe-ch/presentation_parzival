@@ -1,7 +1,6 @@
 <script>
 	import { assets } from '$app/paths';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
-	import { tick } from 'svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -132,13 +131,32 @@
 		verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		verse.parentElement.classList.add('animate-bounce', 'once');
 
+		// add intersection observer that sets the currentVerse to the .verse that is currently in view
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						currentVerse = entry.target.querySelector('.verse').dataset.verse;
+					}
+				});
+			},
+			{
+				root: node,
+				rootMargin: '0px',
+				threshold: 0.5
+			}
+		);
+		node.querySelectorAll('.line').forEach((line) => observer.observe(line));
+
 		return {
 			update(targetVerse) {
 				const verse = node.querySelector(`[data-verse="${targetVerse}"]`);
 				verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
 				verse.parentElement.classList.add('animate-bounce', 'once');
 			},
-			destroy() {}
+			destroy() {
+				observer.disconnect();
+			}
 		};
 	};
 	let currentVerse = `${data.thirties}.${data.verse}`;
