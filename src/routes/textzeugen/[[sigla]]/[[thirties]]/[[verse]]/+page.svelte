@@ -19,6 +19,8 @@
 	const generateViewer = (node, iiif) => {
 		const i = node.id.split('-')[1];
 		if (!iiif || iiif[i] === 'not found') return;
+		/** @type {ResizeObserver}*/
+		let observer;
 		const createViewer = () => {
 			viewer[i] = new OpenSeadragon.Viewer({
 				id: node.id,
@@ -83,13 +85,10 @@
 				sequenceMode: false
 			});
 			iiif.then((iiif) => viewer[i].open(iiif));
-			// add a resize observer that runs the goHome function when the y-axis changes
-			const observer = new ResizeObserver((entries) => {
-				for (const entry of entries) {
-					setTimeout(() => {
-						viewer[i].viewport.goHome(false);
-					}, 50);
-				}
+			observer = new ResizeObserver((_entries) => {
+				setTimeout(() => {
+					viewer[i].viewport.goHome(false);
+				}, 50);
 			});
 			observer.observe(node);
 		};
@@ -108,6 +107,9 @@
 			},
 			destroy() {
 				viewer[i].destroy();
+				if (observer) {
+					observer.disconnect();
+				}
 			}
 		};
 	};
