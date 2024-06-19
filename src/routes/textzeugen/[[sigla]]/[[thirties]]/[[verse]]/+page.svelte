@@ -1,6 +1,7 @@
 <script>
 	import { assets } from '$app/paths';
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
+	import { tick } from 'svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -82,6 +83,15 @@
 				sequenceMode: false
 			});
 			iiif.then((iiif) => viewer[i].open(iiif));
+			// add a resize observer that runs the goHome function when the y-axis changes
+			const observer = new ResizeObserver((entries) => {
+				for (const entry of entries) {
+					setTimeout(() => {
+						viewer[i].viewport.goHome(false);
+					}, 50);
+				}
+			});
+			observer.observe(node);
 		};
 		if (!OpenSeadragon) {
 			import('openseadragon').then((r) => {
@@ -117,8 +127,8 @@
 </script>
 
 <section class="w-full">
-	<h1 class="h1">Textzeugen</h1>
-	<div>
+	<h1 class="h1 my-4">Textzeugen</h1>
+	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>
 			Dies ist die Textzeugenansicht. Derzeit {data.sigla?.length > 1 ? 'werden' : 'wird'}
 			{data?.sigla ? generateLabel(data.sigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor können
@@ -133,7 +143,7 @@
 </section>
 {#if data.sigla}
 	{#each data.sigla as _witnes, i}
-		<section class="grid grid-cols-2">
+		<article class="grid grid-cols-2 bg-surface-active-token">
 			<section>
 				{#await data.tpData[i]}
 					<p>Loading...</p>
@@ -142,7 +152,7 @@
 						{#if tpData?.content}
 							<!-- find <cb> and divide the content into two divs-->
 							{@const columns = tpData.content.split('<br class="tei-cb">')}
-							<div class="flex flex-row gap-5">
+							<div class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto">
 								{#each columns as column}
 									<div class="column">{@html column}</div>
 								{/each}
@@ -158,9 +168,9 @@
 				{/await}
 			</section>
 			<section>
-				<div id="viewer-{i}" class="w-full h-[60vh]" use:generateViewer={data.iiif[i]}></div>
+				<div id="viewer-{i}" class="w-full h-full" use:generateViewer={data.iiif[i]}></div>
 			</section>
-		</section>
+		</article>
 	{/each}
 {/if}
 
