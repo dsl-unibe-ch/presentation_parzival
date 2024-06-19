@@ -126,6 +126,23 @@
 		});
 		return sigla.join(' und ');
 	};
+
+	const scrollToVerse = (node, targetVerse) => {
+		const verse = node.querySelector(`[data-verse="${targetVerse}"]`);
+		verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		verse.parentElement.classList.add('animate-bounce', 'once');
+
+		return {
+			update(targetVerse) {
+				const verse = node.querySelector(`[data-verse="${targetVerse}"]`);
+				verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				verse.parentElement.classList.add('animate-bounce', 'once');
+			},
+			destroy() {}
+		};
+	};
+	let currentVerse = `${data.thirties}.${data.verse}`;
+	let targetVerse = currentVerse;
 </script>
 
 <section class="w-full">
@@ -147,6 +164,12 @@
 	{#each data.sigla as _witnes, i}
 		<article class="grid grid-cols-2 bg-surface-active-token">
 			<section>
+				<div>
+					<h2 class="h2">Textzeuge: {generateLabel([data.sigla[i]])}</h2>
+					<p>
+						Vers: {currentVerse}
+					</p>
+				</div>
 				{#await data.tpData[i]}
 					<p>Loading...</p>
 				{:then tpData}
@@ -154,7 +177,10 @@
 						{#if tpData?.content}
 							<!-- find <cb> and divide the content into two divs-->
 							{@const columns = tpData.content.split('<br class="tei-cb">')}
-							<div class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto">
+							<div
+								class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto snap-y"
+								use:scrollToVerse={targetVerse}
+							>
 								{#each columns as column}
 									<div class="column">{@html column}</div>
 								{/each}
@@ -178,8 +204,14 @@
 
 <style>
 	.column :global(.line) {
+		@apply snap-start;
 		display: flex;
 		gap: 1em;
 		margin: 0.5em 0;
+	}
+
+	.column :global(.once) {
+		-webkit-animation-iteration-count: 4;
+		animation-iteration-count: 4;
 	}
 </style>
