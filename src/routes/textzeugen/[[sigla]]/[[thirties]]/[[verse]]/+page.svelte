@@ -135,7 +135,7 @@
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
+					if (entry.intersectionRect.y - entry.rootBounds.y < 8) {
 						currentVerse = entry.target.querySelector('.verse').dataset.verse;
 					}
 				});
@@ -143,7 +143,7 @@
 			{
 				root: node,
 				rootMargin: '0px',
-				threshold: 0.5
+				threshold: 1
 			}
 		);
 		node.querySelectorAll('.line').forEach((line) => observer.observe(line));
