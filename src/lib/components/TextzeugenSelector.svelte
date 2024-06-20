@@ -6,6 +6,7 @@
 
 	export let selectedSigla = ['d'];
 
+	/** @type {[String, String] | boolean} */
 	export let coordinates = ['', ''];
 </script>
 

@@ -6,7 +6,7 @@
 	export let data;
 
 	/**
-	 * @type {import('openseadragon') | undefined}
+	 * @type {import('openseadragon')}
 	 */
 	let OpenSeadragon;
 
@@ -15,9 +15,9 @@
 	 */
 	let viewer = [];
 
-	const generateViewer = (node, iiif) => {
-		const i = node.id.split('-')[1];
-		if (!iiif || iiif[i] === 'not found') return;
+	const generateViewer = (/** @type {Element} */ node, /** @type {Promise<Object>} */ iiif) => {
+		const i = Number(node.id.split('-')[1]);
+		if (!iiif) return;
 		/** @type {ResizeObserver}*/
 		let observer;
 		const createViewer = () => {
@@ -83,7 +83,10 @@
 				},
 				sequenceMode: false
 			});
-			iiif.then((iiif) => viewer[i].open(iiif));
+			iiif.then((iiif) => {
+				if (iiif === 'not found') return;
+				viewer[i].open(iiif);
+			});
 			observer = new ResizeObserver((_entries) => {
 				setTimeout(() => {
 					viewer[i].viewport.goHome(false);
@@ -101,6 +104,9 @@
 		}
 
 		return {
+			/**
+			 * @param {Promise<Object>} iiif
+			 */
 			update(iiif) {
 				iiif.then((iiif) => viewer[i].open(iiif));
 			},
@@ -113,7 +119,7 @@
 		};
 	};
 
-	const generateLabel = (sigla) => {
+	const generateLabel = (/** @type {String[]} */ sigla) => {
 		const info = [...data.codices, ...data.fragments];
 		sigla.map((s) => {
 			const found = info.find((i) => i.sigil === s);
@@ -126,27 +132,34 @@
 		return sigla.join(' und ');
 	};
 
-	const scrollToVerse = (node, targetVerse) => {
+	const scrollToVerse = (/** @type {HTMLDivElement} */ node, /** @type {String} */ targetVerse) => {
 		const verse = node.querySelector(`[data-verse="${targetVerse}"]`);
+		if (!verse) return;
 		verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
-		verse.parentElement.classList.add('animate-bounce', 'once');
+		verse.parentElement?.classList.add('animate-bounce', 'once');
 
 		return {
+			/**
+			 * @param {String} targetVerse
+			 */
 			update(targetVerse) {
 				const verse = node.querySelector(`[data-verse="${targetVerse}"]`);
+				if (!verse) return;
 				verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				verse.parentElement.classList.add('animate-bounce', 'once');
+				verse.parentElement?.classList.add('animate-bounce', 'once');
 			},
 			destroy() {}
 		};
 	};
-	const onScrollEnd = (/** @type { Event } */ e) => {
-		const verses = e.target?.querySelectorAll('.verse');
+	const onScrollEnd = (/** @type { Event & { target: HTMLElement}} } */ e) => {
+		const /** @type { NodeListOf<HTMLElement> } */ verses = e.target?.querySelectorAll('.verse');
 		let found = false;
 		for (let i = 0; i < verses.length; i++) {
 			const verse = verses[i];
-			if (verse.getBoundingClientRect().top === e.target.getBoundingClientRect().top) {
-				console.log(verse.getBoundingClientRect().top, e.target.getBoundingClientRect().top);
+			if (
+				verse.getBoundingClientRect().top === e.target.getBoundingClientRect().top &&
+				verse.dataset.verse
+			) {
 				currentVerse = verse.dataset.verse;
 				found = true;
 				break;
@@ -155,7 +168,10 @@
 		if (!found) {
 			for (let i = 0; i < verses.length; i++) {
 				const verse = verses[i];
-				if (verse.getBoundingClientRect().top >= e.target.getBoundingClientRect().top) {
+				if (
+					verse.getBoundingClientRect().top >= e.target.getBoundingClientRect().top &&
+					verse.dataset.verse
+				) {
 					console.log(verse.getBoundingClientRect().top, e.target.getBoundingClientRect().top);
 					currentVerse = verse.dataset.verse;
 					break;
@@ -171,7 +187,7 @@
 	<h1 class="h1 my-4">Textzeugen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>
-			Dies ist die Textzeugenansicht. Derzeit {data.sigla?.length > 1 ? 'werden' : 'wird'}
+			Dies ist die Textzeugenansicht. Derzeit {Number(data.sigla?.length) > 1 ? 'werden' : 'wird'}
 			{data?.sigla ? generateLabel(data.sigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor können
 			Sie die Textzeugen wechseln.
 		</p>
@@ -192,34 +208,38 @@
 						Vers: {currentVerse}
 					</p>
 				</div>
-				{#await data.tpData[i]}
-					<p>Loading...</p>
-				{:then tpData}
-					{#if tpData}
-						{#if tpData?.content}
-							<!-- find <cb> and divide the content into two divs-->
-							{@const columns = tpData.content.split('<br class="tei-cb">')}
-							<div
-								class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto snap-y"
-								on:scrollend={onScrollEnd}
-								use:scrollToVerse={targetVerse}
-							>
-								{#each columns as column}
-									<div class="column">{@html column}</div>
-								{/each}
-							</div>
+				{#if typeof data.tpData === 'object'}
+					{#await data.tpData[i]}
+						<p>Loading...</p>
+					{:then tpData}
+						{#if tpData}
+							{#if tpData?.content}
+								<!-- find <cb> and divide the content into two divs-->
+								{@const columns = tpData.content.split('<br class="tei-cb">')}
+								<div
+									class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto snap-y"
+									on:scrollend={onScrollEnd}
+									use:scrollToVerse={targetVerse}
+								>
+									{#each columns as column}
+										<div class="column">{@html column}</div>
+									{/each}
+								</div>
+							{:else}
+								{JSON.stringify(tpData)}
+							{/if}
 						{:else}
-							{JSON.stringify(tpData)}
+							<p>Der Vers existiert nicht</p>
 						{/if}
-					{:else}
-						<p>Der Vers existiert nicht</p>
-					{/if}
-				{:catch error}
-					<p style="color: red">{error.message}</p>
-				{/await}
+					{:catch error}
+						<p style="color: red">{error.message}</p>
+					{/await}
+				{/if}
 			</section>
 			<section>
-				<div id="viewer-{i}" class="w-full h-full" use:generateViewer={data.iiif[i]}></div>
+				{#if typeof data.iiif === 'object'}
+					<div id="viewer-{i}" class="w-full h-full" use:generateViewer={data.iiif[i]}></div>
+				{/if}
 			</section>
 		</article>
 	{/each}

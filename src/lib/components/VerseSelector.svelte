@@ -3,7 +3,8 @@
 	import { base } from '$app/paths';
 
 	export let targetPath = '/einzelverssynopse';
-	export let coordinates = [1, '1'];
+	/** @type {[String, String] | boolean} */
+	export let coordinates = ['1', '1'];
 
 	//TODO: use preloadData as soon as valid data is entered
 
@@ -53,26 +54,28 @@
 	}}
 >
 	<p>Vers:</p>
-	<input
-		type="number"
-		placeholder="Dreißiger"
-		class="input inline max-w-28"
-		min="1"
-		max="827"
-		on:input={handleInput}
-		bind:this={thirties}
-		value={coordinates[0]}
-	/>.<input
-		type="number"
-		placeholder="Vers"
-		class="input max-w-20"
-		min="1"
-		max="30"
-		on:input={handleInput}
-		bind:this={verse}
-		value={coordinates[1]}
-	/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
-	<button class="btn-icon variant-filled btn-icon-sm flex-shrink-0 flex-grow-0">
-		<i class="fa-solid fa-magnifying-glass"></i></button
-	>
+	{#if typeof coordinates === 'object'}
+		<input
+			type="number"
+			placeholder="Dreißiger"
+			class="input inline max-w-28"
+			min="1"
+			max="827"
+			on:input={handleInput}
+			bind:this={thirties}
+			value={Number(coordinates[0])}
+		/>.<input
+			type="number"
+			placeholder="Vers"
+			class="input max-w-20"
+			min="1"
+			max="30"
+			on:input={handleInput}
+			bind:this={verse}
+			value={Number(coordinates[0])}
+		/>-<input type="text" placeholder="Zusatz" class="input max-w-20" bind:value={additional} />
+		<button class="btn-icon variant-filled btn-icon-sm flex-shrink-0 flex-grow-0">
+			<i class="fa-solid fa-magnifying-glass"></i></button
+		>
+	{/if}
 </form>
