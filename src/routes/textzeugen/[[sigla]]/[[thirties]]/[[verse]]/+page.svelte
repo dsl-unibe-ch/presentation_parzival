@@ -131,33 +131,37 @@
 		verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		verse.parentElement.classList.add('animate-bounce', 'once');
 
-		// add intersection observer that sets the currentVerse to the .verse that is currently in view
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.intersectionRect.y - entry.rootBounds.y < 8) {
-						currentVerse = entry.target.querySelector('.verse').dataset.verse;
-					}
-				});
-			},
-			{
-				root: node,
-				rootMargin: '0px',
-				threshold: 1
-			}
-		);
-		node.querySelectorAll('.line').forEach((line) => observer.observe(line));
-
 		return {
 			update(targetVerse) {
 				const verse = node.querySelector(`[data-verse="${targetVerse}"]`);
 				verse.scrollIntoView({ behavior: 'smooth', block: 'center' });
 				verse.parentElement.classList.add('animate-bounce', 'once');
 			},
-			destroy() {
-				observer.disconnect();
-			}
+			destroy() {}
 		};
+	};
+	const onScrollEnd = (/** @type { Event } */ e) => {
+		const verses = e.target?.querySelectorAll('.verse');
+		let found = false;
+		for (let i = 0; i < verses.length; i++) {
+			const verse = verses[i];
+			if (verse.getBoundingClientRect().top === e.target.getBoundingClientRect().top) {
+				console.log(verse.getBoundingClientRect().top, e.target.getBoundingClientRect().top);
+				currentVerse = verse.dataset.verse;
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			for (let i = 0; i < verses.length; i++) {
+				const verse = verses[i];
+				if (verse.getBoundingClientRect().top >= e.target.getBoundingClientRect().top) {
+					console.log(verse.getBoundingClientRect().top, e.target.getBoundingClientRect().top);
+					currentVerse = verse.dataset.verse;
+					break;
+				}
+			}
+		}
 	};
 	let currentVerse = `${data.thirties}.${data.verse}`;
 	let targetVerse = currentVerse;
@@ -197,6 +201,7 @@
 							{@const columns = tpData.content.split('<br class="tei-cb">')}
 							<div
 								class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto snap-y"
+								on:scrollend={onScrollEnd}
 								use:scrollToVerse={targetVerse}
 							>
 								{#each columns as column}
