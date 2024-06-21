@@ -2,11 +2,12 @@
 	import TextzeugenSelector from '$lib/components/TextzeugenSelector.svelte';
 	import IIIFViewer from '$lib/components/IIIFViewer.svelte';
 	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
+	import { base } from '$app/paths';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	const selectedSigla = data.content ? data.content.map((c) => c.sigla) : [];
+	$: selectedSigla = data.content ? data.content.map((c) => c.sigla) : [];
 
 	const generateLabel = (/** @type {String[]} */ sigla) => {
 		const info = [...data.codices, ...data.fragments];
@@ -19,6 +20,20 @@
 			return s;
 		});
 		return sigla.join(' und ');
+	};
+
+	const generateCloseLink = (/** @type {String} */ sigla) => {
+		const siglas = selectedSigla.filter((e) => e !== sigla);
+		let path = `${base}/textzeugen/${siglas.join('-')}`;
+		if (siglas.length) {
+			if (data.thirties) {
+				path += `/${data.thirties}`;
+				if (data.verse) {
+					path += `/${data.verse}`;
+				}
+			}
+		}
+		return path;
 	};
 
 	setTarget(`${data.thirties}.${data.verse}`);
@@ -46,11 +61,14 @@
 			class="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
 		>
 			<section>
-				<div>
+				<div class="mb-4 relative">
 					<h2 class="h2">Textzeuge: {generateLabel([content.sigla])}</h2>
 					<p>
 						Vers: {localVerses[i]}
 					</p>
+					<a class="btn btn-icon absolute top-0 right-0" href={generateCloseLink(content.sigla)}
+						><i class="fa-solid fa-x"></i></a
+					>
 				</div>
 				{#await content.meta then meta}
 					{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
