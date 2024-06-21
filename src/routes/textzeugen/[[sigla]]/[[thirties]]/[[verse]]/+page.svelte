@@ -42,7 +42,9 @@
 </section>
 {#if data.content}
 	{#each data.content as content, i}
-		<article class="grid grid-cols-2 bg-surface-active-token">
+		<article
+			class="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
+		>
 			<section>
 				<div>
 					<h2 class="h2">Textzeuge: {generateLabel([content.sigla])}</h2>
@@ -73,7 +75,7 @@
 					{/if}
 				{/await}
 			</section>
-			<section>
+			<section class="min-h-[40vh]">
 				{#await content.meta then meta}
 					{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
 						{#await meta.iiif}

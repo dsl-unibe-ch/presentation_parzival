@@ -9,7 +9,6 @@
 
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import { local } from 'd3';
 	export let content;
 
 	let localVerse = $targetVerse;
@@ -24,7 +23,6 @@
 		if (programmaticScroll) {
 			programmaticScroll = false;
 		} else {
-			console.log('onScrollEnd');
 			const positive = (/** @type {string} */ verse) => {
 				localVerse = verse;
 				$targetVerse = verse;
@@ -68,12 +66,12 @@
 			scrollContainer?.scrollTo({
 				top:
 					scrollContainer?.scrollTop +
-					verse.parentElement?.getBoundingClientRect().top -
+					Number(verse.parentElement?.getBoundingClientRect().top) -
 					scrollContainer?.getBoundingClientRect().top,
 				behavior: 'smooth'
 			});
 			dispatch('localVerseChange', target);
-			// verse.parentElement?.classList.add('animate-bounce', 'once');
+			verse.parentElement?.classList.add('animate-bounce', 'once');
 		};
 		scroll(targetVerse);
 
