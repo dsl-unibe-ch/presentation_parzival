@@ -1,6 +1,7 @@
 import { join } from 'path';
 
 import typography from '@tailwindcss/typography';
+import containerQueries from '@tailwindcss/container-queries';
 import forms from '@tailwindcss/forms';
 import { parzival } from './parzival';
 import { skeleton } from '@skeletonlabs/tw-plugin';
@@ -16,6 +17,7 @@ export default {
 	},
 	plugins: [
 		typography,
+		containerQueries,
 		forms,
 		skeleton({
 			themes: {
