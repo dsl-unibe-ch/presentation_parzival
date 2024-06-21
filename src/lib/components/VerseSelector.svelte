@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 
 	export let targetPath = '/einzelverssynopse';
-	/** @type {[String, String] | boolean} */
+	/** @type {[String | boolean, String | boolean]} */
 	export let coordinates = ['1', '1'];
 
 	//TODO: use preloadData as soon as valid data is entered

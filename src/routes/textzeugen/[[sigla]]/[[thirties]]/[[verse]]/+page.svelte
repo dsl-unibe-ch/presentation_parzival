@@ -80,9 +80,7 @@
 		<TextzeugenSelector
 			sigla={[...data.codices, ...data.fragments]}
 			selectedSigla={data.sigla ? [...data.sigla] : []}
-			coordinates={typeof data.thirties === 'string' && typeof data.verse === 'string'
-				? [data.thirties, data.verse]
-				: false}
+			coordinates={[data.thirties, data.verse]}
 		/>
 	</div>
 </section>
