@@ -3,6 +3,7 @@
 	import IIIFViewer from '$lib/components/IIIFViewer.svelte';
 	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
 	import { base } from '$app/paths';
+	import { page } from '$app/stores';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -36,6 +37,15 @@
 		return path;
 	};
 
+	const generateCloseIiifLink = (/** @type {Number} */ i) => {
+		let link = new URL($page.url.toString());
+		const currentParam = $page.url.searchParams.get('iiif')?.split('-') ?? [];
+		console.log($page.url.searchParams.get('iiif'));
+		currentParam[i] = 'true';
+		link.searchParams.set('iiif', currentParam.join('-'));
+		return link.toString();
+	};
+
 	setTarget(`${data.thirties}.${data.verse}`);
 	let localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
 </script>
@@ -43,6 +53,7 @@
 <section class="w-full">
 	<h1 class="h1 my-4">Textzeugen</h1>
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
+		{$page.url}
 		<p>
 			Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1 ? 'werden' : 'wird'}
 			{data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor
@@ -93,14 +104,24 @@
 					{/if}
 				{/await}
 			</section>
-			<section class="min-h-[40vh]">
+			<section class="min-h-[40vh] relative">
 				{#await content.meta then meta}
 					{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
 						{#await meta.iiif}
 							<p>Loading...</p>
 						{:then iiif}
 							{#if typeof iiif === 'object'}
-								<IIIFViewer {iiif} />
+								{#if !content.iiifViewer}
+									<a
+										class="btn btn-icon absolute top-0 right-0 z-10"
+										href={generateCloseIiifLink(i)}><i class="fa-solid fa-x"></i></a
+									>
+									<IIIFViewer {iiif} />
+								{:else}
+									<button class="btn btn-icon absolute top-0 right-0">
+										<i class="fa-solid fa-x"></i>
+									</button>
+								{/if}
 							{/if}
 						{:catch error}
 							<p style="color: red">{error.message}</p>
