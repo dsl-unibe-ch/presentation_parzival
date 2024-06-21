@@ -26,11 +26,11 @@ export async function load({ fetch, params }) {
 					}
 				}
 			});
-		} else if (!params.verse) {
+		} else if (!params.verse && typeof thirties === 'string') {
 			verse = false;
 			(await lowestPromises)[sigla[0]].some((/** @type {{id: String, l: String[]}} **/ page) => {
 				const newVerse = page.l
-					.find((/** @type {String} **/ l) => l.startsWith(thirties))
+					.find((/** @type {String} **/ l) => l.startsWith(String(thirties)))
 					?.split('.')[1];
 				if (newVerse) {
 					verse = newVerse;
@@ -42,6 +42,7 @@ export async function load({ fetch, params }) {
 
 	const meta = sigla?.map(async (witnes) => {
 		const data = await fetch(`${api}/json/metadata-ms-page/${witnes}.json`).then((r) => r.json());
+		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}> }} */
 		let returnObject = {};
 		if (thirties) {
 			returnObject =
@@ -51,7 +52,7 @@ export async function load({ fetch, params }) {
 		} else {
 			returnObject = data[witnes][0];
 		}
-		if (returnObject.iiif) {
+		if (returnObject.iiif && typeof returnObject.iiif === 'string') {
 			returnObject.iiif = fetch(returnObject.iiif).then((res) => {
 				if (!res.ok) {
 					console.error('Failed to fetch iiif', res);
@@ -77,13 +78,15 @@ export async function load({ fetch, params }) {
 	});
 
 	return {
-		sigla,
 		thirties,
 		verse,
 		codices,
 		fragments,
-		tpData: meta ? (await Promise.all(meta)).map((m) => m?.tpData) : false,
-		iiif: meta ? (await Promise.all(meta)).map((m) => m?.iiif) : false,
-		page: meta ? (await Promise.all(meta)).map((m) => m?.page) : false
+		content: sigla?.map((witnes, i) => {
+			return {
+				sigla: witnes,
+				meta: meta ? meta[i] : false
+			};
+		})
 	};
 }

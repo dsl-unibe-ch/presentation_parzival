@@ -7,7 +7,7 @@
 </script>
 
 <script>
-	/** @type { Promise<Object> } */
+	/** @type { Object } */
 	export let iiif;
 
 	const uuid = crypto.randomUUID();
@@ -16,7 +16,7 @@
 	 */
 	let viewer;
 
-	const generateViewer = (/** @type {Element} */ node, /** @type {Promise<Object>} */ iiif) => {
+	const generateViewer = (/** @type {Element} */ node, /** @type {Object} */ iiif) => {
 		const i = Number(node.id.split('-')[1]);
 		if (!iiif) return;
 		/** @type {ResizeObserver}*/
@@ -84,10 +84,7 @@
 				},
 				sequenceMode: false
 			});
-			iiif.then((iiif) => {
-				if (iiif === 'not found') return;
-				viewer.open(iiif);
-			});
+			viewer.open(iiif);
 			observer = new ResizeObserver((_entries) => {
 				setTimeout(() => {
 					viewer.viewport.goHome(false);
@@ -109,7 +106,7 @@
 			 * @param {Promise<Object>} iiif
 			 */
 			update(iiif) {
-				iiif.then((iiif) => viewer.open(iiif));
+				viewer.open(iiif);
 			},
 			destroy() {
 				viewer.destroy();
