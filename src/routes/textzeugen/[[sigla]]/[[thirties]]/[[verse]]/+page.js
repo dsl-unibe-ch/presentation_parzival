@@ -1,13 +1,11 @@
 import { api, teipb } from '$lib/constants';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ fetch, params, url }) {
+export async function load({ fetch, params }) {
 	const { codices, fragments } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
 		r.json()
 	);
 	const sigla = params.sigla?.split('-');
-
-	const iiifViewer = url.searchParams.get('iiif')?.split('-') ?? [];
 
 	/** @type string | boolean */
 	let thirties = params.thirties ?? '1';
@@ -88,7 +86,6 @@ export async function load({ fetch, params, url }) {
 		content: sigla?.map((witnes, i) => {
 			return {
 				sigla: witnes,
-				iiifViewer: Boolean(iiifViewer[i]) ?? false,
 				meta: meta ? meta[i] : false
 			};
 		})
