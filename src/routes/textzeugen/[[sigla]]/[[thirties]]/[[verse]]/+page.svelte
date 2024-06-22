@@ -37,11 +37,24 @@
 		return path;
 	};
 
-	const generateCloseIiifLink = (/** @type {Number} */ i) => {
-		let link = new URL($page.url.toString());
-		const currentParam = $page.url.searchParams.get('iiif')?.split('-') ?? [];
-		currentParam[i] = 'true';
-		link.searchParams.set('iiif', currentParam.join('-'));
+	const generateIiifLink = (
+		/** @type {URL} */ url,
+		/** @type {Number} */ i,
+		/** @type {boolean} */ close
+	) => {
+		let link = new URL(url.toString());
+		const currentParam = url.searchParams.get('iiif')?.split('-') ?? [];
+		if (close) {
+			currentParam[i] = String(close);
+			link.searchParams.set('iiif', currentParam.join('-'));
+		} else {
+			currentParam[i] = '';
+			if (currentParam.some((e) => e === 'true')) {
+				link.searchParams.set('iiif', currentParam.join('-'));
+			} else {
+				link.searchParams.delete('iiif');
+			}
+		}
 		return link.toString();
 	};
 
@@ -112,13 +125,14 @@
 								{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
 									<a
 										class="btn btn-icon absolute top-0 right-0 z-10"
-										href={generateCloseIiifLink(i)}><i class="fa-solid fa-x"></i></a
+										href={generateIiifLink($page.url, i, true)}><i class="fa-solid fa-x"></i></a
 									>
 									<IIIFViewer {iiif} />
 								{:else}
-									<button class="btn btn-icon absolute top-0 right-0">
-										<i class="fa-solid fa-x"></i>
-									</button>
+									<a
+										class="btn btn-icon absolute top-0 right-0 z-10"
+										href={generateIiifLink($page.url, i, false)}><i class="fa-solid fa-x"></i></a
+									>
 								{/if}
 							{/if}
 						{:catch error}
