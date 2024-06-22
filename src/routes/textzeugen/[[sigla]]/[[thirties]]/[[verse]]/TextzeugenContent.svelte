@@ -86,15 +86,36 @@
 			destroy() {}
 		};
 	};
+	// returns true when the column is empty or when it contains only children that are empty or themselves have empty children (recursively)
+	const isEmptyColumn = (/** @type {String} */ column) => {
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(column, 'text/html');
+		const children = doc.body.children;
+		for (let i = 0; i < children.length; i++) {
+			const child = children[i];
+			if (child.children.length === 0) {
+				if (child.textContent.trim() !== '') {
+					return false;
+				}
+			} else {
+				if (!isEmptyColumn(child.innerHTML)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	};
 </script>
 
 <div
-	class="flex flex-row gap-5 max-h-[70vh] overflow-y-auto snap-y"
+	class="grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 max-h-[70vh] overflow-y-auto snap-y"
 	on:scrollend={onScrollEnd}
 	use:scrollToVerse={$targetVerse}
 >
 	{#each columns as column}
-		<div class="column">{@html column}</div>
+		{#if !isEmptyColumn(column)}
+			<div class="column">{@html column}</div>
+		{/if}
 	{/each}
 </div>
 
