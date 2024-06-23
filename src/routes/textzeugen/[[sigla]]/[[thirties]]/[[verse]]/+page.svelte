@@ -129,6 +129,9 @@
 										{}
 									);
 								}}
+								on:localPageChange={(e) => {
+									console.log(e.detail);
+								}}
 							/>
 						{:catch error}
 							<p style="color: red">{error.message}</p>

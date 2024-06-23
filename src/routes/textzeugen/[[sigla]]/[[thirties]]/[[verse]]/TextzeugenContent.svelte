@@ -60,11 +60,29 @@
 						}
 					}
 				}
-			}, 500);
+			}, 100);
 		}
 	};
 
 	const scrollToVerse = (/** @type {HTMLDivElement} */ node, /** @type {String} */ targetVerse) => {
+		const scroll = (/** @type {String} */ target) => {
+			const verse = node.querySelector(`[data-verse="${target}"]`);
+			if (!verse) return;
+			const scrollContainer = verse.parentElement?.parentElement?.parentElement?.parentElement;
+			programmaticScroll = true;
+			// verse.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			scrollContainer?.scrollTo({
+				top:
+					scrollContainer?.scrollTop +
+					Number(verse.parentElement?.getBoundingClientRect().top) -
+					scrollContainer?.getBoundingClientRect().top,
+				behavior: 'instant'
+			});
+			dispatch('localVerseChange', target);
+			verse.parentElement?.classList.add('animate-bounce', 'once');
+		};
+		scroll(targetVerse);
+
 		//add IntersectionOberver to all divs with class page
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -84,24 +102,6 @@
 		node.querySelectorAll('.page').forEach((page) => {
 			observer.observe(page);
 		});
-
-		const scroll = (/** @type {String} */ target) => {
-			const verse = node.querySelector(`[data-verse="${target}"]`);
-			if (!verse) return;
-			const scrollContainer = verse.parentElement?.parentElement?.parentElement?.parentElement;
-			programmaticScroll = true;
-			// verse.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			scrollContainer?.scrollTo({
-				top:
-					scrollContainer?.scrollTop +
-					Number(verse.parentElement?.getBoundingClientRect().top) -
-					scrollContainer?.getBoundingClientRect().top,
-				behavior: 'instant'
-			});
-			dispatch('localVerseChange', target);
-			verse.parentElement?.classList.add('animate-bounce', 'once');
-		};
-		scroll(targetVerse);
 
 		return {
 			/**
