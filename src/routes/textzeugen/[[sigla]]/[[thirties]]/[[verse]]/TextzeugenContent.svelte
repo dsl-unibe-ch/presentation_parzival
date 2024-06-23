@@ -19,7 +19,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: pageColumns = pages.map((/** @type {string} */ c) => c.split('<br class="tei-cb">'));
+	$: pageColumns = pages.map((c) => c.content.split('<br class="tei-cb">'));
 
 	let programmaticScroll = false;
 
@@ -65,6 +65,27 @@
 	};
 
 	const scrollToVerse = (/** @type {HTMLDivElement} */ node, /** @type {String} */ targetVerse) => {
+		//add IntersectionOberver to all divs with class page
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (programmaticScroll) return;
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						dispatch('localPageChange', entry.target.dataset);
+					}
+				});
+			},
+			{
+				root: node,
+				rootMargin: '0px',
+				threshold: [0, 1]
+			}
+		);
+		node.querySelectorAll('.page').forEach((page) => {
+			console.log(page);
+			observer.observe(page);
+		});
+
 		const scroll = (/** @type {String} */ target) => {
 			const verse = node.querySelector(`[data-verse="${target}"]`);
 			if (!verse) return;
@@ -120,9 +141,14 @@
 	on:scrollend={onScrollEnd}
 	use:scrollToVerse={$targetVerse}
 >
-	{#each pageColumns as columns}
-		<div class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4">
-			{#each columns as column}
+	{#each pages as pageObject, i (pageObject.id)}
+		<div
+			class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4"
+			data-id={pageObject.id}
+			data-next={pageObject.nextId}
+			data-previous={pageObject.previousId}
+		>
+			{#each pageColumns[i] as column}
 				{#if !isEmptyColumn(column)}
 					<div class="column">{@html column}</div>
 				{/if}

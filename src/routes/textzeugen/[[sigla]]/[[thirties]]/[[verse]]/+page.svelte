@@ -4,7 +4,7 @@
 	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { replaceState } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -63,6 +63,7 @@
 
 	setTarget(`${data.thirties}.${data.verse}`);
 	let localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
+	let localPages = [];
 </script>
 
 <section class="w-full">
@@ -112,46 +113,23 @@
 							<p>Loading...</p>
 						{:then tpData}
 							{@const resolvedData = tpData.map((d) => d.status === 'fulfilled' && d.value)}
-							<button
-								on:click={() =>
-									goto(
-										`${base}/textzeugen/${$page.params.sigla}/${localVerses[i].replace('.', '/')}`,
-										{
-											replaceState: false,
-											invalidateAll: false,
-											keepFocus: true,
-											noScroll: true
-										}
-									)}>gototest</button
-							>
 							<TextzeugenContent
-								pages={resolvedData.map((d) => d?.content)}
-								on:localVerseChange={(e) => (localVerses[i] = e.detail)}
+								pages={resolvedData.map((d, i) => {
+									return {
+										id: pages[i].page,
+										content: d.content,
+										nextId: d?.nextId,
+										previousId: d?.previousId
+									};
+								})}
+								on:localVerseChange={(e) => {
+									localVerses[i] = e.detail;
+									replaceState(
+										`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}`,
+										{}
+									);
+								}}
 							/>
-							{#if tpData.status === 'fulfilled'}
-								{#if tpData?.content}
-									<button
-										on:click={() =>
-											goto(
-												`${base}/textzeugen/${$page.params.sigla}/${localVerses[i].replace('.', '/')}`,
-												{
-													replaceState: false,
-													invalidateAll: false,
-													keepFocus: true,
-													noScroll: true
-												}
-											)}>gototest</button
-									>
-									<TextzeugenContent
-										pages={tpData.content}
-										on:localVerseChange={(e) => (localVerses[i] = e.detail)}
-									/>
-								{:else}
-									{JSON.stringify(tpData)}
-								{/if}
-							{:else}
-								<p>Der Vers existiert nicht</p>
-							{/if}
 						{:catch error}
 							<p style="color: red">{error.message}</p>
 						{/await}
