@@ -77,7 +77,6 @@
 		/** @type {number} */ i,
 		/** @type {string} */ sigla
 	) => {
-		console.log('checklocalPages', e.detail.id);
 		const indexCurrent = localPages[i].findIndex((p) => p.page === e.detail.id);
 
 		const createObject = (/** @type {string} */ id) => {

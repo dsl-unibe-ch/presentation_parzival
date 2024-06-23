@@ -100,9 +100,7 @@
 		};
 		scroll(targetVerse);
 
-		node.querySelectorAll('.page').forEach((page) => {
-			observer.observe(page);
-		});
+		observer.observe(node);
 
 		return {
 			/**
