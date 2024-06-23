@@ -4,6 +4,7 @@
 	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -106,27 +107,54 @@
 							</a>
 						</div>
 					</div>
-					{#await content.meta then meta}
-						{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
-							{#await meta.tpData}
-								<p>Loading...</p>
-							{:then tpData}
-								{#if tpData}
-									{#if tpData?.content}
-										<TextzeugenContent
-											content={tpData.content}
-											on:localVerseChange={(e) => (localVerses[i] = e.detail)}
-										/>
-									{:else}
-										{JSON.stringify(tpData)}
-									{/if}
+					{#await content.meta then pages}
+						{#await Promise.allSettled(pages.map((p) => p.tpData))}
+							<p>Loading...</p>
+						{:then tpData}
+							{@const resolvedData = tpData.map((d) => d.status === 'fulfilled' && d.value)}
+							<button
+								on:click={() =>
+									goto(
+										`${base}/textzeugen/${$page.params.sigla}/${localVerses[i].replace('.', '/')}`,
+										{
+											replaceState: false,
+											invalidateAll: false,
+											keepFocus: true,
+											noScroll: true
+										}
+									)}>gototest</button
+							>
+							<TextzeugenContent
+								pages={resolvedData.map((d) => d?.content)}
+								on:localVerseChange={(e) => (localVerses[i] = e.detail)}
+							/>
+							{#if tpData.status === 'fulfilled'}
+								{#if tpData?.content}
+									<button
+										on:click={() =>
+											goto(
+												`${base}/textzeugen/${$page.params.sigla}/${localVerses[i].replace('.', '/')}`,
+												{
+													replaceState: false,
+													invalidateAll: false,
+													keepFocus: true,
+													noScroll: true
+												}
+											)}>gototest</button
+									>
+									<TextzeugenContent
+										pages={tpData.content}
+										on:localVerseChange={(e) => (localVerses[i] = e.detail)}
+									/>
 								{:else}
-									<p>Der Vers existiert nicht</p>
+									{JSON.stringify(tpData)}
 								{/if}
-							{:catch error}
-								<p style="color: red">{error.message}</p>
-							{/await}
-						{/if}
+							{:else}
+								<p>Der Vers existiert nicht</p>
+							{/if}
+						{:catch error}
+							<p style="color: red">{error.message}</p>
+						{/await}
 					{/await}
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}

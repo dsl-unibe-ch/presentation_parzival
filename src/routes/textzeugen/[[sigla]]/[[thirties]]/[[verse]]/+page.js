@@ -43,39 +43,49 @@ export async function load({ fetch, params }) {
 
 	const meta = sigla?.map(async (witnes) => {
 		const data = await fetch(`${api}/json/metadata-ms-page/${witnes}.json`).then((r) => r.json());
-		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}> }} */
-		let returnObject = {};
+		/**  @type {{ iiif: string | Promise<any>, id: string, tpData: Promise<{content: string}> }[]} */
+		let returnObjects = [];
 		if (thirties) {
-			returnObject =
-				data[witnes].find((/** @type {{ l: string, id:string | string[]; }} */ entry) =>
+			const selectedIndex = data[witnes].findIndex(
+				(/** @type {{ l: string, id:string | string[]; }} */ entry) =>
 					entry.l.includes(`${thirties}.${verse}`)
-				) ?? {};
+			);
+
+			if (selectedIndex > 0) returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
+			returnObjects.push(data[witnes][selectedIndex] ?? {});
+			if (selectedIndex <= data[witnes].length - 1)
+				returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
 		} else {
-			returnObject = data[witnes][0];
+			returnObjects = [data[witnes][0], data[witnes][1]];
 		}
-		if (returnObject.iiif && typeof returnObject.iiif === 'string') {
-			returnObject.iiif = fetch(returnObject.iiif).then((res) => {
-				if (!res.ok) {
-					console.error('Failed to fetch iiif', res);
-					return false;
-				}
-				return res.json();
-			});
-		}
-		if (returnObject.id) {
-			returnObject.tpData = fetch(
-				`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
-			).then((r) => {
-				if (!r.ok) {
-					console.error('Failed to fetch tpData', r);
-					return false;
-				}
-				return r.json();
-			});
-		}
-		return returnObject
-			? { tpData: returnObject.tpData, iiif: returnObject.iiif, page: returnObject.id }
-			: { tpData: false, iiif: false, page: false };
+		returnObjects.map((returnObject) => {
+			if (returnObject.iiif && typeof returnObject.iiif === 'string') {
+				returnObject.iiif = fetch(returnObject.iiif).then((res) => {
+					if (!res.ok) {
+						console.error('Failed to fetch iiif', res);
+						return false;
+					}
+					return res.json();
+				});
+			}
+			if (returnObject.id) {
+				returnObject.tpData = fetch(
+					`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
+				).then((r) => {
+					if (!r.ok) {
+						console.error('Failed to fetch tpData', r);
+						return false;
+					}
+					return r.json();
+				});
+			}
+			return returnObject;
+		});
+		return returnObjects.length
+			? returnObjects.map((returnObject) => {
+					return { tpData: returnObject.tpData, iiif: returnObject.iiif, page: returnObject.id };
+				})
+			: [{ tpData: false, iiif: false, page: false }];
 	});
 
 	return {

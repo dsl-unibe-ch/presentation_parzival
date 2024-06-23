@@ -9,7 +9,7 @@
 
 <script>
 	import { createEventDispatcher } from 'svelte';
-	export let content;
+	export let pages;
 
 	let localVerse = $targetVerse;
 	/**
@@ -19,7 +19,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: columns = content.split('<br class="tei-cb">');
+	$: pageColumns = pages.map((/** @type {string} */ c) => c.split('<br class="tei-cb">'));
 
 	let programmaticScroll = false;
 
@@ -27,39 +27,40 @@
 		if (programmaticScroll) {
 			programmaticScroll = false;
 		} else {
-			const positive = (/** @type {string} */ verse) => {
-				localVerse = verse;
-				clearTimeout(timer);
-				timer = setTimeout(() => {
+			clearTimeout(timer);
+			timer = setTimeout(() => {
+				const positive = (/** @type {string} */ verse) => {
+					localVerse = verse;
 					$targetVerse = verse;
-				}, 500);
-				dispatch('localVerseChange', verse);
-			};
-			const /** @type { NodeListOf<HTMLElement> } */ verses = e.target?.querySelectorAll('.verse');
-			let found = false;
-			for (let i = 0; i < verses.length; i++) {
-				const verse = verses[i];
-				if (
-					verse.getBoundingClientRect().top === e.target.getBoundingClientRect().top &&
-					verse.dataset.verse
-				) {
-					positive(verse.dataset.verse);
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
+					dispatch('localVerseChange', verse);
+				};
+				const /** @type { NodeListOf<HTMLElement> } */ verses =
+						e.target?.querySelectorAll('.verse');
+				let found = false;
 				for (let i = 0; i < verses.length; i++) {
 					const verse = verses[i];
 					if (
-						verse.getBoundingClientRect().top >= e.target.getBoundingClientRect().top &&
+						verse.getBoundingClientRect().top === e.target.getBoundingClientRect().top &&
 						verse.dataset.verse
 					) {
 						positive(verse.dataset.verse);
+						found = true;
 						break;
 					}
 				}
-			}
+				if (!found) {
+					for (let i = 0; i < verses.length; i++) {
+						const verse = verses[i];
+						if (
+							verse.getBoundingClientRect().top >= e.target.getBoundingClientRect().top &&
+							verse.dataset.verse
+						) {
+							positive(verse.dataset.verse);
+							break;
+						}
+					}
+				}
+			}, 500);
 		}
 	};
 
@@ -67,7 +68,7 @@
 		const scroll = (/** @type {String} */ target) => {
 			const verse = node.querySelector(`[data-verse="${target}"]`);
 			if (!verse) return;
-			const scrollContainer = verse.parentElement?.parentElement?.parentElement;
+			const scrollContainer = verse.parentElement?.parentElement?.parentElement?.parentElement;
 			programmaticScroll = true;
 			// verse.scrollIntoView({ behavior: 'smooth', block: 'start' });
 			scrollContainer?.scrollTo({
@@ -115,14 +116,19 @@
 </script>
 
 <div
-	class="grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 max-h-[70vh] overflow-y-auto snap-y"
+	class="max-h-[70vh] overflow-y-auto snap-y"
 	on:scrollend={onScrollEnd}
 	use:scrollToVerse={$targetVerse}
 >
-	{#each columns as column}
-		{#if !isEmptyColumn(column)}
-			<div class="column">{@html column}</div>
-		{/if}
+	{#each pageColumns as columns}
+		<div class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4">
+			{#each columns as column}
+				{#if !isEmptyColumn(column)}
+					<div class="column">{@html column}</div>
+				{/if}
+			{/each}
+		</div>
+		<hr class="!border-t-4" />
 	{/each}
 </div>
 
