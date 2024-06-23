@@ -54,7 +54,7 @@ export async function load({ fetch, params }) {
 			if (selectedIndex > 0) {
 				returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
 			}
-			returnObjects.push(data[witnes][selectedIndex] ?? {});
+			returnObjects.push({ ...data[witnes][selectedIndex], active: true } ?? {});
 			if (selectedIndex <= data[witnes].length - 1) {
 				returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
 			}
@@ -84,11 +84,7 @@ export async function load({ fetch, params }) {
 			}
 			return returnObject;
 		});
-		return returnObjects.length
-			? returnObjects.map((returnObject) => {
-					return { tpData: returnObject.tpData, iiif: returnObject.iiif, page: returnObject.id };
-				})
-			: [{ tpData: false, iiif: false, page: false }];
+		return returnObjects.length ? returnObjects : [{ tpData: false, iiif: false, page: false }];
 	});
 
 	return {

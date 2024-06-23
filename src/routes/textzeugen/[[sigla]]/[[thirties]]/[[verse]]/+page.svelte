@@ -4,7 +4,7 @@
 	import TextzeugenContent, { setTarget } from './TextzeugenContent.svelte';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { replaceState } from '$app/navigation';
+	import { afterNavigate, replaceState } from '$app/navigation';
 	import { iiif, teipb } from '$lib/constants';
 
 	/** @type {import('./$types').PageData} */
@@ -66,11 +66,18 @@
 	let localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
 	let localPages = Array(data.content?.length).fill([]);
 	let currentIiif = Array(data.content?.length).fill({});
-	//fill the data from the load-function into the localPages array
-	data.content?.forEach((c, i) => {
-		c.meta.then((meta) => {
-			localPages[i] = [...localPages[i], ...meta];
-			currentIiif[i] = meta[1]?.iiif;
+
+	afterNavigate(() => {
+		//fill the data from the load-function into the localPages array
+		data.content?.forEach((c, i) => {
+			c.meta.then((meta) => {
+				localPages[i] = [...meta];
+				meta
+					.find((m) => m.active)
+					?.iiif.then((iiif) => {
+						currentIiif[i] = iiif;
+					});
+			});
 		});
 	});
 
@@ -79,13 +86,13 @@
 		/** @type {number} */ i,
 		/** @type {string} */ sigla
 	) => {
-		const indexCurrent = localPages[i].findIndex((p) => p.page === e.detail.id);
+		const indexCurrent = localPages[i].findIndex((p) => p.id === e.detail.id);
 		localPages[i][indexCurrent]?.iiif.then((iiif) => {
 			currentIiif[i] = iiif;
 		});
 		const createObject = (/** @type {string} */ id) => {
 			return {
-				page: id,
+				id: id,
 				tpData: fetch(`${teipb}/parts/${sigla}.xml/json?&view=page&id=${id}&odd=parzival.odd`).then(
 					(r) => r.json()
 				),
