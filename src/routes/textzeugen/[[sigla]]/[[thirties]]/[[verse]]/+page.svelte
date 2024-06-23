@@ -65,10 +65,12 @@
 	setTarget(`${data.thirties}.${data.verse}`);
 	let localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
 	let localPages = Array(data.content?.length).fill([]);
+	let currentIiif = Array(data.content?.length).fill({});
 	//fill the data from the load-function into the localPages array
 	data.content?.forEach((c, i) => {
 		c.meta.then((meta) => {
 			localPages[i] = [...localPages[i], ...meta];
+			currentIiif[i] = meta[1]?.iiif;
 		});
 	});
 
@@ -78,7 +80,9 @@
 		/** @type {string} */ sigla
 	) => {
 		const indexCurrent = localPages[i].findIndex((p) => p.page === e.detail.id);
-
+		localPages[i][indexCurrent]?.iiif.then((iiif) => {
+			currentIiif[i] = iiif;
+		});
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				page: id,
@@ -162,19 +166,9 @@
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
 					<section class="min-h-[40vh]">
-						{#await localPages[i] then meta}
-							{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
-								{#await meta.iiif}
-									<p>Loading...</p>
-								{:then iiif}
-									{#if typeof iiif === 'object'}
-										<IIIFViewer {iiif} />
-									{/if}
-								{:catch error}
-									<p style="color: red">{error.message}</p>
-								{/await}
-							{/if}
-						{/await}
+						{#if typeof currentIiif[i] === 'object' && Object.keys(currentIiif[i]).length}
+							<IIIFViewer iiif={currentIiif[i]} />
+						{/if}
 					</section>
 				{/if}
 			</article>

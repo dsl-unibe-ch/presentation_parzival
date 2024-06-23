@@ -51,10 +51,13 @@ export async function load({ fetch, params }) {
 					entry.l.includes(`${thirties}.${verse}`)
 			);
 
-			if (selectedIndex > 0) returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
+			if (selectedIndex > 0) {
+				returnObjects.push(data[witnes][selectedIndex - 1] ?? {});
+			}
 			returnObjects.push(data[witnes][selectedIndex] ?? {});
-			if (selectedIndex <= data[witnes].length - 1)
+			if (selectedIndex <= data[witnes].length - 1) {
 				returnObjects.push(data[witnes][selectedIndex + 1] ?? {});
+			}
 		} else {
 			returnObjects = [data[witnes][0], data[witnes][1]];
 		}

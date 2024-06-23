@@ -17,8 +17,6 @@
 	let viewer;
 
 	const generateViewer = (/** @type {Element} */ node, /** @type {Object} */ iiif) => {
-		const i = Number(node.id.split('-')[1]);
-		if (!iiif) return;
 		/** @type {ResizeObserver}*/
 		let observer;
 		const createViewer = () => {
@@ -84,13 +82,14 @@
 				},
 				sequenceMode: false
 			});
-			viewer.open(iiif);
 			observer = new ResizeObserver((_entries) => {
 				setTimeout(() => {
 					viewer.viewport.goHome(false);
 				}, 50);
 			});
 			observer.observe(node);
+			if (!iiif) return;
+			viewer.open(iiif);
 		};
 		if (!OpenSeadragon) {
 			import('openseadragon').then((r) => {
@@ -106,6 +105,7 @@
 			 * @param {Promise<Object>} iiif
 			 */
 			update(iiif) {
+				if (!viewer) return;
 				viewer.open(iiif);
 			},
 			destroy() {
