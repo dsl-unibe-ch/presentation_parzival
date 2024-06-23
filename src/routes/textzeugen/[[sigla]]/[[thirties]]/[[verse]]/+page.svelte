@@ -83,7 +83,7 @@
 	<div class="grid grid-cols-[repeat(auto-fit,minmax(550px,1fr))] gap-4">
 		{#each data.content as content, i}
 			<article
-				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl relative"
+				class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-4 bg-surface-active-token my-4 py-4 px-8 rounded-xl"
 			>
 				<section>
 					<div class="mb-4 relative">
@@ -91,7 +91,7 @@
 						<p>
 							Vers: {localVerses[i]}
 						</p>
-						<div class="btngroup absolute top-0 right-0">
+						<div class="absolute top-0 right-0">
 							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
 								<a class="btn btn-icon" href={generateIiifLink($page.url, i, true)}>
 									<i class="fa-solid fa-eye-slash"></i>
@@ -101,9 +101,9 @@
 									<i class="fa-solid fa-eye"></i>
 								</a>
 							{/if}
-							<a class="btn btn-icon" href={generateCloseLink(content.sigla)}
-								><i class="fa-solid fa-x"></i></a
-							>
+							<a class="btn btn-icon" href={generateCloseLink(content.sigla)}>
+								<i class="fa-solid fa-x"></i>
+							</a>
 						</div>
 					</div>
 					{#await content.meta then meta}
@@ -130,7 +130,7 @@
 					{/await}
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
-					<section class="min-h-[40vh] relative">
+					<section class="min-h-[40vh]">
 						{#await content.meta then meta}
 							{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
 								{#await meta.iiif}

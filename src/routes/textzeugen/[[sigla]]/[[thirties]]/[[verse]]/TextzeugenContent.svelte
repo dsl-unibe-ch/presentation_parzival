@@ -12,6 +12,10 @@
 	export let content;
 
 	let localVerse = $targetVerse;
+	/**
+	 * @type {number | undefined}
+	 */
+	let timer;
 
 	const dispatch = createEventDispatcher();
 
@@ -25,7 +29,10 @@
 		} else {
 			const positive = (/** @type {string} */ verse) => {
 				localVerse = verse;
-				$targetVerse = verse;
+				clearTimeout(timer);
+				timer = setTimeout(() => {
+					$targetVerse = verse;
+				}, 500);
 				dispatch('localVerseChange', verse);
 			};
 			const /** @type { NodeListOf<HTMLElement> } */ verses = e.target?.querySelectorAll('.verse');
