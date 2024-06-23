@@ -91,9 +91,20 @@
 						<p>
 							Vers: {localVerses[i]}
 						</p>
-						<a class="btn btn-icon absolute top-0 right-0" href={generateCloseLink(content.sigla)}
-							><i class="fa-solid fa-x"></i></a
-						>
+						<div class="btngroup absolute top-0 right-0">
+							{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
+								<a class="btn btn-icon" href={generateIiifLink($page.url, i, true)}>
+									<i class="fa-solid fa-eye-slash"></i>
+								</a>
+							{:else}
+								<a class="btn btn-icon" href={generateIiifLink($page.url, i, false)}>
+									<i class="fa-solid fa-eye"></i>
+								</a>
+							{/if}
+							<a class="btn btn-icon" href={generateCloseLink(content.sigla)}
+								><i class="fa-solid fa-x"></i></a
+							>
+						</div>
 					</div>
 					{#await content.meta then meta}
 						{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
@@ -126,10 +137,6 @@
 									<p>Loading...</p>
 								{:then iiif}
 									{#if typeof iiif === 'object'}
-										<a
-											class="btn btn-icon absolute top-0 right-0 z-10"
-											href={generateIiifLink($page.url, i, true)}><i class="fa-solid fa-x"></i></a
-										>
 										<IIIFViewer {iiif} />
 									{/if}
 								{:catch error}
@@ -138,10 +145,6 @@
 							{/if}
 						{/await}
 					</section>
-				{:else}
-					<a class="btn btn-icon" href={generateIiifLink($page.url, i, false)}
-						><i class="fa-solid fa-image"></i></a
-					>
 				{/if}
 			</article>
 		{/each}
