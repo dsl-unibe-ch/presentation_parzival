@@ -82,7 +82,6 @@
 			}
 		);
 		node.querySelectorAll('.page').forEach((page) => {
-			console.log(page);
 			observer.observe(page);
 		});
 
@@ -97,7 +96,7 @@
 					scrollContainer?.scrollTop +
 					Number(verse.parentElement?.getBoundingClientRect().top) -
 					scrollContainer?.getBoundingClientRect().top,
-				behavior: 'smooth'
+				behavior: 'instant'
 			});
 			dispatch('localVerseChange', target);
 			verse.parentElement?.classList.add('animate-bounce', 'once');
