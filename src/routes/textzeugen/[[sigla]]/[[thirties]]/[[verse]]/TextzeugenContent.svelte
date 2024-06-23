@@ -8,7 +8,7 @@
 </script>
 
 <script>
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	export let pages;
 
 	let localVerse = $targetVerse;
@@ -19,7 +19,25 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: pageColumns = pages.map((c) => c.content.split('<br class="tei-cb">'));
+	let scrollContainer, observer;
+
+	onMount(() => {
+		observer = new IntersectionObserver(
+			(entries) => {
+				if (programmaticScroll) return;
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						dispatch('localPageChange', entry.target.dataset);
+					}
+				});
+			},
+			{
+				root: scrollContainer,
+				rootMargin: '0px',
+				threshold: [0, 1]
+			}
+		);
+	});
 
 	let programmaticScroll = false;
 
@@ -66,11 +84,10 @@
 
 	const scrollToVerse = (/** @type {HTMLDivElement} */ node, /** @type {String} */ targetVerse) => {
 		const scroll = (/** @type {String} */ target) => {
-			const verse = node.querySelector(`[data-verse="${target}"]`);
+			const verse = node.parentElement?.querySelector(`[data-verse="${target}"]`);
 			if (!verse) return;
-			const scrollContainer = verse.parentElement?.parentElement?.parentElement?.parentElement;
 			programmaticScroll = true;
-			// verse.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			// verse.scrollIntoView({ behavior: 'instant', block: 'start' });
 			scrollContainer?.scrollTo({
 				top:
 					scrollContainer?.scrollTop +
@@ -83,22 +100,6 @@
 		};
 		scroll(targetVerse);
 
-		//add IntersectionOberver to all divs with class page
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (programmaticScroll) return;
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						dispatch('localPageChange', entry.target.dataset);
-					}
-				});
-			},
-			{
-				root: node,
-				rootMargin: '0px',
-				threshold: [0, 1]
-			}
-		);
 		node.querySelectorAll('.page').forEach((page) => {
 			observer.observe(page);
 		});
@@ -138,22 +139,30 @@
 <div
 	class="max-h-[70vh] overflow-y-auto snap-y"
 	on:scrollend={onScrollEnd}
-	use:scrollToVerse={$targetVerse}
+	bind:this={scrollContainer}
 >
-	{#each pages as pageObject, i (pageObject.id)}
-		<div
-			class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4"
-			data-id={pageObject.id}
-			data-next={pageObject.nextId}
-			data-previous={pageObject.previousId}
-		>
-			{#each pageColumns[i] as column}
-				{#if !isEmptyColumn(column)}
-					<div class="column">{@html column}</div>
-				{/if}
-			{/each}
-		</div>
-		<hr class="!border-t-4" />
+	{#each pages as pageObject, i (pageObject.page)}
+		{#await pageObject.tpData}
+			Lade Seite...
+		{:then tpData}
+			{@const pageColumns = tpData.content.split('<br class="tei-cb">')}
+			<div
+				class="page grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4"
+				data-id={pageObject.page}
+				data-next={tpData.nextId}
+				data-previous={tpData.previousId}
+				use:scrollToVerse={$targetVerse}
+			>
+				{#each pageColumns as column}
+					{#if !isEmptyColumn(column)}
+						<div class="column">{@html column}</div>
+					{/if}
+				{/each}
+			</div>
+			<hr class="!border-t-4" />
+		{:catch error}
+			{error.message}
+		{/await}
 	{/each}
 </div>
 

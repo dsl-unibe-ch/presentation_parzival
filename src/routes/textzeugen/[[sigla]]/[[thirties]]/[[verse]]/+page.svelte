@@ -5,6 +5,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { replaceState } from '$app/navigation';
+	import { iiif, teipb } from '$lib/constants';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -63,7 +64,47 @@
 
 	setTarget(`${data.thirties}.${data.verse}`);
 	let localVerses = Array(data.content?.length).fill(`${data.thirties}.${data.verse}`);
-	let localPages = [];
+	let localPages = Array(data.content?.length).fill([]);
+	//fill the data from the load-function into the localPages array
+	data.content?.forEach((c, i) => {
+		c.meta.then((meta) => {
+			localPages[i] = [...localPages[i], ...meta];
+		});
+	});
+
+	const checklocalPages = (
+		/** @type {CustomEvent<any>} */ e,
+		/** @type {number} */ i,
+		/** @type {string} */ sigla
+	) => {
+		console.log('checklocalPages', e.detail.id);
+		const indexCurrent = localPages[i].findIndex((p) => p.page === e.detail.id);
+
+		const createObject = (/** @type {string} */ id) => {
+			return {
+				page: id,
+				tpData: fetch(`${teipb}/parts/${sigla}.xml/json?&view=page&id=${id}&odd=parzival.odd`).then(
+					(r) => r.json()
+				),
+				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
+			};
+		};
+
+		//switch statement for the cases -1, 0, localPages[i].length
+		switch (indexCurrent) {
+			case -1:
+				console.error('current page not found in localPages', e.detail.id);
+				break;
+			case 0:
+				console.log('fetching previous', e.detail.previous);
+				localPages[i] = [createObject(e.detail.previous), ...localPages[i]];
+				break;
+			case localPages[i].length - 1:
+				console.log('fetching next', e.detail.next);
+				localPages[i] = [...localPages[i], createObject(e.detail.next)];
+				break;
+		}
+	};
 </script>
 
 <section class="w-full">
@@ -108,39 +149,21 @@
 							</a>
 						</div>
 					</div>
-					{#await content.meta then pages}
-						{#await Promise.allSettled(pages.map((p) => p.tpData))}
-							<p>Loading...</p>
-						{:then tpData}
-							{@const resolvedData = tpData.map((d) => d.status === 'fulfilled' && d.value)}
-							<TextzeugenContent
-								pages={resolvedData.map((d, i) => {
-									return {
-										id: pages[i].page,
-										content: d.content,
-										nextId: d?.nextId,
-										previousId: d?.previousId
-									};
-								})}
-								on:localVerseChange={(e) => {
-									localVerses[i] = e.detail;
-									replaceState(
-										`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}`,
-										{}
-									);
-								}}
-								on:localPageChange={(e) => {
-									console.log(e.detail);
-								}}
-							/>
-						{:catch error}
-							<p style="color: red">{error.message}</p>
-						{/await}
-					{/await}
+					<TextzeugenContent
+						pages={localPages[i]}
+						on:localVerseChange={(e) => {
+							localVerses[i] = e.detail;
+							replaceState(
+								`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}`,
+								{}
+							);
+						}}
+						on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
+					/>
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
 					<section class="min-h-[40vh]">
-						{#await content.meta then meta}
+						{#await localPages[i] then meta}
 							{#if typeof meta === 'object' && typeof meta.tpData === 'object'}
 								{#await meta.iiif}
 									<p>Loading...</p>
