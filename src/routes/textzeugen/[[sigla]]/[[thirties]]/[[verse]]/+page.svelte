@@ -12,11 +12,13 @@
 
 	const generateLabel = (/** @type {String[]} */ sigla) => {
 		const info = [...data.codices, ...data.fragments];
-		sigla.map((s) => {
-			const found = info.find((i) => i.sigil === s);
+		sigla = sigla.map((s) => {
+			const found = info.find((i) => i.handle === s);
 			if (found) {
-				const { sigil, handle, ...rest } = found;
-				return `${sigil} (${rest})`;
+				const { sigil, loc, cod } = found;
+				const location = loc ? `Standort: ${loc}` : '';
+				const codex = cod ? `Codex: ${cod}` : '';
+				return `<abbr title='${[location, codex].join(', ')}'>${sigil}</abbr>`;
 			}
 			return s;
 		});
@@ -67,7 +69,7 @@
 	<div class="grid gap-6 md:grid-cols-2 md:my-8">
 		<p>
 			Dies ist die Textzeugenansicht. Derzeit {Number(data.content?.length) > 1 ? 'werden' : 'wird'}
-			{data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor
+			{@html data?.content ? generateLabel(selectedSigla) : 'keine Textzeugen'} angezeigt. Mit dem Selektor
 			können Sie die Textzeugen wechseln.
 		</p>
 		<TextzeugenSelector
@@ -85,7 +87,7 @@
 			>
 				<section>
 					<div class="mb-4 relative">
-						<h2 class="h2">Textzeuge: {generateLabel([content.sigla])}</h2>
+						<h2 class="h2">Textzeuge: {@html generateLabel([content.sigla])}</h2>
 						<p>
 							Vers: {localVerses[i]}
 						</p>

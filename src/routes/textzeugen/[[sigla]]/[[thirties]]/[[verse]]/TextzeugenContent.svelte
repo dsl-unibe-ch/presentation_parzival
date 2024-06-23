@@ -94,7 +94,7 @@
 		for (let i = 0; i < children.length; i++) {
 			const child = children[i];
 			if (child.children.length === 0) {
-				if (child.textContent.trim() !== '') {
+				if (child.textContent?.trim() !== '') {
 					return false;
 				}
 			} else {
