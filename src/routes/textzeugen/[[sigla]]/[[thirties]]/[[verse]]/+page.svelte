@@ -106,12 +106,16 @@
 				console.error('current page not found in localPages', e.detail.id);
 				break;
 			case 0:
-				console.log('fetching previous', e.detail.previous);
-				localPages[i] = [createObject(e.detail.previous), ...localPages[i]];
+				if (e.detail.previous) {
+					console.log('fetching previous', e.detail.previous);
+					localPages[i] = [createObject(e.detail.previous), ...localPages[i]];
+				}
 				break;
 			case localPages[i].length - 1:
-				console.log('fetching next', e.detail.next);
-				localPages[i] = [...localPages[i], createObject(e.detail.next)];
+				if (e.detail.next) {
+					console.log('fetching next', e.detail.next);
+					localPages[i] = [...localPages[i], createObject(e.detail.next)];
+				}
 				break;
 		}
 	};
