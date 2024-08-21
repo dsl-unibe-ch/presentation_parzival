@@ -23,6 +23,8 @@
 			viewer = new OpenSeadragon.Viewer({
 				id: node.id,
 				prefixUrl: `${assets}/openseadragon-svg-icons/icons/`,
+				showNavigator: true,
+				sequenceMode: false,
 				navImages: {
 					zoomIn: {
 						REST: 'zoomin_rest.svg',
@@ -79,8 +81,7 @@
 						HOVER: 'flip_hover.svg',
 						DOWN: 'flip_pressed.svg'
 					}
-				},
-				sequenceMode: false
+				}
 			});
 			observer = new ResizeObserver((_entries) => {
 				setTimeout(() => {
