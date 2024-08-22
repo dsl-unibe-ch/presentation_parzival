@@ -8,11 +8,6 @@
 	$: ({ tableData } = data);
 	let tableWidth = 0;
 	let tableHeight = 0;
-
-	/**
-	 * @type { String[] }
-	 */
-	let selectedSigla = ['', ''];
 </script>
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
@@ -95,7 +90,7 @@
 		</p>
 	</section>
 	<section>
-		<h2 class="h2 my-10">Versindizes zu den Textzeugen</h2>
+		<h2 class="h2 my-10" id="versindizes">Versindizes zu den Textzeugen</h2>
 		<p class="my-5">
 			Die Indizes listen die Start- bzw. Endverse je Seite und Spalte für einen Textzeugen auf. Der
 			anzuzeigende Textzeuge kann aus der Liste ausgewählt und durch "Index anzeigen" aufgerufen
@@ -111,7 +106,7 @@
 		</select>
 	</section>
 	<section>
-		<h2 class="h2 my-10">Verssynopse</h2>
+		<h2 class="h2 my-10" id="verssynopse">Verssynopse</h2>
 		<p class="my-5">
 			Es werden Einzelverse in sämtlichen Textzeugen und (optional) Fassungen angezeigt. Bitte geben
 			Sie im ersten Feld die Zahl eines Dreißigers (z. B. 249), im zweiten Feld die Zahl eines
@@ -125,7 +120,7 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2 my-10">Synopse zweier Textzeugen</h2>
+		<h2 class="h2 my-10" id="textzeugensynopse">Synopse zweier Textzeugen</h2>
 		<p class="my-5">
 			Die beiden Textzeugen können aus den Listen ausgewählt werden; der gewünschte Versbereich ist
 			in die Eingabefelder einzutragen. Der Startvers wird jeweils durch zwei Eingaben bestimmt: die
@@ -138,12 +133,12 @@
 		</div>
 	</section>
 	<section>
-		<h2 class="h2 my-10">Suche</h2>
+		<h2 class="h2 my-10" id="suche">Suche</h2>
 		<p class="my-5">Geben Sie einen Suchbegriff ein, um in der digitalen Edition zu suchen.</p>
 		<input type="text" placeholder="Suchbegriff" class="input" />
 	</section>
 	<section class="col-span-full">
-		<h2 class="h2 my-10">Edition nach Dreißigern</h2>
+		<h2 class="h2 my-10" id="tabelle">Edition nach Dreißigern</h2>
 		<p class="my-5">
 			Aktuell sind noch die Bücher IX bis XIV (Dreißiger 433–733) in Revision; über den ganzen Text
 			hin befindet sich die Interpunktion in Überarbeitung. Die folgende Tabelle führt die Dreißiger
