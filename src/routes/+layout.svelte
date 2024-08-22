@@ -38,17 +38,17 @@
 		drawerStore.open(s);
 	}
 
-	// Programatically generate routes and menu items
-	const routes = import.meta.glob('./*/+page.svelte');
-	const menuItems = Object.keys(routes).map((item) =>
-		item.replace('./', '').replace('/+page.svelte', '')
-	);
-	const pages = menuItems.map((item) => {
-		return {
-			slug: item[0].toUpperCase() + item.slice(1).replaceAll('-', ' '), // Capitalize first letter and replace dashes with spaces
-			path: `/${item}`
-		};
-	});
+	const pages = [
+		{ slug: 'Einführung', path: '/einfuehrung' },
+		{ slug: 'English Presentation', path: '/englishpresentation' },
+		{ slug: 'Handschriftenverzeichnis', path: '/hsverz' },
+		{ slug: 'Mitarbeitende', path: '/mitarbeitende' },
+		{ slug: 'Projektpräsentationen', path: '/projektpraesentationen' },
+		{ slug: 'Fassungen', path: '/fassungen' },
+		{ slug: 'Monotext', path: '/monotext' },
+		{ slug: 'Suche', path: '/suche' },
+		{ slug: 'Versindizes', path: '/versindizes' }
+	];
 </script>
 
 <Drawer height="h-auto">
