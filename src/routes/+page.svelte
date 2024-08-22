@@ -17,12 +17,27 @@
 
 <div class="container mx-auto grid grid-cols-[repeat(auto-fit,minmax(366px,1fr))] gap-6">
 	<section class="col-span-full">
-		<h1 class="h1 my-20">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
-		<p>
-			Introtext Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, similique quidem?
-			Labore consectetur assumenda quam fugit. Alias sint nostrum, aliquam, eveniet, corporis
-			ducimus necessitatibus expedita iste nihil at modi tempore!
-		</p>
+		<div class="mt-20 mb-4">
+			<h1 class="h1">Wolfram von Eschenbach, ›Parzival‹: Digitale Edition</h1>
+			<small>
+				Ein Projekt des Schweizerischen Nationalfonds und der Deutschen Forschungsgemeinschaft
+			</small>
+		</div>
+		<div class="bg-[url('$lib/assets/G063v.jpg')] bg-cover">
+			<div
+				class="md:flex flex-row-reverse items-center md:[&_picture]:flex-shrink-0 max-w-3xl mx-auto"
+			>
+				<enhanced:img
+					src="$lib/assets/G049v-freigestellt.gif"
+					alt="Portrait"
+					class="w-full h-auto my-4 md:h-[20rem] md:w-auto"
+				/>
+				<p class="text-primary-500 font-bold pb-4 px-4">
+					Eine neue kritische Ausgabe nach Fassungen mit philologischen und phylogenetischen
+					Analyseverfahren inklusive Einbindung digitaler Faksimiles
+				</p>
+			</div>
+		</div>
 	</section>
 	<section>
 		<h2 class="h2 my-10">Versindizes zu den Textzeugen</h2>
