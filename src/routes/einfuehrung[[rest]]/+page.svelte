@@ -1,15 +1,14 @@
-<div class="container mx-auto">
+<div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
 		Wolfram von Eschenbach, ›Parzival‹.<br />Eine überlieferungskritische Ausgabe in digitaler Form
 	</h1>
-	<h2 class="h2">Voraussetzungen</h2>
+	<h2>Voraussetzungen</h2>
 
 	<p>
-		<font size="+2">W</font>olfram von Eschenbach hat mit seinem ›Parzival‹ einen der bedeutendsten
-		Erzähltexte des europäischen Mittelalters geschaffen. Der zwischen 1200 und 1210 entstandene
-		Versroman verbindet den keltischen Artusstoff mit religiöser Gralsthematik. Als zentral
-		erscheint dabei die Frage, wie eine von Widersprüchen und Gegensätzen zerrissene Welt wieder
-		heil wird.
+		Wolfram von Eschenbach hat mit seinem ›Parzival‹ einen der bedeutendsten Erzähltexte des
+		europäischen Mittelalters geschaffen. Der zwischen 1200 und 1210 entstandene Versroman verbindet
+		den keltischen Artusstoff mit religiöser Gralsthematik. Als zentral erscheint dabei die Frage,
+		wie eine von Widersprüchen und Gegensätzen zerrissene Welt wieder heil wird.
 		<br />
 
 		Wolfram verleiht dieser Frage in der fiktiven Gestalt seines ›Parzival‹ ein überzeitliches
@@ -39,45 +38,72 @@
 		Neuausgaben die Vielzahl der inzwischen bekannt gewordenen Überlieferungsträger nicht
 		hinreichend berücksichtigen. Aus diesen Defiziten ist das Desiderat einer neuen kritischen
 		Textausgabe erwachsen, die auf der Grundlage der gesamten heute bekannten Überlieferung basiert
-		(<a href="javascript:fenster('anmerkung/bumke.html')">J. Bumke</a>).
+		(
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary>J. Bumke</summary>
+			Vgl. Joachim Bumke, Wolfram von Eschenbach, (8., völlig neu bearbeitete Auflage) Stuttgart/ Weimar
+			2004 (Sammlung Metzler 36), S. 254.
+		</details>
+		).
 	</p>
 
 	<h2>Methodischer Kontext</h2>
 	<p>
-		<font size="+2">D</font>ieses Desiderat findet sich auf zentrale Probleme in der philologischen
-		Theoriediskussion der germanistischen Mediävistik verwiesen. Zu nennen wären Phänomene wie das
-		Verhältnis von Aufführung und Schrift, die vielfach beobachtbare Varianz mittelalterlicher
-		Texte, Konzepte der Autorschaft und Überlieferungsgeschichte sowie Fragen einer adäquaten
-		Textherstellung und Textpräsentation. Sehr stark vereinfacht ließe sich sagen, daß die
-		Fachdebatte um zwei Standpunkte kreist, die man schlagwortartig mit den Begriffen
+		Dieses Desiderat findet sich auf zentrale Probleme in der philologischen Theoriediskussion der
+		germanistischen Mediävistik verwiesen. Zu nennen wären Phänomene wie das Verhältnis von
+		Aufführung und Schrift, die vielfach beobachtbare Varianz mittelalterlicher Texte, Konzepte der
+		Autorschaft und Überlieferungsgeschichte sowie Fragen einer adäquaten Textherstellung und
+		Textpräsentation. Sehr stark vereinfacht ließe sich sagen, daß die Fachdebatte um zwei
+		Standpunkte kreist, die man schlagwortartig mit den Begriffen
 		<i>New Philology</i> und <i>New Phylogeny</i> benennen könnte (bei letzterem handelt es sich um
 		einen hier in Anlehnung an die Bezeichnung
 		<i>New Philology</i> geprägten Neologismus): <br />
 
-		Die <a href="javascript:fenster('anmerkung/nphil.html')"><i>New Philology</i></a> betont die
-		handschriftliche Vielfalt und die daraus resultierende Unfestigkeit der mittelalterlichen Texte.
-		Sie tendiert dazu, die Hierarchie der einzelnen Überlieferungszeugen zugunsten eines prinzipiell
-		variablen, unfesten Status der mittelalterlichen Handschriftenkultur preiszugeben. <br />
+		Die
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary><i>New Philology</i></summary>
+			Vgl. zur Diskussion in der Altgermanistik z.B. Karl Stackmann, Neue Philologie?, (Nachdruck aus:
+			Modernes Mittelalter. Neue Bilder einer populären Epoche, hrsg. v. Joachim Heinzle, Frankfurt am
+			Main/ Leipzig 1994, S. 398-427) in: Karl Stackmann, Philologie und Lexikographie. Kleine Schriften
+			II, hrsg. v. Jens Haustein, Göttingen 1998, S. 20-41; ders., Autor - Überlieferung - Editor, in:
+			Das Mittelalter und die Germanisten. Zur neueren Methodengeschichte der Germanischen Philologie.
+			Freiburger Colloquium 1997, hrsg. v. Eckart Conrad Lutz, Freiburg i. Ü. 1998 (Scrinium Friburgense
+			11), S. 11-32, bes. S. 24-32.
+		</details>
+		betont die handschriftliche Vielfalt und die daraus resultierende Unfestigkeit der mittelalterlichen
+		Texte. Sie tendiert dazu, die Hierarchie der einzelnen Überlieferungszeugen zugunsten eines prinzipiell
+		variablen, unfesten Status der mittelalterlichen Handschriftenkultur preiszugeben.<br />
 
 		Die <i>New Phylogeny</i> hält demgegenüber an handschriftlichen Bezügen und Gruppierungen als
 		der Basis überlieferungskritischer Untersuchungen fest. Der aus der Evolutionsbiologie stammende
-		Begriff <i>Phylogeny</i> (deutsch: <span class="doublequote">‚</span>Phylogenese<span
-			class="doublequote">‘</span
-		>) bezeichnet die stammesgeschichtliche Verwandtschaft der Arten und wird im angelsächsischen
-		Raum derzeit auf Fragen handschriftlicher Beziehungen angewandt, so etwa in der
-		<a href="javascript:fenster('anmerkung/chaucer.html')"> Chaucer-Forschung</a>.<br />
+		Begriff <i>Phylogeny</i> (deutsch: ‚Phylogenese‘) bezeichnet die stammesgeschichtliche
+		Verwandtschaft der Arten und wird im angelsächsischen Raum derzeit auf Fragen handschriftlicher
+		Beziehungen angewandt, so etwa in der
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary>Chaucer-Forschung</summary>
+			Vgl. Adrian C. Barbrook/ Christopher J. Howe/ Norman Blake/ Peter Robinson, The phylogeny of ’The
+			Canterbury Tales’, in: Nature, vol. 394, issue 6696, 27-8-1998, S. 839; Christopher J. Howe/ Adrian
+			C. Barbrook/ Matthew Spencer/ Peter Robinson/ Barbara Bordalejo/ Linne R. Mooney, Manuscript Evolution,
+			in: Endeavour 25/3 (2001), S. 121–126.
+		</details>
+		.<br />
 
 		Eine kritische Neuausgabe des ›Parzival‹ muss der zu verarbeitenden Lesartenfülle und den nicht
 		unbeträchtlichen Problemen der Textherstellung vor dem methodischen Hintergrund der Polarität
 		von
 		<i>New Philology</i>
 		und <i>New Phylogeny</i> begegnen. Damit erscheint eine in der ›Parzival‹-Philologie der
-		sechziger Jahre erhobene Forderung aktueller denn je, nämlich
-		<span class="doublequote">„</span>vor der Klärung der Hss.-Verzweigung das gesamte Material, das
-		zur textkritischen Auswertung gesammelt wurde, [...] zu publizieren<span class="doublequote"
-			>“</span
-		>
-		(<a href="javascript:fenster('anmerkung/nellmann.html')">E. Nellmann</a>). <br />
+		sechziger Jahre erhobene Forderung aktueller denn je, nämlich „vor der Klärung der
+		Hss.-Verzweigung das gesamte Material, das zur textkritischen Auswertung gesammelt wurde, [...]
+		zu publizieren“ (
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary>E. Nellmann</summary>
+			Eberhard Nellmann, Zur handschriftlichen Überlieferung des Parzival, in: Kolloquium über Probleme
+			altgermanistischer Editionen. Marbach am Neckar, 26. und 27. April 1966. Referate und Diskussionsbeiträge,
+			hrsg. v. Hugo Kuhn/ Karl Stackmann/ Dieter Wuttke, Wiesbaden 1968 (Deutsche Forschungsgemeinschaft.
+			Forschungsberichte 13), S. 13-21, hier S. 20.
+		</details>
+		).<br />
 
 		Der Gedanke mag, als er 1968 vorgebracht worden ist, utopisch erschienen sein. Er lässt sich
 		jedoch heute mit Hilfe digitaler Methoden umsetzen. Eine überlieferungskritische Ausgabe in
@@ -87,12 +113,21 @@
 	<h2>Das Parzival-Projekt</h2>
 
 	<p>
-		<font size="+2">I</font>m Rahmen eines vom Schweizerischen Nationalfonds und phasenweise von der
-		Deutschen Forschungsgemeinschaft geförderten Projekts erarbeitet ein von Prof. Dr. Michael Stolz
+		Im Rahmen eines vom Schweizerischen Nationalfonds und phasenweise von der Deutschen
+		Forschungsgemeinschaft geförderten Projekts erarbeitet ein von Prof. Dr. Michael Stolz
 		geleitetes Forschungsteam an der Universität Bern eine solche digitale Ausgabe. Dabei wird eine
 		Edition nach Fassungen erstellt, die auf Volltranskriptionen aller Textzeugen beruht und in
 		Anlehnung an den von Joachim Bumke geprägten
-		<a href="javascript:fenster('anmerkung/klage.html')">Fassungsbegriff</a>
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary>Fassungsbegriff</summary>
+			Ein Ansatz, der in der Erforschung mittelhochdeutscher Epik zunehmend favorisiert wird und die
+			Annahme eines einzelnen Autororiginals verdrängt. Vgl. Joachim Bumke, Der unfeste Text. Überlegungen
+			zur Überlieferungsgeschichte und Textkritik der höfischen Epik im 13. Jahrhundert, in: ’Aufführung’
+			und ’Schrift’ in Mittelalter und Früher Neuzeit, hrsg. v. Jan-Dirk Müller, Stuttgart/ Weimar 1996
+			(Germanistische Symposien. Berichtsbände 17), S. 118–129; ders., Die vier Fassungen der Nibelungenklage’.
+			Untersuchungen zur Überlieferungsgeschichte und Textkritik der höfischen Epik im 13. Jahrhundert,
+			Berlin/ New York 1996 (Quellen und Forschungen zur Literatur- und Kulturgeschichte 8 [242]).
+		</details>
 		vier Textfassungen dokumentiert: *D (basierend u.a. auf Handschrift D), *m (basierend u.a. auf den
 		Handschriften mno), *G (basierend u.a. auf den Handschriften GI LM OQR Z), *T (basierend u.a. auf
 		den Textzeugen TUVW).<br />
@@ -101,36 +136,64 @@
 		Speicherverfahren auch – den Forderungen der <i>New Phylogeny</i> entsprechend – einen neuen
 		Blick auf handschriftliche Beziehungen. Hierbei kann auf stemmatologische Vorgehensweisen
 		zurückgegriffen werden, die der niederländische Romanist
-		<a href="javascript:fenster('anmerkung/dees.html')">Anthonij Dees</a>
-		entwickelt hat. <br />
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary>Anthonij Dees</summary>
+			Vgl. Anthonij Dees, Sur une constellation de quatre manuscrits, in: Mélanges de linguistique et
+			de littérature offerts à Lein Geschiere par ses amis, collègues et élèves, hrsg. v. A. Dees/ A.Kibédy
+			Varga/ R.E.V. Stuip, Amsterdam 1975, S. 1-9; ders., Considérations théoriques sur la tradition
+			manuscrite du ’Lai de l’Ombre’, in: Neophilologus 60 (1976), S. 481-504. Ferner die übersichtliche
+			Zusammenfassung in der leider nur schwer zugänglichen Dissertation von Margot van Mulken, The Manuscript
+			Tradition of the Perceval of Chrétien de Troyes. A stemmatological and dialectical approach, Diss.
+			Vrije Universiteit Amsterdam, Faculteit der Letteren 1993, S. 45-61.
+		</details>
+		entwickelt hat.<br />
 
 		Anstelle von historischen Genealogien handschriftlicher Stammbäume geht Dees von Verkettungen in
-		sogenannten
-		<span class="doublequote">‚</span>unrooted trees<span class="doublequote">‘</span> aus, die
-		keinen Aufhängungspunkt haben und auf die von einem Archetypus ausgehenden Verzweigungen
-		verzichten. Dieses Abstraktionsniveau macht das Aufzeigen von Beziehungen zwischen
-		handschriftlichen Varianten möglich, ohne dass daraus schon zwingend genealogische
-		Abhängigkeiten erschlossen werden. Nach demselben Prinzip verfahren phylogenetische Analysen der
-		Evolutionsbiologie, die aufgrund bestimmter Eigenschaften einzelner Arten deren Beziehungen und
-		Gruppierungen ermitteln, noch ehe daraus Schlussfolgerungen über die Stammesgeschichte selbst
-		gezogen werden. In Zusammenarbeit mit Biologen und Philologen an den Universitäten Cambridge
-		(England) und Helsinki (Finnland) konnten solche <span class="doublequote">‚</span>unrooted
-		trees<span class="doublequote">‘</span> zu verschiedenen Abschnitten des ›Parzival‹-Romans
-		erstellt werden. Vgl. dazu den
-		<a href="projektaufsaetze/Stolz_Wolfr12_SD.pdf" target="_blank">Beitrag von Michael Stolz</a> in:
-		Wolfram-Studien 23 (2014), bes. S. 459–465.
+		sogenannten ‚unrooted trees‘ aus, die keinen Aufhängungspunkt haben und auf die von einem
+		Archetypus ausgehenden Verzweigungen verzichten. Dieses Abstraktionsniveau macht das Aufzeigen
+		von Beziehungen zwischen handschriftlichen Varianten möglich, ohne dass daraus schon zwingend
+		genealogische Abhängigkeiten erschlossen werden. Nach demselben Prinzip verfahren
+		phylogenetische Analysen der Evolutionsbiologie, die aufgrund bestimmter Eigenschaften einzelner
+		Arten deren Beziehungen und Gruppierungen ermitteln, noch ehe daraus Schlussfolgerungen über die
+		Stammesgeschichte selbst gezogen werden. In Zusammenarbeit mit Biologen und Philologen an den
+		Universitäten Cambridge (England) und Helsinki (Finnland) konnten solche ‚unrooted trees‘ zu
+		verschiedenen Abschnitten des ›Parzival‹-Romans erstellt werden. Vgl. dazu den
+		<a href="/Stolz_Wolfr12_SD.pdf" target="_blank">Beitrag von Michael Stolz</a> in: Wolfram-Studien
+		23 (2014), bes. S. 459–465.
 	</p>
 
 	<h2>Editionsproben</h2>
 
 	<p>
-		<font size="+2">W</font>elche Möglichkeiten die synoptische Darstellung von Fassungen und
-		Überlieferungsträgern am Bildschirm bietet, zeigt die Abteilung
-		<a href="editionen.html" target="_blank">Editionsproben</a>
-		auf dieser Website. Dort werden auch die Verfahren der
-		<a href="javascript:erlaeuterungsFenster('erlfass.html')">Fassungsedition</a>
+		Welche Möglichkeiten die synoptische Darstellung von Fassungen und Überlieferungsträgern am
+		Bildschirm bietet, zeigt die Abteilung Editionsproben auf dieser Website. Dort werden auch die
+		Verfahren der
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
+			<summary>Fassungsedition</summary>
+			Die Beispiele zeigen ein Editionskonzept nach den vier Fassungen *D *G *m und *T auf: Ein Mausklick
+			auf die links neben einer Versangabe befindliche Fassungssigle (z.B. *D) bringt den entsprechenden
+			Vers der jeweils folgenden Fassung (z.B. *G) in der obersten Zeile zur Anzeige. Auf diese Weise
+			kann durch fortgesetztes Anklicken der jeweils selben Versposition rasch eine Konkordanz hergestellt
+			werden. Die unter den Fassungstexten befindlichen Fenster enthalten einen zweistöckigen Apparat.
+			Die erste Etage ("Apparat 1") dokumentiert Gliederungseinrichtungen der Handschriften, wie etwa
+			Initialen, Überschriften und Capitulumzeichen. Die zweite Etage ("Apparat 2") verzeichnet aussagerelevante
+			Varianten in der Textgestalt, etwa Wortersetzungen, Wortumstellungen, Änderungen bei morphologischen
+			Kompositionsteilen wie Präfixen und auch Wechsel der Flexionsklasse (Varianten, die nicht aussagerelevant
+			sind, können über die Einzeltranskriptionen erschlossen werden). In den einzelnen Fassungstexten
+			kann Apparat 1 durch einen Mausklick auf die Abschnittangabe (z.B. den 'Dreißiger' 184) angesprungen
+			werden; Apparat 2 wird mit einem Mausklick auf die daneben stehende Versangabe (z.B. 01) erreicht.
+			Der Link fehlt in den angegebenen Positionen jeweils dann, wenn der betroffene Vers keine Varianten
+			des einen oder anderen Typs aufweist. Über die Handschriftensiglen der Apparate kann eine Volltranskription
+			mit Digitalfaksimiles der einzelnen Manuskripte angesteuert werden. Die Ansicht öffnet sich in
+			einem neuen Fenster, das verschiebbar und in seiner Größe beliebig veränderbar ist. Dies ermöglicht
+			einen direkten Vergleich zwischen den Transkriptionen und den Fassungstexten. Die Transkriptionen
+			folgen den unter "Editionsproben" angegebenen Konventionen. Die Transkriptionen der Einzelhandschriften
+			können zudem auch über die blauen Handschriftensiglen in der oberen Menüleiste über den Fassungstexten
+			angesprochen werden. Mit dem Button "3 Fassungen" kann der Fassungstext von *T ausgeblendet werden,
+			um eine bessere Darstellung auf Monitoren mit geringerer Breite zu gewährleisten.
+		</details>
 		und das Modell einer
-		<details class="inline open:block">
+		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
 			<summary>Eintextedition</summary>
 			Neben der synoptischen Mehrtextedition wird auch eine Eintextedition (Lesetext) angeboten, in welcher
 			die wichtigsten editorischen Informationen gebündelt präsentiert werden. Der kritische Text ist
@@ -159,7 +222,7 @@
 			Kolloquium 2018, in Verbindung mit Franz-Josef Holznagel u. Mathias Herweg hg. von Ricarda Bauschke-Hartung,
 			Berlin 2020 (Wolfram-Studien 26), S. 471–493 (im Druck)
 		</details>
-		(basierend auf<a href="hsverz.html" target="_blank">Codex 857</a> der Stiftsbibliothek St.
+		(basierend auf&nbsp;<a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St.
 		Gallen aus der Mitte des 13. Jahrhunderts, Hs. D) erläutert.<br />
 
 		Zweifellos kann in einer Digitaledition die von der <i>New Philology</i> postulierte Varianz
