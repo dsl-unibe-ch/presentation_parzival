@@ -13,7 +13,7 @@
 			target="_blank">Parzival im Manuskript</a
 		>. Profile der Parzival–Überlieferung am Beispiel von fünf Handschriften des 13. bis 15.
 		Jahrhunderts. Mit einem Beitrag von Richard F. Fasching, Basel 2020 [419 S.] [<a
-			href="images/4086_8_Titelflyer_Stolz_Parzival.pdf"
+			href="/4086_8_Titelflyer_Stolz_Parzival.pdf"
 			title="Flyer Parzival im Mansukript"
 			target="_blank">Flyer</a
 		>]
@@ -45,7 +45,7 @@
 		›Parzival‹, in: Überlieferungsgeschichte transdisziplinär. Neue Perspektiven auf ein
 		germanistisches Forschungsparadigma, in Verbindung mit Horst Brunner und Freimut Löser
 		herausgegeben von Dorothea Klein, Wiesbaden 2016 (Wissensliteratur im Mittelalter 52), S.
-		353–388 <a href="projektaufsaetze/Stolz_Eintext16_SD-1.pdf" target="_blank">[Text]</a>
+		353–388 <a href="/Stolz_Eintext16_SD-1.pdf" target="_blank">[Text]</a>
 	</p>
 
 	<p>
@@ -53,7 +53,7 @@
 		Überlieferung und textkritische Erschließung, in: Wolframs Parzival-Roman im europäischen
 		Kontext. Tübinger Kolloquium 2012, in Verbindung mit Susanne Köbele und Eckart Conrad Lutz hg.
 		von Klaus Ridder, Berlin 2014 (Wolfram-Studien 23), S. 431–478 <a
-			href="projektaufsaetze/Stolz_Wolfr12_SD.pdf"
+			href="/Stolz_Wolfr12_SD.pdf"
 			target="_blank">[Text]</a
 		>
 	</p>
