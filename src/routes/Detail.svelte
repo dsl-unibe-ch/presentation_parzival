@@ -174,7 +174,10 @@
 		})
 		.on('click', (e) => {
 			const reference = e.currentTarget;
-			const popup = popupLabels[reference.textContent];
+			const popup =
+				popupLabels[
+					codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
+				];
 			if (popup && reference) {
 				computePosition(reference, popup, {
 					placement: 'top'
@@ -189,7 +192,10 @@
 		})
 		.on('blur', (e) => {
 			const reference = e.currentTarget;
-			const popup = popupLabels[reference.textContent];
+			const popup =
+				popupLabels[
+					codices.find((i) => i.sigil === reference.textContent)?.handle || reference.textContent
+				];
 			if (popup) {
 				popup.style.opacity = '0';
 			}
