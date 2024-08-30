@@ -1,3 +1,21 @@
+<script>
+	import { popup } from '@skeletonlabs/skeleton';
+
+	/** @type {import('@skeletonlabs/skeleton').PopupSettings}*/
+	const popupClick = {
+		event: 'focus-click',
+		target: 'popupClick',
+		placement: 'top'
+	};
+
+	/** @type {HTMLSpanElement} */
+	let popupContent;
+</script>
+
+<div class="card m-8 p-4 variant-filled-primary" data-popup="popupClick">
+	<span bind:this={popupContent}>content</span>
+	<div class="arrow variant-filled-primary" />
+</div>
 <div class="container mx-auto typography">
 	<h1 class="h1 mb-4">
 		Wolfram von Eschenbach, ›Parzival‹.<br />Eine überlieferungskritische Ausgabe in digitaler Form
@@ -38,12 +56,15 @@
 		Neuausgaben die Vielzahl der inzwischen bekannt gewordenen Überlieferungsträger nicht
 		hinreichend berücksichtigen. Aus diesen Defiziten ist das Desiderat einer neuen kritischen
 		Textausgabe erwachsen, die auf der Grundlage der gesamten heute bekannten Überlieferung basiert
-		(
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>J. Bumke</summary>
-			Vgl. Joachim Bumke, Wolfram von Eschenbach, (8., völlig neu bearbeitete Auflage) Stuttgart/ Weimar
-			2004 (Sammlung Metzler 36), S. 254.
-		</details>
+		(<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>J. Bumke <span class="hidden">
+				Vgl. Joachim Bumke, Wolfram von Eschenbach, (8., völlig neu bearbeitete Auflage) Stuttgart/
+				Weimar 2004 (Sammlung Metzler 36), S. 254.
+			</span>
+		</button>
 		).
 	</p>
 
@@ -60,16 +81,21 @@
 		<i>New Philology</i> geprägten Neologismus): <br />
 
 		Die
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary><i>New Philology</i></summary>
-			Vgl. zur Diskussion in der Altgermanistik z.B. Karl Stackmann, Neue Philologie?, (Nachdruck aus:
-			Modernes Mittelalter. Neue Bilder einer populären Epoche, hrsg. v. Joachim Heinzle, Frankfurt am
-			Main/ Leipzig 1994, S. 398-427) in: Karl Stackmann, Philologie und Lexikographie. Kleine Schriften
-			II, hrsg. v. Jens Haustein, Göttingen 1998, S. 20-41; ders., Autor - Überlieferung - Editor, in:
-			Das Mittelalter und die Germanisten. Zur neueren Methodengeschichte der Germanischen Philologie.
-			Freiburger Colloquium 1997, hrsg. v. Eckart Conrad Lutz, Freiburg i. Ü. 1998 (Scrinium Friburgense
-			11), S. 11-32, bes. S. 24-32.
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			><i>New Philology</i>
+			<span class="hidden">
+				Vgl. zur Diskussion in der Altgermanistik z.B. Karl Stackmann, Neue Philologie?, (Nachdruck
+				aus: Modernes Mittelalter. Neue Bilder einer populären Epoche, hrsg. v. Joachim Heinzle,
+				Frankfurt am Main/ Leipzig 1994, S. 398-427) in: Karl Stackmann, Philologie und
+				Lexikographie. Kleine Schriften II, hrsg. v. Jens Haustein, Göttingen 1998, S. 20-41; ders.,
+				Autor - Überlieferung - Editor, in: Das Mittelalter und die Germanisten. Zur neueren
+				Methodengeschichte der Germanischen Philologie. Freiburger Colloquium 1997, hrsg. v. Eckart
+				Conrad Lutz, Freiburg i. Ü. 1998 (Scrinium Friburgense 11), S. 11-32, bes. S. 24-32.
+			</span>
+		</button>
 		betont die handschriftliche Vielfalt und die daraus resultierende Unfestigkeit der mittelalterlichen
 		Texte. Sie tendiert dazu, die Hierarchie der einzelnen Überlieferungszeugen zugunsten eines prinzipiell
 		variablen, unfesten Status der mittelalterlichen Handschriftenkultur preiszugeben.<br />
@@ -79,13 +105,17 @@
 		Begriff <i>Phylogeny</i> (deutsch: ‚Phylogenese‘) bezeichnet die stammesgeschichtliche
 		Verwandtschaft der Arten und wird im angelsächsischen Raum derzeit auf Fragen handschriftlicher
 		Beziehungen angewandt, so etwa in der
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>Chaucer-Forschung</summary>
-			Vgl. Adrian C. Barbrook/ Christopher J. Howe/ Norman Blake/ Peter Robinson, The phylogeny of ’The
-			Canterbury Tales’, in: Nature, vol. 394, issue 6696, 27-8-1998, S. 839; Christopher J. Howe/ Adrian
-			C. Barbrook/ Matthew Spencer/ Peter Robinson/ Barbara Bordalejo/ Linne R. Mooney, Manuscript Evolution,
-			in: Endeavour 25/3 (2001), S. 121–126.
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>Chaucer-Forschung <span class="hidden">
+				Vgl. Adrian C. Barbrook/ Christopher J. Howe/ Norman Blake/ Peter Robinson, The phylogeny of
+				’The Canterbury Tales’, in: Nature, vol. 394, issue 6696, 27-8-1998, S. 839; Christopher J.
+				Howe/ Adrian C. Barbrook/ Matthew Spencer/ Peter Robinson/ Barbara Bordalejo/ Linne R.
+				Mooney, Manuscript Evolution, in: Endeavour 25/3 (2001), S. 121–126.
+			</span>
+		</button>
 		.<br />
 
 		Eine kritische Neuausgabe des ›Parzival‹ muss der zu verarbeitenden Lesartenfülle und den nicht
@@ -96,13 +126,17 @@
 		sechziger Jahre erhobene Forderung aktueller denn je, nämlich „vor der Klärung der
 		Hss.-Verzweigung das gesamte Material, das zur textkritischen Auswertung gesammelt wurde, [...]
 		zu publizieren“ (
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>E. Nellmann</summary>
-			Eberhard Nellmann, Zur handschriftlichen Überlieferung des Parzival, in: Kolloquium über Probleme
-			altgermanistischer Editionen. Marbach am Neckar, 26. und 27. April 1966. Referate und Diskussionsbeiträge,
-			hrsg. v. Hugo Kuhn/ Karl Stackmann/ Dieter Wuttke, Wiesbaden 1968 (Deutsche Forschungsgemeinschaft.
-			Forschungsberichte 13), S. 13-21, hier S. 20.
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>E. Nellmann <span class="hidden">
+				Eberhard Nellmann, Zur handschriftlichen Überlieferung des Parzival, in: Kolloquium über
+				Probleme altgermanistischer Editionen. Marbach am Neckar, 26. und 27. April 1966. Referate
+				und Diskussionsbeiträge, hrsg. v. Hugo Kuhn/ Karl Stackmann/ Dieter Wuttke, Wiesbaden 1968
+				(Deutsche Forschungsgemeinschaft. Forschungsberichte 13), S. 13-21, hier S. 20.
+			</span>
+		</button>
 		).<br />
 
 		Der Gedanke mag, als er 1968 vorgebracht worden ist, utopisch erschienen sein. Er lässt sich
@@ -118,16 +152,21 @@
 		geleitetes Forschungsteam an der Universität Bern eine solche digitale Ausgabe. Dabei wird eine
 		Edition nach Fassungen erstellt, die auf Volltranskriptionen aller Textzeugen beruht und in
 		Anlehnung an den von Joachim Bumke geprägten
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>Fassungsbegriff</summary>
-			Ein Ansatz, der in der Erforschung mittelhochdeutscher Epik zunehmend favorisiert wird und die
-			Annahme eines einzelnen Autororiginals verdrängt. Vgl. Joachim Bumke, Der unfeste Text. Überlegungen
-			zur Überlieferungsgeschichte und Textkritik der höfischen Epik im 13. Jahrhundert, in: ’Aufführung’
-			und ’Schrift’ in Mittelalter und Früher Neuzeit, hrsg. v. Jan-Dirk Müller, Stuttgart/ Weimar 1996
-			(Germanistische Symposien. Berichtsbände 17), S. 118–129; ders., Die vier Fassungen der Nibelungenklage’.
-			Untersuchungen zur Überlieferungsgeschichte und Textkritik der höfischen Epik im 13. Jahrhundert,
-			Berlin/ New York 1996 (Quellen und Forschungen zur Literatur- und Kulturgeschichte 8 [242]).
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>Fassungsbegriff <span class="hidden">
+				Ein Ansatz, der in der Erforschung mittelhochdeutscher Epik zunehmend favorisiert wird und
+				die Annahme eines einzelnen Autororiginals verdrängt. Vgl. Joachim Bumke, Der unfeste Text.
+				Überlegungen zur Überlieferungsgeschichte und Textkritik der höfischen Epik im 13.
+				Jahrhundert, in: ’Aufführung’ und ’Schrift’ in Mittelalter und Früher Neuzeit, hrsg. v.
+				Jan-Dirk Müller, Stuttgart/ Weimar 1996 (Germanistische Symposien. Berichtsbände 17), S.
+				118–129; ders., Die vier Fassungen der Nibelungenklage’. Untersuchungen zur
+				Überlieferungsgeschichte und Textkritik der höfischen Epik im 13. Jahrhundert, Berlin/ New
+				York 1996 (Quellen und Forschungen zur Literatur- und Kulturgeschichte 8 [242]).
+			</span>
+		</button>
 		vier Textfassungen dokumentiert: *D (basierend u.a. auf Handschrift D), *m (basierend u.a. auf den
 		Handschriften mno), *G (basierend u.a. auf den Handschriften GI LM OQR Z), *T (basierend u.a. auf
 		den Textzeugen TUVW).<br />
@@ -136,16 +175,21 @@
 		Speicherverfahren auch – den Forderungen der <i>New Phylogeny</i> entsprechend – einen neuen
 		Blick auf handschriftliche Beziehungen. Hierbei kann auf stemmatologische Vorgehensweisen
 		zurückgegriffen werden, die der niederländische Romanist
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>Anthonij Dees</summary>
-			Vgl. Anthonij Dees, Sur une constellation de quatre manuscrits, in: Mélanges de linguistique et
-			de littérature offerts à Lein Geschiere par ses amis, collègues et élèves, hrsg. v. A. Dees/ A.Kibédy
-			Varga/ R.E.V. Stuip, Amsterdam 1975, S. 1-9; ders., Considérations théoriques sur la tradition
-			manuscrite du ’Lai de l’Ombre’, in: Neophilologus 60 (1976), S. 481-504. Ferner die übersichtliche
-			Zusammenfassung in der leider nur schwer zugänglichen Dissertation von Margot van Mulken, The Manuscript
-			Tradition of the Perceval of Chrétien de Troyes. A stemmatological and dialectical approach, Diss.
-			Vrije Universiteit Amsterdam, Faculteit der Letteren 1993, S. 45-61.
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>Anthonij Dees <span class="hidden">
+				Vgl. Anthonij Dees, Sur une constellation de quatre manuscrits, in: Mélanges de linguistique
+				et de littérature offerts à Lein Geschiere par ses amis, collègues et élèves, hrsg. v. A.
+				Dees/ A.Kibédy Varga/ R.E.V. Stuip, Amsterdam 1975, S. 1-9; ders., Considérations théoriques
+				sur la tradition manuscrite du ’Lai de l’Ombre’, in: Neophilologus 60 (1976), S. 481-504.
+				Ferner die übersichtliche Zusammenfassung in der leider nur schwer zugänglichen Dissertation
+				von Margot van Mulken, The Manuscript Tradition of the Perceval of Chrétien de Troyes. A
+				stemmatological and dialectical approach, Diss. Vrije Universiteit Amsterdam, Faculteit der
+				Letteren 1993, S. 45-61.
+			</span>
+		</button>
 		entwickelt hat.<br />
 
 		Anstelle von historischen Genealogien handschriftlicher Stammbäume geht Dees von Verkettungen in
@@ -168,60 +212,74 @@
 		Welche Möglichkeiten die synoptische Darstellung von Fassungen und Überlieferungsträgern am
 		Bildschirm bietet, zeigt die Abteilung Editionsproben auf dieser Website. Dort werden auch die
 		Verfahren der
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>Fassungsedition</summary>
-			Die Beispiele zeigen ein Editionskonzept nach den vier Fassungen *D *G *m und *T auf: Ein Mausklick
-			auf die links neben einer Versangabe befindliche Fassungssigle (z.B. *D) bringt den entsprechenden
-			Vers der jeweils folgenden Fassung (z.B. *G) in der obersten Zeile zur Anzeige. Auf diese Weise
-			kann durch fortgesetztes Anklicken der jeweils selben Versposition rasch eine Konkordanz hergestellt
-			werden. Die unter den Fassungstexten befindlichen Fenster enthalten einen zweistöckigen Apparat.
-			Die erste Etage ("Apparat 1") dokumentiert Gliederungseinrichtungen der Handschriften, wie etwa
-			Initialen, Überschriften und Capitulumzeichen. Die zweite Etage ("Apparat 2") verzeichnet aussagerelevante
-			Varianten in der Textgestalt, etwa Wortersetzungen, Wortumstellungen, Änderungen bei morphologischen
-			Kompositionsteilen wie Präfixen und auch Wechsel der Flexionsklasse (Varianten, die nicht aussagerelevant
-			sind, können über die Einzeltranskriptionen erschlossen werden). In den einzelnen Fassungstexten
-			kann Apparat 1 durch einen Mausklick auf die Abschnittangabe (z.B. den 'Dreißiger' 184) angesprungen
-			werden; Apparat 2 wird mit einem Mausklick auf die daneben stehende Versangabe (z.B. 01) erreicht.
-			Der Link fehlt in den angegebenen Positionen jeweils dann, wenn der betroffene Vers keine Varianten
-			des einen oder anderen Typs aufweist. Über die Handschriftensiglen der Apparate kann eine Volltranskription
-			mit Digitalfaksimiles der einzelnen Manuskripte angesteuert werden. Die Ansicht öffnet sich in
-			einem neuen Fenster, das verschiebbar und in seiner Größe beliebig veränderbar ist. Dies ermöglicht
-			einen direkten Vergleich zwischen den Transkriptionen und den Fassungstexten. Die Transkriptionen
-			folgen den unter "Editionsproben" angegebenen Konventionen. Die Transkriptionen der Einzelhandschriften
-			können zudem auch über die blauen Handschriftensiglen in der oberen Menüleiste über den Fassungstexten
-			angesprochen werden. Mit dem Button "3 Fassungen" kann der Fassungstext von *T ausgeblendet werden,
-			um eine bessere Darstellung auf Monitoren mit geringerer Breite zu gewährleisten.
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>Fassungsedition <span class="hidden">
+				Die Beispiele zeigen ein Editionskonzept nach den vier Fassungen *D *G *m und *T auf: Ein
+				Mausklick auf die links neben einer Versangabe befindliche Fassungssigle (z.B. *D) bringt
+				den entsprechenden Vers der jeweils folgenden Fassung (z.B. *G) in der obersten Zeile zur
+				Anzeige. Auf diese Weise kann durch fortgesetztes Anklicken der jeweils selben Versposition
+				rasch eine Konkordanz hergestellt werden. Die unter den Fassungstexten befindlichen Fenster
+				enthalten einen zweistöckigen Apparat. Die erste Etage ("Apparat 1") dokumentiert
+				Gliederungseinrichtungen der Handschriften, wie etwa Initialen, Überschriften und
+				Capitulumzeichen. Die zweite Etage ("Apparat 2") verzeichnet aussagerelevante Varianten in
+				der Textgestalt, etwa Wortersetzungen, Wortumstellungen, Änderungen bei morphologischen
+				Kompositionsteilen wie Präfixen und auch Wechsel der Flexionsklasse (Varianten, die nicht
+				aussagerelevant sind, können über die Einzeltranskriptionen erschlossen werden). In den
+				einzelnen Fassungstexten kann Apparat 1 durch einen Mausklick auf die Abschnittangabe (z.B.
+				den 'Dreißiger' 184) angesprungen werden; Apparat 2 wird mit einem Mausklick auf die daneben
+				stehende Versangabe (z.B. 01) erreicht. Der Link fehlt in den angegebenen Positionen jeweils
+				dann, wenn der betroffene Vers keine Varianten des einen oder anderen Typs aufweist. Über
+				die Handschriftensiglen der Apparate kann eine Volltranskription mit Digitalfaksimiles der
+				einzelnen Manuskripte angesteuert werden. Die Ansicht öffnet sich in einem neuen Fenster,
+				das verschiebbar und in seiner Größe beliebig veränderbar ist. Dies ermöglicht einen
+				direkten Vergleich zwischen den Transkriptionen und den Fassungstexten. Die Transkriptionen
+				folgen den unter "Editionsproben" angegebenen Konventionen. Die Transkriptionen der
+				Einzelhandschriften können zudem auch über die blauen Handschriftensiglen in der oberen
+				Menüleiste über den Fassungstexten angesprochen werden. Mit dem Button "3 Fassungen" kann
+				der Fassungstext von *T ausgeblendet werden, um eine bessere Darstellung auf Monitoren mit
+				geringerer Breite zu gewährleisten.
+			</span>
+		</button>
 		und das Modell einer
-		<details class="inline open:block open:border-2 open:p-1 [&:not([open])]:anchor">
-			<summary>Eintextedition</summary>
-			Neben der synoptischen Mehrtextedition wird auch eine Eintextedition (Lesetext) angeboten, in welcher
-			die wichtigsten editorischen Informationen gebündelt präsentiert werden. Der kritische Text ist
-			hier nach Fassung *D auf der Grundlage des St. Galler Codex 857 eingerichtet. Rechts daneben werden
-			in verkleinertem Schriftgrad die Varianten der Fassungstexte *G und *T (nach der jeweiligen Leithandschrift)
-			in normalisierter Form mit der jeweiligen Fassungssigle angegeben, wobei auch Binnenvarianten ausgewählter
-			Handschriften berücksichtigt werden. Die Varianten der Fassung *m (die Fassung *D nahe steht) sind
-			dagegen in der dritten Apparatetage untergebracht: Die erste dieser drei Apparatetagen listet die
-			Auswahl der Textzeugen auf, die bei der Angabe der Fassungsvarianten mit berücksichtigt werden.
-			Es sind dies neben den Leithandschriften D, m, G und T weitere vollständige Handschriften und gegebenenfalls
-			Fragmente, die aus textgeschichtlicher Perspektive als besonders wichtig erachtet werden. Die zweite
-			Apparatetage beinhaltet (ähnlich wie „Apparat 1“ in der synoptischen Edition) Angaben zur materiellen
-			Gestalt der ausgewählten Textzeugen; aufgeführt sind Initialen, Majuskeln sowie gegebenenfalls
-			Überschriften und Illustrationen. Die dritte Apparatetage dokumentiert Abweichungen der Leithandschrift
-			D gegenüber dem konstituierten Text *D und verzeichnet die Varianten der Fassung *m. Auf semantisch
-			wichtige Fassungsunterschiede der Fassung *m macht gegebenenfalls ein auf diese Apparatetage verweisendes
-			Pfeilsymbol in der Spalte der Fassungsvarianten (neben dem *D-Text) aufmerksam. In seltenen Fällen
-			wird das auf diesen Apparat verweisende Pfeilsymbol auch für Varianten der Fassungen *G und *T
-			verwendet, falls deren Wortlaut aus Platzgründen nicht neben dem Lesetext untergebracht werden
-			kann. Ausführlichere Erläuterungen zur Eintextedition enthalten die Beiträge: Michael Stolz: Von
-			den Fassungen zur Eintextedition. Eine neue Leseausgabe von Wolframs ›Parzival‹, in: Überlieferungsgeschichte
-			transdisziplinär. Neue Perspektivenauf ein germanistisches Forschungsparadigma, in Verbindung mit
-			Horst Brunner u. Freimut Löser hg. von Dorothea Klein, Wiesbaden 2016 (Wissensliteratur im Mittelalter
-			52), S. 353–388. Brüggen, Elke u. Michael Stolz: Fassungen, Übersetzung und Kommentar. Profile
-			einer neuen Ausgabe von Wolframs ›Parzival‹ – erscheint in: Walther von der Vogelweide. Düsseldorfer
-			Kolloquium 2018, in Verbindung mit Franz-Josef Holznagel u. Mathias Herweg hg. von Ricarda Bauschke-Hartung,
-			Berlin 2020 (Wolfram-Studien 26), S. 471–493 (im Druck)
-		</details>
+		<button
+			class="anchor"
+			use:popup={popupClick}
+			on:focus={(e) => (popupContent.innerHTML = e.target.querySelector('.hidden').innerHTML)}
+			>Eintextedition <span class="hidden">
+				Neben der synoptischen Mehrtextedition wird auch eine Eintextedition (Lesetext) angeboten,
+				in welcher die wichtigsten editorischen Informationen gebündelt präsentiert werden. Der
+				kritische Text ist hier nach Fassung *D auf der Grundlage des St. Galler Codex 857
+				eingerichtet. Rechts daneben werden in verkleinertem Schriftgrad die Varianten der
+				Fassungstexte *G und *T (nach der jeweiligen Leithandschrift) in normalisierter Form mit der
+				jeweiligen Fassungssigle angegeben, wobei auch Binnenvarianten ausgewählter Handschriften
+				berücksichtigt werden. Die Varianten der Fassung *m (die Fassung *D nahe steht) sind dagegen
+				in der dritten Apparatetage untergebracht: Die erste dieser drei Apparatetagen listet die
+				Auswahl der Textzeugen auf, die bei der Angabe der Fassungsvarianten mit berücksichtigt
+				werden. Es sind dies neben den Leithandschriften D, m, G und T weitere vollständige
+				Handschriften und gegebenenfalls Fragmente, die aus textgeschichtlicher Perspektive als
+				besonders wichtig erachtet werden. Die zweite Apparatetage beinhaltet (ähnlich wie „Apparat
+				1“ in der synoptischen Edition) Angaben zur materiellen Gestalt der ausgewählten Textzeugen;
+				aufgeführt sind Initialen, Majuskeln sowie gegebenenfalls Überschriften und Illustrationen.
+				Die dritte Apparatetage dokumentiert Abweichungen der Leithandschrift D gegenüber dem
+				konstituierten Text *D und verzeichnet die Varianten der Fassung *m. Auf semantisch wichtige
+				Fassungsunterschiede der Fassung *m macht gegebenenfalls ein auf diese Apparatetage
+				verweisendes Pfeilsymbol in der Spalte der Fassungsvarianten (neben dem *D-Text) aufmerksam.
+				In seltenen Fällen wird das auf diesen Apparat verweisende Pfeilsymbol auch für Varianten
+				der Fassungen *G und *T verwendet, falls deren Wortlaut aus Platzgründen nicht neben dem
+				Lesetext untergebracht werden kann. Ausführlichere Erläuterungen zur Eintextedition
+				enthalten die Beiträge: Michael Stolz: Von den Fassungen zur Eintextedition. Eine neue
+				Leseausgabe von Wolframs ›Parzival‹, in: Überlieferungsgeschichte transdisziplinär. Neue
+				Perspektivenauf ein germanistisches Forschungsparadigma, in Verbindung mit Horst Brunner u.
+				Freimut Löser hg. von Dorothea Klein, Wiesbaden 2016 (Wissensliteratur im Mittelalter 52),
+				S. 353–388. Brüggen, Elke u. Michael Stolz: Fassungen, Übersetzung und Kommentar. Profile
+				einer neuen Ausgabe von Wolframs ›Parzival‹ – erscheint in: Walther von der Vogelweide.
+				Düsseldorfer Kolloquium 2018, in Verbindung mit Franz-Josef Holznagel u. Mathias Herweg hg.
+				von Ricarda Bauschke-Hartung, Berlin 2020 (Wolfram-Studien 26), S. 471–493 (im Druck)
+			</span>
+		</button>
 		(basierend auf&nbsp;<a href="/hsverz" target="_self">Codex 857</a> der Stiftsbibliothek St.
 		Gallen aus der Mitte des 13. Jahrhunderts, Hs. D) erläutert.<br />
 
