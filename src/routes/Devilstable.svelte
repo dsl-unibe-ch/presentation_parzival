@@ -4,6 +4,7 @@
 
 	const DATA_MAX = 827;
 
+	export let codices;
 	export let width = 400;
 	export let height = 400;
 
@@ -101,6 +102,7 @@
 	on:brush={(e) => (selection = e.detail)}
 />
 <Detail
+	{codices}
 	width={mobile ? width : width - brushDimension}
 	height={mobile ? height - brushDimension : height}
 	data={[

@@ -153,6 +153,7 @@
 			bind:clientHeight={tableHeight}
 		>
 			<Devilstable
+				codices={data.codices}
 				width={tableWidth || 1000}
 				height={tableHeight || 400}
 				data={tableData['contiguous-ranges']}

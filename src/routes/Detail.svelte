@@ -2,8 +2,8 @@
 	import * as d3 from 'd3';
 	import { computePosition, shift, flip, offset } from '@floating-ui/dom';
 	import { base } from '$app/paths';
-	import { codices } from '$lib/sigla.json';
 
+	export let codices;
 	export let width = 400;
 	export let height = 400;
 	export let data_start = 1;

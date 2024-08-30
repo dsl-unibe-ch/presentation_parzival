@@ -1,5 +1,4 @@
-//import sigla from '$lib/sigla.json';
-
+import { api } from '$lib/constants';
 import { generateEntries } from '$lib/functions';
 
 /** @type {import('./$types').PageLoad} */
@@ -15,8 +14,8 @@ export async function load({ fetch, params }) {
 
 	return {
 		thirties: params.thirties ?? '1',
-		verse: params.verse?.padStart(2, '0') ?? '01'
-		//publisherData
+		verse: params.verse?.padStart(2, '0') ?? '01',
+		sigla: await fetch(`${api}/json/metadata-nomenclature.json`).then((res) => res.json())
 	};
 }
 

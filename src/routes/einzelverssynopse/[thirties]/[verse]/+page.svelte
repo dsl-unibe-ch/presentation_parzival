@@ -1,5 +1,4 @@
 <script>
-	import sigla from '$lib/sigla.json';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
 	import { afterNavigate } from '$app/navigation';
@@ -14,7 +13,7 @@
 
 	/** @type {string[]} */
 	let loss = [];
-	$: ({ thirties, verse } = data);
+	$: ({ thirties, verse, sigla } = data);
 
 	afterNavigate(() => {
 		// reset loss
