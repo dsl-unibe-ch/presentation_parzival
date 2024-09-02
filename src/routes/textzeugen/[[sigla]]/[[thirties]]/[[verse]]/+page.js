@@ -73,7 +73,7 @@ export async function load({ fetch, params }) {
 			}
 			if (returnObject.id) {
 				returnObject.tpData = fetch(
-					`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival.odd`
+					`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival-verse.odd`
 				).then((r) => {
 					if (!r.ok) {
 						console.error('Failed to fetch tpData', r);

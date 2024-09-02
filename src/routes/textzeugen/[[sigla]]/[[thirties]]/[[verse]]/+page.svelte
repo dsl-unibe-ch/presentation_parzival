@@ -93,9 +93,9 @@
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				id: id,
-				tpData: fetch(`${teipb}/parts/${sigla}.xml/json?&view=page&id=${id}&odd=parzival.odd`).then(
-					(r) => r.json()
-				),
+				tpData: fetch(
+					`${teipb}/parts/${sigla}.xml/json?&view=page&id=${id}&odd=parzival-verse.odd`
+				).then((r) => r.json()),
 				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
 			};
 		};
