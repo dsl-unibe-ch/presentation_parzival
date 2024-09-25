@@ -5,7 +5,7 @@
 	"scripts": {
 		"docker:start": "docker pull existdb/teipublisher:9.0.0 && docker run -d -p 8081:8080 -p 8444:8443 --name teipublisher existdb/teipublisher:9.0.0",
 		"docker:stop": "docker stop teipublisher && docker rm teipublisher",
-		"dev": "npm run docker:start && vite dev && npm run docker:stop",
+		"dev": "vite dev",
 		"build": "npm run docker:start && vite build && npm run docker:stop",
 		"preview": "npm run docker:start && vite preview && npm run docker:stop",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
