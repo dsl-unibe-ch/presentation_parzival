@@ -8,6 +8,11 @@ on:
 jobs:
   build_site:
     runs-on: ubuntu-latest
+    services:
+      existdb:
+        image: existdb/teipublisher:9.0.0
+        ports:
+          - 8081:8080
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,8 +32,7 @@ jobs:
           EXISTDB_PASS: ''
           EXISTDB_SERVER: 'http://127.0.0.1:8081'
         run: |
-          printenv
-          npm run docker:start
+          npm run installXar
 
       - name: build
         env:
