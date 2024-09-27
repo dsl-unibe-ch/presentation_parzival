@@ -22,16 +22,11 @@ jobs:
         run: npm install
 
       - name: start docker
-        run: npm run docker:start
-
-      - name: download xar and install it in the docker container
         env:
           EXISTDB_USER: 'admin'
           EXISTDB_PASS: ''
           EXISTDB_SERVER: 'http://127.0.0.1:8081'
-        run: |
-          printenv
-          npm run installXar
+        run: npm run docker:start
 
       - name: build
         env:
