@@ -29,7 +29,9 @@ jobs:
           EXISTDB_USER: 'admin'
           EXISTDB_PASS: ''
           EXISTDB_SERVER: 'http://127.0.0.1:8081'
-        run: npm run installXar
+        run: |
+          printenv
+          npm run installXar
 
       - name: build
         env:
