@@ -93,9 +93,7 @@
 		const createObject = (/** @type {string} */ id) => {
 			return {
 				id: id,
-				tpData: fetch(
-					`${teipb}/parts/${sigla}.xml/json?&view=page&id=${id}&odd=parzival-verse.odd`
-				).then((r) => r.json()),
+				tpData: fetch(`/data/pages/${sigla}/${id}`).then((r) => r.json()),
 				iiif: fetch(`${iiif}/${id}.jpf/info.json`).then((r) => r.json())
 			};
 		};
@@ -163,17 +161,19 @@
 							</a>
 						</div>
 					</div>
-					<TextzeugenContent
-						pages={localPages[i]}
-						on:localVerseChange={(e) => {
-							localVerses[i] = e.detail;
-							replaceState(
-								`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}`,
-								{}
-							);
-						}}
-						on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
-					/>
+					{#if localPages[i]?.length}
+						<TextzeugenContent
+							pages={localPages[i]}
+							on:localVerseChange={(e) => {
+								localVerses[i] = e.detail;
+								replaceState(
+									`${base}/textzeugen/${$page.params.sigla}/${e.detail.replace('.', '/')}`,
+									{}
+								);
+							}}
+							on:localPageChange={(e) => checklocalPages(e, i, content.sigla)}
+						/>
+					{/if}
 				</section>
 				{#if !($page.url.searchParams.get('iiif')?.split('-')[i] === 'true')}
 					<section class="min-h-[40vh]">

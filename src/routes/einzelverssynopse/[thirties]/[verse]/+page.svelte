@@ -10,13 +10,19 @@
 
 	let hyparchetypesSlider = false;
 
+	/**
+	 * @type {String[]}
+	 */
 	let loss = [];
 
+	/**
+	 * @param {string} key
+	 */
 	function addtoLoss(key) {
 		loss = [...loss, key];
 	}
 
-	$: sigla.codices.forEach(async (c) => {
+	$: sigla.codices.forEach(async (/** @type {{ handle: string; sigil: string; }} */ c) => {
 		if (!(await publisherData[c.handle])?.content) {
 			addtoLoss(c.sigil);
 		}
@@ -46,7 +52,8 @@
 					{#await publisherData[witness] then value}
 						{#if value?.content}
 							<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
-								{sigla.codices.find((c) => c.handle === witness)?.sigil}
+								{sigla.codices.find((/** @type {{ handle: string; }} */ c) => c.handle === witness)
+									?.sigil}
 							</dt>
 							<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
 								{@html value.content}

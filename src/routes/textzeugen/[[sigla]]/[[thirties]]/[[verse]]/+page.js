@@ -2,6 +2,7 @@ import { api, teipb } from '$lib/constants';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
+	console.log(`pageload`);
 	const { codices, fragments } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) =>
 		r.json()
 	);
@@ -72,9 +73,7 @@ export async function load({ fetch, params }) {
 				});
 			}
 			if (returnObject.id) {
-				returnObject.tpData = fetch(
-					`${teipb}/parts/${witnes}.xml/json?&view=page&id=${returnObject.id}&odd=parzival-verse.odd`
-				).then((r) => {
+				returnObject.tpData = fetch(`/data/pages/${witnes}/${returnObject.id}`).then((r) => {
 					if (!r.ok) {
 						console.error('Failed to fetch tpData', r);
 						return false;
