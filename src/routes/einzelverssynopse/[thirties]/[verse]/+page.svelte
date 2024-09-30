@@ -1,59 +1,25 @@
 <script>
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import VerseSelector from '$lib/components/VerseSelector.svelte';
-	import { afterNavigate } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { teipb } from '$lib/constants';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	/** @type {{ [key: string]: Promise<any> }} */
-	const publisherData = {};
-
-	/** @type {string[]} */
-	let loss = [];
-	$: ({ thirties, verse, sigla } = data);
-
-	afterNavigate(() => {
-		// reset loss
-		loss = [];
-		sigla.codices.forEach((element) => {
-			publisherData[element.handle] = fetch(
-				`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
-			).then((r) => r.json());
-		});
-	});
+	$: ({ thirties, verse, sigla, publisherData } = data);
 
 	let hyparchetypesSlider = false;
 
-	// if hyparchetypesSlider is active, fetch the hyparchetypes
-	$: sigla.hyparchetypes.forEach((element) => {
-		if (hyparchetypesSlider) {
-			publisherData[element.handle] = fetch(
-				`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
-			).then((r) => r.json());
-		} else {
-			delete publisherData[element.handle];
-		}
-	});
+	let loss = [];
 
-	const addToLoss = (/** @type {string} */ handle) => {
-		const sigil =
-			sigla.codices.find((c) => c.handle === handle)?.sigil ||
-			sigla.hyparchetypes.find((c) => c.handle === handle)?.sigil;
-		if (sigil && !loss.includes(sigil)) {
-			loss = [...loss, sigil];
-		}
-	};
+	function addtoLoss(key) {
+		loss = [...loss, key];
+	}
 
-	// check for missing verses and add them to loss
-	$: Object.entries(publisherData).forEach(([key, promise]) => {
-		promise.then((value) => {
-			if (!value.content) {
-				addToLoss(key);
-			}
-		});
+	$: sigla.codices.forEach(async (c) => {
+		if (!(await publisherData[c.handle])?.content) {
+			addtoLoss(c.sigil);
+		}
 	});
 </script>
 
