@@ -9,9 +9,7 @@ export async function GET({ fetch, params }) {
 	return json(
 		await fetch(
 			`${teipb}/parts/${params.sigla}.xml/json?odd=parzival-verse-inline.odd&view=single`
-		).then((r) => {
-			r.json();
-		})
+		).then((r) => r.json())
 	);
 }
 
