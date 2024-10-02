@@ -1,13 +1,15 @@
 import { teipb, api } from '$lib/constants';
-import { writeFile } from 'node:fs';
+import { writeFile, readFile } from 'node:fs/promises';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load({ fetch }) {
 	console.log('loading einzelverssynopse');
 	let publisherData;
 	try {
-		publisherData = await import('./publisherdata_verse.json');
-	} catch (_error) {
+		publisherData = await readFile('./src/routes/einzelverssynopse/publisherdata_verse.json',  { encoding: 'utf8' });
+		publisherData = JSON.parse(publisherData);
+	} catch (error) {
+		console.error('error importing the file', error);
 		console.log('fetching from api');
 		const { codices } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) => r.json());
 		const siglaArray = codices.map((/** @type {{ handle: string; }} */ codex) => codex.handle);

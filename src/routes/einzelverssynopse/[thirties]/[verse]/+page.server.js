@@ -1,6 +1,5 @@
 import { api, teipb } from '$lib/constants';
 import { generateEntries } from '$lib/functions';
-import { JSDOM } from 'jsdom';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch, params, parent }) {
@@ -15,12 +14,15 @@ export async function load({ fetch, params, parent }) {
 
 	// Fetch the textzeugen
 	sigla.codices.forEach(async (/** @type {{ handle: string; }} */ element) => {
-		const html = JSDOM.fragment((await rawPublisherData[element.handle]).content);
-		console.log('created fragment');
-		const line = html.querySelector(`span[data-verse="${thirties}.${verse}"]`);
-		console.log('found line', line);
-		if (line) {
-			publisherData[element.handle] = line.outerHTML;
+		// const html = JSDOM.fragment((await rawPublisherData[element.handle]).content);
+		// console.log('created fragment');
+		// const line = html.querySelector(`span[data-verse="${thirties}.${verse}"]`);
+		const content = (await rawPublisherData[element.handle]).content;
+		const start = content.indexOf(`<span class="verse-inline" data-verse="${thirties}.${verse}">`);
+		const end = content.indexOf('</span>', start);
+		if (start !== -1 && end !== -1) {
+			const line = content.slice(start, end);
+			publisherData[element.handle] = line;
 		}
 	});
 	// Fetch fassungen
