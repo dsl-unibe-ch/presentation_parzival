@@ -15,24 +15,20 @@ export async function load({ fetch, params, parent }) {
 
 	// Fetch the textzeugen
 	sigla.codices.forEach(async (/** @type {{ handle: string; }} */ element) => {
-		// publisherData[element.handle] = fetch(
-		// 	`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
-		// ).then((r) => r.json());
-		const html = new JSDOM(await rawPublisherData[element.handle], 'text/html');
-		const line = html.window.document.querySelector(
-			`span.verse-inline[data-verse="${thirties}.${verse}"]`
-		);
+		const html = JSDOM.fragment((await rawPublisherData[element.handle]).content);
+		console.log('created fragment');
+		const line = html.querySelector(`span[data-verse="${thirties}.${verse}"]`);
+		console.log('found line', line);
 		if (line) {
 			publisherData[element.handle] = line.outerHTML;
 		}
 	});
-
 	// Fetch fassungen
-	sigla.hyparchetypes.forEach((/** @type {{ handle: string}} */ element) => {
-		publisherData[element.handle] = fetch(
-			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
-		).then((r) => r.json());
-	});
+	// sigla.hyparchetypes.forEach((/** @type {{ handle: string}} */ element) => {
+	// 	publisherData[element.handle] = fetch(
+	// 		`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
+	// 	).then((r) => r.json());
+	// });
 
 	await Promise.allSettled(Object.values(publisherData));
 

@@ -4,10 +4,10 @@ import { writeFile } from 'node:fs';
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load({ fetch }) {
 	console.log('loading einzelverssynopse');
-	const publisherData = fetch(`/einzelverssynopse/publisherdata_verse.json`);
-	console.log('publisherData', publisherData);
-
-	if (!(await publisherData).ok) {
+	let publisherData;
+	try {
+		publisherData = await import('./publisherdata_verse.json');
+	} catch (_error) {
 		console.log('fetching from api');
 		const { codices } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) => r.json());
 		const siglaArray = codices.map((/** @type {{ handle: string; }} */ codex) => codex.handle);
@@ -37,9 +37,10 @@ export async function load({ fetch }) {
 				}
 			}
 		);
-		return resolvedPublisherData;
+		publisherData = resolvedPublisherData;
 	}
 
+	console.log('done with the big data fetch');
 	// @ts-ignore
-	return await publisherData.then((r) => r.json());
+	return publisherData;
 }
