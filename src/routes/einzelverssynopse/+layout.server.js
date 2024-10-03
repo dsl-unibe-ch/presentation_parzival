@@ -19,7 +19,7 @@ export async function load({ fetch }) {
 		const siglaArray = codices.map((/** @type {{ handle: string; }} */ codex) => codex.handle);
 		let fetchPublisherData = {};
 		siglaArray.forEach(async (/** @type {string} */ handle) => {
-			fetchPublisherData[handle] = fetch(
+			fetchPublisherData[handle] = await fetch(
 				`${teipb}/parts/${handle}.xml/json?odd=parzival-verse-inline.odd&view=single`
 			).then((r) => r.json());
 		});
