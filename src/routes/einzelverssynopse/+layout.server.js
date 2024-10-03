@@ -13,7 +13,9 @@ export async function load({ fetch }) {
 	} catch (error) {
 		console.error('error importing the file', error);
 		console.log('fetching from api');
-		const { codices } = await fetch(`${api}/json/metadata-nomenclature.json`).then((r) => r.json());
+		const { codices, hyparchetypes } = await fetch(`${api}/json/metadata-nomenclature.json`).then(
+			(r) => r.json()
+		);
 		const siglaArray = codices.map((/** @type {{ handle: string; }} */ codex) => codex.handle);
 		let fetchPublisherData = {};
 		siglaArray.forEach(async (/** @type {string} */ handle) => {
@@ -21,8 +23,18 @@ export async function load({ fetch }) {
 				`${teipb}/parts/${handle}.xml/json?odd=parzival-verse-inline.odd&view=single`
 			).then((r) => r.json());
 		});
+
+		// let synFiles = new Array(827).fill(null);
+		// //get syn files
+		// synFiles = synFiles.map((_, index) => {
+		// 	return fetch(
+		// 		`${teipb}/parts/syn${index + 1}.xml/json?odd=parzival-verse-inline.odd&view=single`
+		// 	).then((r) => r.json());
+		// });
+
 		//await all promises
 		await Promise.allSettled(Object.values(fetchPublisherData));
+		// await Promise.allSettled(synFiles);
 		// Await all the values of the object
 		const resolvedPublisherData = {};
 		for (const [key, value] of Object.entries(fetchPublisherData)) {

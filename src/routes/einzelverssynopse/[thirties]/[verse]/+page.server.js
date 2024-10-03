@@ -14,6 +14,33 @@ export async function load({ fetch, params, parent }) {
 
 	// causes layout-function to rerun!
 	const rawPublisherData = await parent();
+	let synFile;
+	try {
+		synFile = await readFile(
+			`./src/routes/einzelverssynopse/${thirties}/publisherdata_verse.json`,
+			{
+				encoding: 'utf8'
+			}
+		);
+		synFile = JSON.parse(synFile);
+	} catch (error) {
+		console.error('error importing the file', error);
+		console.log('fetching from api');
+		synFile = await fetch(
+			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single`
+		).then((r) => r.json());
+		writeFile(
+			`./src/routes/einzelverssynopse/${thirties}/publisherdata_verse.json`,
+			JSON.stringify(synFile),
+			(err) => {
+				if (err) {
+					console.error(err);
+				} else {
+					console.log('file written successfully');
+				}
+			}
+		);
+	}
 	// Fetch the textzeugen
 	sigla.codices.forEach(async (/** @type {{ handle: string; }} */ element) => {
 		// const html = JSDOM.fragment((await rawPublisherData[element.handle]).content);
@@ -29,12 +56,15 @@ export async function load({ fetch, params, parent }) {
 			loss.push(element.handle);
 		}
 	});
+
 	// Fetch fassungen
-	// sigla.hyparchetypes.forEach((/** @type {{ handle: string}} */ element) => {
+	sigla.hyparchetypes.forEach((/** @type {{ handle: string}} */ element) => {
+		const content = synFile.content;
+		const start = content.indexOf(`<l n="${element.handle} ${thirties}.${verse}">`);
+	});
 	// 	publisherData[element.handle] = fetch(
 	// 		`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
 	// 	).then((r) => r.json());
-	// });
 
 	await Promise.allSettled(Object.values(publisherData));
 
