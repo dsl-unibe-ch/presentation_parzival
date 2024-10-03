@@ -6,27 +6,9 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	$: ({ thirties, verse, sigla, publisherData } = data);
+	$: ({ thirties, verse, sigla, publisherData, loss } = data);
 
 	let hyparchetypesSlider = false;
-
-	/**
-	 * @type {String[]}
-	 */
-	let loss = [];
-
-	/**
-	 * @param {string} key
-	 */
-	function addtoLoss(key) {
-		loss = [...loss, key];
-	}
-
-	$: sigla.codices.forEach(async (/** @type {{ handle: string; sigil: string; }} */ c) => {
-		if (!(await publisherData[c.handle])?.content) {
-			addtoLoss(c.sigil);
-		}
-	});
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
@@ -41,8 +23,8 @@
 					{#await publisherData[archetype.handle]}
 						<dd class="border-l-2 border-current pl-4 py-1 font-sans"></dd>
 					{:then value}
-						{#if value?.content}
-							<dd class="border-l-2 border-current pl-4 py-1 font-sans">{@html value?.content}</dd>
+						{#if value}
+							<dd class="border-l-2 border-current pl-4 py-1 font-sans">{@html value}</dd>
 						{:else}
 							<dd class="border-l-2 border-current pl-4 py-1"></dd>
 						{/if}
@@ -50,13 +32,13 @@
 				{/if}
 				{#each archetype.witnesses as witness}
 					{#await publisherData[witness] then value}
-						{#if value?.content}
+						{#if value}
 							<dt class="pr-4 pt-2 {hyparchetypesSlider ? 'ml-5' : ''}">
 								{sigla.codices.find((/** @type {{ handle: string; }} */ c) => c.handle === witness)
 									?.sigil}
 							</dt>
 							<dd class="border-l-2 border-current {hyparchetypesSlider ? 'ml-5' : ''} pl-4 py-1">
-								{@html value.content}
+								{@html value}
 							</dd>
 						{/if}
 					{:catch error}

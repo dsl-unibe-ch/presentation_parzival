@@ -9,6 +9,7 @@ export async function load({ fetch, params, parent }) {
 	const rawPublisherData = await parent();
 	const thirties = params.thirties ?? '1';
 	const verse = params.verse?.padStart(2, '0') ?? '01';
+	let loss = [];
 
 	const sigla = await fetch(`${api}/json/metadata-nomenclature.json`).then((res) => res.json());
 
@@ -23,6 +24,8 @@ export async function load({ fetch, params, parent }) {
 		if (start !== -1 && end !== -1) {
 			const line = content.slice(start, end);
 			publisherData[element.handle] = line;
+		} else {
+			loss.push(element.handle);
 		}
 	});
 	// Fetch fassungen
@@ -38,7 +41,8 @@ export async function load({ fetch, params, parent }) {
 		thirties,
 		verse,
 		sigla,
-		publisherData
+		publisherData,
+		loss
 	};
 }
 
