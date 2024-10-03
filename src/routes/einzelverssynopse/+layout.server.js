@@ -6,7 +6,9 @@ export async function load({ fetch }) {
 	console.log('loading einzelverssynopse');
 	let publisherData;
 	try {
-		publisherData = await readFile('./src/routes/einzelverssynopse/publisherdata_verse.json',  { encoding: 'utf8' });
+		publisherData = await readFile('./src/routes/einzelverssynopse/publisherdata_verse.json', {
+			encoding: 'utf8'
+		});
 		publisherData = JSON.parse(publisherData);
 	} catch (error) {
 		console.error('error importing the file', error);

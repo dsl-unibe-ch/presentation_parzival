@@ -5,14 +5,15 @@ import { generateEntries } from '$lib/functions';
 export async function load({ fetch, params, parent }) {
 	/** @type {{ [key: string]: Promise<any> }} */
 	const publisherData = {};
-	console.log('einzelverssynopse', params);
-	const rawPublisherData = await parent();
+	// console.log('einzelverssynopse', params);
 	const thirties = params.thirties ?? '1';
 	const verse = params.verse?.padStart(2, '0') ?? '01';
 	let loss = [];
 
 	const sigla = await fetch(`${api}/json/metadata-nomenclature.json`).then((res) => res.json());
 
+	// causes layout-function to rerun!
+	const rawPublisherData = await parent();
 	// Fetch the textzeugen
 	sigla.codices.forEach(async (/** @type {{ handle: string; }} */ element) => {
 		// const html = JSDOM.fragment((await rawPublisherData[element.handle]).content);
