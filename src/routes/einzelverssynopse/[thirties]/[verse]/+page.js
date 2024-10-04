@@ -3,6 +3,7 @@ import { generateEntries } from '$lib/functions';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch, params }) {
+	console.log(params);
 	/** @type {{ [key: string]: Promise<any> }} */
 	/*const publisherData = {};
 
