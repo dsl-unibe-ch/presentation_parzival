@@ -16,23 +16,33 @@ export async function load({ fetch, params }) {
 	sigla.codices.forEach((element) => {
 		publisherData[element.handle] = fetch(
 			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
-		).then((r) => r.json());
+		);
 	});
 
 	// Fetch fassungen
 	sigla.hyparchetypes.forEach((element) => {
 		publisherData[element.handle] = fetch(
 			`${teipb}/parts/syn${thirties}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/div/div/l[@n=%27${element.handle}%20${thirties}.${verse}%27]`
-		).then((r) => r.json());
+		);
 	});
 
-	await Promise.allSettled(Object.values(publisherData));
+	// Wait for all promises to resolve
+	const resolvedPublisherData = await Promise.all(
+		Object.entries(publisherData).map(async ([key, promise]) => {
+			const response = await promise;
+			const data = await response.json();
+			return [key, data];
+		})
+	);
+
+	// Convert array back to object
+	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
 
 	return {
 		thirties,
 		verse,
 		sigla,
-		publisherData
+		publisherData: resolvedPublisherDataObject
 	};
 }
 
