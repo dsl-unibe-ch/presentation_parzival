@@ -11,11 +11,10 @@ export async function load({ fetch, params }) {
 	const verse = params.verse?.padStart(2, '0') ?? '01';
 
 	const sigla = await fetch(`${api}/json/metadata-nomenclature.json`).then((res) => res.json());
-
 	// Fetch the textzeugen
 	sigla.codices.forEach((element) => {
 		publisherData[element.handle] = fetch(
-			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&id=${element.handle}_${thirties}.${verse}%`
+			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=page&id=${element.handle}_${thirties}.${verse}`
 		);
 	});
 
@@ -26,14 +25,21 @@ export async function load({ fetch, params }) {
 		);
 	});
 
-	// Wait for all promises to resolve
+	/** @type {string[]} */
+	let loss = [];
+	// Wait for all promises to resolve and filter those with status 200
 	const resolvedPublisherData = await Promise.all(
 		Object.entries(publisherData).map(async ([key, promise]) => {
 			const response = await promise;
-			const data = await response.json();
-			return [key, data];
+			if (response.status === 200) {
+				const data = await response.json();
+				return [key, data];
+			} else {
+				loss.push(key);
+			}
+			return null;
 		})
-	);
+	).then((results) => results.filter((result) => result !== null));
 
 	// Convert array back to object
 	const resolvedPublisherDataObject = Object.fromEntries(resolvedPublisherData);
@@ -42,7 +48,8 @@ export async function load({ fetch, params }) {
 		thirties,
 		verse,
 		sigla,
-		publisherData: resolvedPublisherDataObject
+		publisherData: resolvedPublisherDataObject,
+		loss
 	};
 }
 

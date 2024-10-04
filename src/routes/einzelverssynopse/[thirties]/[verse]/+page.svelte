@@ -6,21 +6,8 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	$: ({ thirties, verse, sigla, publisherData } = data);
-
+	$: ({ thirties, verse, sigla, publisherData, loss } = data);
 	let hyparchetypesSlider = false;
-
-	let loss = [];
-
-	function addtoLoss(key) {
-		loss = [...loss, key];
-	}
-
-	$: sigla.codices.forEach(async (c) => {
-		if (!(await publisherData[c.handle])?.content) {
-			addtoLoss(c.sigil);
-		}
-	});
 </script>
 
 <div class="container mx-auto p-4 flex flex-wrap justify-between gap-9">
