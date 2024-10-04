@@ -5,6 +5,7 @@ import { generateEntries } from '$lib/functions';
 export async function load({ fetch, params }) {
 	/** @type {{ [key: string]: Promise<any> }} */
 	const publisherData = {};
+	console.log(params);
 
 	const thirties = params.thirties ?? '1';
 	const verse = params.verse?.padStart(2, '0') ?? '01';
