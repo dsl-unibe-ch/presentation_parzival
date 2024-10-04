@@ -15,7 +15,7 @@ export async function load({ fetch, params }) {
 	// Fetch the textzeugen
 	sigla.codices.forEach((element) => {
 		publisherData[element.handle] = fetch(
-			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&xpath=//text/body/l[@xml:id=%27${element.handle}_${thirties}.${verse}%27]`
+			`${teipb}/parts/${element.handle}.xml/json?odd=parzival.odd&view=single&id=${element.handle}_${thirties}.${verse}%`
 		);
 	});
 
