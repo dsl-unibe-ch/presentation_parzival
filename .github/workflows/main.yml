@@ -11,7 +11,7 @@ jobs:
       labels: big-runner_0.032-a-minute
     services:
       existdb:
-        image: existdb/teipublisher:9.0.0
+        image: existdb/existdb:6.2.0
         ports:
           - 8081:8080
     steps:
