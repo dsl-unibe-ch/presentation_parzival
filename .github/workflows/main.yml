@@ -7,8 +7,7 @@ on:
 
 jobs:
   build_site:
-    runs-on:
-      labels: big-runner_0.032-a-minute
+    runs-on: ubuntu-latest
     services:
       existdb:
         image: existdb/existdb:6.2.0
